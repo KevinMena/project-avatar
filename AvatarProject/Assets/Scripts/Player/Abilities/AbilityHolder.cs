@@ -10,7 +10,7 @@ namespace AvatarBA
 
         public void UseAbility()
         {
-            sampleAbility.Perform();
+            sampleAbility.Trigger();
             StartCoroutine(sampleAbility.CooldownCountdown());
         }
     }

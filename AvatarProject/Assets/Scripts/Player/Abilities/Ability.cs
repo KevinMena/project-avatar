@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AvatarBA
 {
-    public class Ability : ScriptableObject
+    public abstract class Ability : ScriptableObject
     {
 
         public Sprite icon;
@@ -17,14 +17,11 @@ namespace AvatarBA
 
         public AbilityState state = AbilityState.ready;
 
-        public virtual void Perform() {}
+        public abstract void Initialize();
+        public abstract void Trigger();
 
         public IEnumerator CooldownCountdown()
         {
-            if(state == AbilityState.cooldown)
-                yield break;
-            
-            state = AbilityState.cooldown;
             yield return new WaitForSecondsRealtime(cooldown);
             state= AbilityState.ready;
         }

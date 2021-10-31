@@ -12,6 +12,9 @@ namespace AvatarBA
         [SerializeField] 
         private MovementInputProvider _provider;
 
+        [SerializeField]
+        private DashAbility _dashAbility;
+
         [SerializeField] 
         private Vector3 _movementDirection;
 
@@ -23,13 +26,11 @@ namespace AvatarBA
         
         private bool _canMove = true;
 
-        private float _dashCooldown = 0.7f;
-
-        private bool _dashOnCooldown = false;
-
-        private float _dashStartTime;
-
-        private float _dashCooldownTime;
+        public bool CanMove
+        {
+            get => _canMove;
+            set => _canMove = value;
+        }
 
         private void Awake() 
         {
@@ -54,12 +55,6 @@ namespace AvatarBA
             {
                 Move();
                 Rotate();
-            }
-
-            if(_dashOnCooldown)
-            {
-                if(Time.time > _dashCooldownTime)
-                    _dashOnCooldown = false;
             }
         }
 
@@ -93,7 +88,7 @@ namespace AvatarBA
 
             // Apply speed and calculate desire position
             Vector3 velocity = _movementDirection * _playerInformation.runningSpeed;
-            _characterController.Move(velocity * Time.deltaTime);
+            MovePlayer(velocity * Time.deltaTime);
         }
         
         /// <summary>
@@ -115,31 +110,16 @@ namespace AvatarBA
 
         private void OnDash()
         {
-            if(_dashOnCooldown) return;
+            if(_dashAbility.state == AbilityState.cooldown) return;
 
-            _dashOnCooldown = true;
-            _dashStartTime = Time.time;
-            _dashCooldownTime = _dashStartTime + _dashCooldown;
-            StartCoroutine(Dash());
+            _dashAbility.Trigger();
+            StartCoroutine(_dashAbility.TriggerCO(gameObject, MovePlayer, CanMove, _playerInformation.dashingSpeed, _playerInformation.dashTime));
+            StartCoroutine(_dashAbility.CooldownCountdown());
         }
 
-        private IEnumerator Dash()
+        private void MovePlayer(Vector3 target)
         {
-            _canMove = false;
-            // Calculate correct direction base on where the camera is looking
-            Vector3 targetDirection = transform.forward;
-
-            // Apply speed and calculate desire position
-            Vector3 velocity = targetDirection * _playerInformation.dashingSpeed;
-
-            float finishedTime = Time.time + _playerInformation.dashTime;
-            
-            while(Time.time < finishedTime)
-            {
-                _characterController.Move(velocity * Time.deltaTime);
-                yield return null;
-            }
-            _canMove = true;
+            _characterController.Move(target);
         }
     }
 }

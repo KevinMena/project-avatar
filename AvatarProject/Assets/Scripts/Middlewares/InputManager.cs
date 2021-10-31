@@ -26,7 +26,7 @@ namespace AvatarBA
                 SetCallbacks();
             }
 
-            EnableInput();
+            //EnableInput();
             provider?.Subscribe(this);
         }
 
@@ -72,7 +72,7 @@ namespace AvatarBA
             
         }
 
-        private void EnableInput()
+        public void EnableInput()
         {
             _playerInput.Gameplay.Enable();
         }
