@@ -24,6 +24,9 @@
 .vs/
 .vscode/
 
+# Idea cache directory
+.idea/
+
 # Gradle cache directory
 .gradle/
 
@@ -52,10 +55,14 @@ ExportedObj/
 
 # Unity3D generated file on crash reports
 sysinfo.txt
+debug.log
 
 # Builds
 *.apk
 *.unitypackage
+
+#Mac invisible folder files
+*.DS_Store
 
 # Crashlytics generated file
 crashlytics-build.properties
@@ -66,4 +73,5 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+*.bin
 
