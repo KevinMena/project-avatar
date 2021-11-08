@@ -6,6 +6,7 @@ namespace AvatarBA
 {
     public class PlayerController : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] 
         private PlayerInformation _playerInformation;
 
@@ -15,6 +16,7 @@ namespace AvatarBA
         [SerializeField]
         private DashAbility _dashAbility;
 
+        [Header("Settings")]
         [SerializeField] 
         private Vector3 _movementDirection;
 
@@ -88,7 +90,7 @@ namespace AvatarBA
 
             // Apply speed and calculate desire position
             Vector3 velocity = _movementDirection * _playerInformation.runningSpeed;
-            MovePlayer(velocity * Time.deltaTime);
+            _characterController.Move(velocity * Time.deltaTime);
         }
         
         /// <summary>
@@ -113,13 +115,12 @@ namespace AvatarBA
             if(_dashAbility.state == AbilityState.cooldown) return;
 
             _dashAbility.Trigger();
-            StartCoroutine(_dashAbility.TriggerCO(gameObject, MovePlayer, CanMove, _playerInformation.dashingSpeed, _playerInformation.dashTime));
+            StartCoroutine(_dashAbility.TriggerCO(gameObject, 
+                                                target => _characterController.Move(target), 
+                                                CanMove, 
+                                                _playerInformation.dashingSpeed, 
+                                                _playerInformation.dashTime));
             StartCoroutine(_dashAbility.CooldownCountdown());
-        }
-
-        private void MovePlayer(Vector3 target)
-        {
-            _characterController.Move(target);
         }
     }
 }

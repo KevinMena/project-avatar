@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1ea89feeb739e745b011fa9c785fc54, type: 3}
-  m_Name: Dash Ability
+  m_Script: {fileID: 11500000, guid: 7ca281d0ac6d5104ab9c2ac9671d5513, type: 3}
+  m_Name: AttributesContainer_New
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  abilityName: Player Dash
-  description: Quickly move forward
-  cooldown: 0.7
-  state: 0
+  _collection: {fileID: 11400000, guid: 67f5200ea3f554149a08384c6e355e6a, type: 2}
