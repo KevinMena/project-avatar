@@ -9,13 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1ea89feeb739e745b011fa9c785fc54, type: 3}
-  m_Name: Abilities_PlayerDash
+  m_Script: {fileID: 11500000, guid: 53e7b3cad9cbc7944a3adbcd2feb652c, type: 3}
+  m_Name: StatType_MovementSpeed
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
-  abilityName: Player Dash
-  description: Quickly move forward
-  cooldown: 0.7
-  state: 0
-  _dashSpeed: 15
-  _dashTime: 0.25
+  _id: movementSpeed
+  _displayName: Movement Speed
+  _defaultValue: 5

@@ -7,6 +7,10 @@ namespace AvatarBA
     [CreateAssetMenu(fileName = "Dash Ability", menuName ="Abilities/Dash")]
     public class DashAbility : Ability
     {
+        [SerializeField] private float _dashSpeed = 0;
+
+        [SerializeField] private float _dashTime = 0;
+
         public override void Initialize() { }
 
         public override void Trigger()
@@ -16,7 +20,7 @@ namespace AvatarBA
             state = AbilityState.cooldown;
         }
 
-        public IEnumerator TriggerCO(GameObject caller, UnityAction<Vector3> OnMove, bool canMove, float dashSpeed, float dashTime)
+        public IEnumerator TriggerCO(GameObject caller, UnityAction<Vector3> OnMove, bool canMove)
         {
             canMove = false;
             
@@ -24,9 +28,9 @@ namespace AvatarBA
             Vector3 targetDirection = caller.gameObject.transform.forward;
 
             // Apply speed and calculate desire position
-            Vector3 velocity = targetDirection * dashSpeed;
+            Vector3 velocity = targetDirection * _dashSpeed;
 
-            float finishedTime = Time.time + dashTime;
+            float finishedTime = Time.time + _dashTime;
             
             while(Time.time < finishedTime)
             {

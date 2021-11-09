@@ -926,6 +926,7 @@ GameObject:
   - component: {fileID: 1514762969}
   - component: {fileID: 1514762971}
   - component: {fileID: 1514762970}
+  - component: {fileID: 1514762972}
   m_Layer: 0
   m_Name: Jammo
   m_TagString: Untagged
@@ -960,10 +961,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbb5c65eb6599a54fb8922bfcc90111c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerInformation: {fileID: 11400000, guid: 67a04b73c15ac374ba63b8ca69a47079, type: 2}
   _provider: {fileID: 11400000, guid: 1dc537d92ee66b74fb5a696b8e9cbb05, type: 2}
   _dashAbility: {fileID: 11400000, guid: 92e17554d62f46440b51674e4cd833ad, type: 2}
   _movementDirection: {x: 0, y: 0, z: 0}
+  _rotationSpeed: 14
 --- !u!143 &1514762971
 CharacterController:
   m_ObjectHideFlags: 0
@@ -982,6 +983,19 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.83, z: 0}
+--- !u!114 &1514762972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514762968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84c4c1b065a5b224982d9e10ddbab4a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterData: {fileID: 11400000, guid: fb70198138c431e499aa95ef65d555d4, type: 2}
 --- !u!1 &1563389235
 GameObject:
   m_ObjectHideFlags: 0
