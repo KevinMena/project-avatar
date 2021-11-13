@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace AvatarBA
@@ -12,13 +13,17 @@ namespace AvatarBA
         [Header("Settings")]
         [SerializeField] private Vector3 _movementDirection;
 
+        [SerializeField] private Vector3 _mousePosition;
+
         [SerializeField] private float _rotationSpeed = 0;
 
-        private Vector3 _previousMoveDirection;
+        [SerializeField] private LayerMask _terrainLayer;
 
-        private Transform _gameplayCamera;
+        private Vector3 _desiredDirection;
 
-        private CharacterController _characterController;
+        private Camera _gameplayCamera;
+
+        private Rigidbody _rigidbody;
 
         private PlayerStatsController _statsController;
         
@@ -32,9 +37,9 @@ namespace AvatarBA
 
         private void Awake() 
         {
-            _characterController = GetComponent<CharacterController>();
+            _rigidbody = GetComponent<Rigidbody>();
             _statsController = GetComponent<PlayerStatsController>();
-            _gameplayCamera = Camera.main.transform;
+            _gameplayCamera = Camera.main;
         }
 
         private void Start() 
@@ -50,6 +55,10 @@ namespace AvatarBA
         private void Update()
         {
             UpdateState();
+        }
+
+        private void FixedUpdate() 
+        {
             if(_canMove)
             {
                 Move();
@@ -64,8 +73,9 @@ namespace AvatarBA
         private void UpdateState()
         {
             InputState currentState = _provider.GetState();
-            _previousMoveDirection.x = currentState.movementDirection.x;
-            _previousMoveDirection.z = currentState.movementDirection.y;
+            _desiredDirection.x = currentState.movementDirection.x;
+            _desiredDirection.z = currentState.movementDirection.y;
+            _mousePosition = currentState.mousePosition;
         }
 
         /// <summary>
@@ -74,23 +84,27 @@ namespace AvatarBA
         private void Move()
         {
             //Get the two axes from the camera and flatten them on the XZ plane
-            Vector3 cameraForward = _gameplayCamera.forward;
+            Vector3 cameraForward = _gameplayCamera.transform.forward;
             cameraForward.y = 0f;
-            Vector3 cameraRight = _gameplayCamera.right;
+            Vector3 cameraRight = _gameplayCamera.transform.right;
             cameraRight.y = 0f;
-
+            
             //Use the two axes, modulated by the corresponding inputs, and construct the final vector
-            Vector3 adjustedMovement = cameraRight.normalized * _previousMoveDirection.x +
-                cameraForward.normalized * _previousMoveDirection.z;
+            Vector3 adjustedMovement = cameraRight.normalized * _desiredDirection.x +
+                cameraForward.normalized * _desiredDirection.z;
 
             _movementDirection = Vector3.ClampMagnitude(adjustedMovement, 1f);
 
             // Cache the current movement speed
             float movementSpeed = _statsController.GetStatValue("movementSpeed");
 
+            // Cache velocity last frame
+            Vector3 previousVelocity = _rigidbody.velocity;
+
             // Apply speed and calculate desire position
-            Vector3 velocity = _movementDirection * movementSpeed;
-            _characterController.Move(velocity * Time.deltaTime);
+            Vector3 desiredVelocity = _movementDirection * movementSpeed;
+            Vector3 velocityChange = desiredVelocity - previousVelocity;
+            _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
         }
         
         /// <summary>
@@ -102,12 +116,30 @@ namespace AvatarBA
             Vector3 targetDirection = _movementDirection;
 
             if(targetDirection == Vector3.zero)
-                targetDirection = transform.forward;
+            {
+                Vector3 hitPoint = GetMousePosition();
+
+                if(hitPoint == Vector3.zero)
+                    return;
+                
+                targetDirection = hitPoint - transform.position;
+            }
             
             // Calculate and apply new rotation
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            Quaternion targetRotationDif = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-            transform.rotation = targetRotationDif;
+            Quaternion desiredRotation = Quaternion.Slerp(_rigidbody.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            _rigidbody.rotation = desiredRotation;
+        }
+
+        private Vector3 GetMousePosition()
+        {
+            RaycastHit hit;
+            if(Physics.Raycast(_gameplayCamera.ScreenPointToRay(_mousePosition), out hit, 100, _terrainLayer))
+            {
+                return hit.point;
+            }
+
+            return Vector3.zero;
         }
 
         private void OnDash()
@@ -115,10 +147,25 @@ namespace AvatarBA
             if(_dashAbility.state == AbilityState.cooldown) return;
 
             _dashAbility.Trigger();
-            StartCoroutine(_dashAbility.TriggerCO(gameObject, 
-                                                target => _characterController.Move(target), 
-                                                CanMove));
+            StartCoroutine(_dashAbility.TriggerCO(_rigidbody, 
+                                                t => StartCoroutine(LoseControl(t))
+                                                ));
             StartCoroutine(_dashAbility.CooldownCountdown());
+        }
+
+        private IEnumerator LoseControl(float loseTime)
+        {
+            float finishedTime = Time.time + loseTime;
+
+            CanMove = false;
+
+            while(Time.time < finishedTime)
+            {
+                // Lose control effects
+                yield return null;
+            }
+
+            CanMove = true;
         }
     }
 }

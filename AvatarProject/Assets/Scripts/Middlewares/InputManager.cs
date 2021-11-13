@@ -13,6 +13,8 @@ namespace AvatarBA
         // Movement variables
         private Vector2 _movementInput;
 
+        private Vector2 _mousePosition;
+
         private bool _canDash;
         
         // Input variables
@@ -36,6 +38,11 @@ namespace AvatarBA
             DisableInput();
         }
 
+        private void OnMousePosition(InputAction.CallbackContext context)
+        {
+            _mousePosition = context.ReadValue<Vector2>();
+        }
+
         private void OnMove(InputAction.CallbackContext context)
         {
             _movementInput = context.ReadValue<Vector2>();
@@ -55,10 +62,12 @@ namespace AvatarBA
         {
             currentState.movementDirection = _movementInput;
             currentState.canDash = true;
+            currentState.mousePosition = _mousePosition;
         }
 
         private void SetCallbacks()
         {
+            _playerInput.Gameplay.Mouse.performed += OnMousePosition;
             _playerInput.Gameplay.Movement.performed += OnMove;
             _playerInput.Gameplay.Movement.canceled += OnMoveFinished;
             _playerInput.Gameplay.Dash.performed += OnDash;
@@ -66,6 +75,7 @@ namespace AvatarBA
 
         private void RemoveCallbacks()
         {
+            _playerInput.Gameplay.Mouse.performed -= OnMousePosition;
             _playerInput.Gameplay.Movement.performed -= OnMove;
             _playerInput.Gameplay.Movement.canceled -= OnMoveFinished;
             _playerInput.Gameplay.Dash.performed -= OnDash;

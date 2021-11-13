@@ -20,25 +20,19 @@ namespace AvatarBA
             state = AbilityState.cooldown;
         }
 
-        public IEnumerator TriggerCO(GameObject caller, UnityAction<Vector3> OnMove, bool canMove)
+        public IEnumerator TriggerCO(Rigidbody caller, UnityAction<float> OnLoseControl)
         {
-            canMove = false;
-            
             // Calculate correct direction base on where the camera is looking
-            Vector3 targetDirection = caller.gameObject.transform.forward;
+            Vector3 desiredDirection = caller.transform.forward;
 
             // Apply speed and calculate desire position
-            Vector3 velocity = targetDirection * _dashSpeed;
+            Vector3 desiredVelocity = desiredDirection * _dashSpeed;
 
-            float finishedTime = Time.time + _dashTime;
-            
-            while(Time.time < finishedTime)
-            {
-                OnMove.Invoke(velocity * Time.deltaTime);
-                yield return null;
-            }
+            OnLoseControl.Invoke(_dashTime);
 
-            canMove = true;
+            caller.AddForce(desiredVelocity, ForceMode.VelocityChange);
+
+            yield return null;
         }
     }
 }

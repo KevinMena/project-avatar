@@ -8,6 +8,8 @@ namespace AvatarBA
     {
         public Vector2 movementDirection;
 
+        public Vector2 mousePosition;
+
         public bool canDash;
     }
 }

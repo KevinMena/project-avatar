@@ -33,6 +33,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Mouse"",
+                    ""type"": ""Value"",
+                    ""id"": ""536b1903-bf6b-4c5e-ab98-25fa7b3b24d3"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -101,6 +109,17 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5dbf5345-07ee-4c90-af0f-8deafc1da243"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mouse"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -111,6 +130,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
+        m_Gameplay_Mouse = m_Gameplay.FindAction("Mouse", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -162,12 +182,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private IGameplayActions m_GameplayActionsCallbackInterface;
     private readonly InputAction m_Gameplay_Movement;
     private readonly InputAction m_Gameplay_Dash;
+    private readonly InputAction m_Gameplay_Mouse;
     public struct GameplayActions
     {
         private @PlayerInputActions m_Wrapper;
         public GameplayActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Gameplay_Movement;
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
+        public InputAction @Mouse => m_Wrapper.m_Gameplay_Mouse;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -183,6 +205,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
+                @Mouse.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse;
+                @Mouse.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse;
+                @Mouse.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnMouse;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -193,6 +218,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @Mouse.started += instance.OnMouse;
+                @Mouse.performed += instance.OnMouse;
+                @Mouse.canceled += instance.OnMouse;
             }
         }
     }
@@ -201,5 +229,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnMouse(InputAction.CallbackContext context);
     }
 }
