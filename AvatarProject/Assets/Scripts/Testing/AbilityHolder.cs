@@ -10,8 +10,8 @@ namespace AvatarBA
 
         public void UseAbility()
         {
-            sampleAbility.Trigger();
-            StartCoroutine(sampleAbility.CooldownCountdown());
+            // sampleAbility.Trigger();
+            // StartCoroutine(sampleAbility.CooldownCountdown());
         }
     }
 }

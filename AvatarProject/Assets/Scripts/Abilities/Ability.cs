@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AvatarBA
@@ -15,15 +16,14 @@ namespace AvatarBA
 
         public float cooldown;
 
-        public AbilityState state = AbilityState.ready;
+        public List<AbilityEffect> effects = new List<AbilityEffect>();
 
         public abstract void Initialize();
-        public abstract void Trigger();
+        public abstract IEnumerator Trigger(CharactersController owner, CharactersController target = null);
 
-        public IEnumerator CooldownCountdown()
+        public IEnumerator OnCooldown()
         {
-            yield return new WaitForSecondsRealtime(cooldown);
-            state= AbilityState.ready;
+            yield return new WaitForSeconds(cooldown);
         }
     }
 

@@ -4,14 +4,15 @@ using AvatarBA.Stats;
 
 namespace AvatarBA
 {    
-    public class PlayerStatsController : MonoBehaviour
+    public class CharacterStatsController : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private CharacterData _characterData;
+        [SerializeField] 
+        protected CharacterData _characterData;
 
-        private Dictionary<string, Stat> _currentStats;
+        protected Dictionary<string, Stat> _currentStats;
 
-        void Start()
+        protected virtual void Start()
         {
             _currentStats = _characterData.CreateRuntimeValues();
         }
@@ -29,4 +30,3 @@ namespace AvatarBA
         }
     }
 }
-

@@ -12,12 +12,10 @@ namespace AvatarBA
             Debug.Log("Initiated");
         }
 
-        public override void Trigger()
+        public override IEnumerator Trigger(CharactersController owner, CharactersController target)
         {
-            if(state == AbilityState.cooldown)
-                return;
-            
             Debug.Log("This is a sample of ability");
+            yield return null;
         }
     }
 }

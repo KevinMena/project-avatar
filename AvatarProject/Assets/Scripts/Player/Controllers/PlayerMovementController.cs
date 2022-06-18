@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AvatarBA
 {
-    public class PlayerMovementController : MonoBehaviour
+    public class PlayerMovementController : CharacterMovementController
     {
         [Header("References")]
         [SerializeField] private MovementInputProvider _provider;
@@ -23,22 +23,11 @@ namespace AvatarBA
 
         private Camera _gameplayCamera;
 
-        private Rigidbody _rigidbody;
+        public PlayerController PController => base.Controller as PlayerController;
 
-        private PlayerStatsController _statsController;
-        
-        private bool _canMove = true;
-
-        public bool CanMove
+        protected override void Awake() 
         {
-            get => _canMove;
-            set => _canMove = value;
-        }
-
-        private void Awake() 
-        {
-            _rigidbody = GetComponent<Rigidbody>();
-            _statsController = GetComponent<PlayerStatsController>();
+            base.Awake();
             _gameplayCamera = Camera.main;
         }
 
@@ -96,7 +85,7 @@ namespace AvatarBA
             _movementDirection = Vector3.ClampMagnitude(adjustedMovement, 1f);
 
             // Cache the current movement speed
-            float movementSpeed = _statsController.GetStatValue("movementSpeed");
+            float movementSpeed = PController.PStatsController.GetStatValue("movementSpeed");
 
             // Cache velocity last frame
             Vector3 previousVelocity = _rigidbody.velocity;
@@ -144,28 +133,13 @@ namespace AvatarBA
 
         private void OnDash()
         {
-            if(_dashAbility.state == AbilityState.cooldown) return;
+            // if(_dashAbility.state == AbilityState.cooldown) return;
 
-            _dashAbility.Trigger();
-            StartCoroutine(_dashAbility.TriggerCO(_rigidbody, 
-                                                t => StartCoroutine(LoseControl(t))
-                                                ));
-            StartCoroutine(_dashAbility.CooldownCountdown());
-        }
-
-        private IEnumerator LoseControl(float loseTime)
-        {
-            float finishedTime = Time.time + loseTime;
-
-            CanMove = false;
-
-            while(Time.time < finishedTime)
-            {
-                // Lose control effects
-                yield return null;
-            }
-
-            CanMove = true;
+            // _dashAbility.Trigger();
+            // StartCoroutine(_dashAbility.TriggerCO(_rigidbody, 
+            //                                     t => StartCoroutine(LoseControl(t))
+            //                                     ));
+            // StartCoroutine(_dashAbility.CooldownCountdown());
         }
     }
 }
