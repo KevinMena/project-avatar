@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace AvatarBA
 {
@@ -15,20 +14,23 @@ namespace AvatarBA
 
         public override void Initialize() { }
 
-        public override IEnumerator Trigger(CharactersController owner, CharactersController target)
+        public override IEnumerator Trigger(GameObject owner)
         {
-            CharacterMovementController controller = owner.MovementController;
+            if(owner.TryGetComponent<CharacterMovementController>(out CharacterMovementController movementController))
+            {
+                // Calculate correct direction base on where the camera is looking
+                Vector3 desiredDirection = owner.transform.forward;
 
-            // Calculate correct direction base on where the camera is looking
-            Vector3 desiredDirection = owner.transform.forward;
+                // Apply speed and calculate desire position
+                Vector3 desiredVelocity = desiredDirection * _dashSpeed;
 
-            // Apply speed and calculate desire position
-            Vector3 desiredVelocity = desiredDirection * _dashSpeed;
+                movementController.LoseControl(_dashTime);
 
-            controller.LoseControl(_dashTime);
+                if(owner.TryGetComponent<Character>(out Character character))
+                    character.BecomeInvulnerable();
 
-            controller.AddForce(desiredVelocity, ForceMode.VelocityChange);
-
+                movementController.AddForce(desiredVelocity, ForceMode.VelocityChange);
+            }
             yield return null;
         }
     }

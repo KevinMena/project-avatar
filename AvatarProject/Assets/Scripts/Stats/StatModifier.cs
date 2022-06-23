@@ -7,16 +7,20 @@ namespace AvatarBA.Stats
     {
         private float _value;
         private StatModifierType _modifierType;
+        private object _source;
 
         public float Value => _value;
-
         public StatModifierType ModifierType => _modifierType;
+        public object Source => _source;
 
-        public StatModifier(float value, StatModifierType modifierType)
+        public StatModifier(float value, StatModifierType modifierType, object source)
         {
             _value = value;
             _modifierType = modifierType;
+            _source = source;
         }
+
+        public StatModifier(float value, StatModifierType modifierType) : this(value, modifierType, null) { }
 
         /// <summary>
         /// Compares the type with other modifier to create an order
@@ -39,8 +43,8 @@ namespace AvatarBA.Stats
     /// </summary>
     public enum StatModifierType
     {
-        Flat = 0,
-        PercentAdditive = 1,
-        PercentMultiplicative = 2
+        Flat = 100,
+        PercentAdditive = 200,
+        PercentMultiplicative = 300
     }
 }

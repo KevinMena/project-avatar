@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 namespace AvatarBA
 {    
@@ -20,6 +21,16 @@ namespace AvatarBA
         // Input variables
         private PlayerInputActions _playerInput = null;
 
+        // FOR NOW
+        public event Action OnCoreAbility1;
+
+        public event Action OnCoreAbility2;
+
+        public event Action OnCoreAbility3;
+
+        public event Action OnCoreAbility4;
+
+
         private void OnEnable() 
         {
             if (_playerInput == null)
@@ -28,7 +39,7 @@ namespace AvatarBA
                 SetCallbacks();
             }
 
-            //EnableInput();
+            EnableInput();
             provider?.Subscribe(this);
         }
 

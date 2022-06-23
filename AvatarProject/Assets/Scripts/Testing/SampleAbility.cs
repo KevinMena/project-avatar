@@ -12,7 +12,7 @@ namespace AvatarBA
             Debug.Log("Initiated");
         }
 
-        public override IEnumerator Trigger(CharactersController owner, CharactersController target)
+        public override IEnumerator Trigger(GameObject owner)
         {
             Debug.Log("This is a sample of ability");
             yield return null;

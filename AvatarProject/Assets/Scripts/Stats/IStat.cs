@@ -6,6 +6,8 @@ namespace AvatarBA.Stats
 
         void AddModifier(StatModifier modifier);
 
-        void RemoveModifier(StatModifier modifier);
+        bool RemoveModifier(StatModifier modifier);
+
+        bool RemoveModifiersFromSource(object source);
     }
 }

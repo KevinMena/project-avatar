@@ -10,6 +10,8 @@ namespace AvatarBA.Stats
         private readonly List<StatModifier> _statModifiers = new List<StatModifier>();
 
         private float _value;
+
+        private float _lastBaseValue = float.MinValue;
         private bool _isDirty = true;
 
         /// <summary>
@@ -21,14 +23,21 @@ namespace AvatarBA.Stats
         {
             get
             {
-                if(_isDirty)
+                if(_isDirty || _lastBaseValue != BaseValue)
                 {
+                    _lastBaseValue = BaseValue;
                     _value = CalculateCurrentValue();
                     _isDirty = false;
                 }
 
                 return _value;
             }
+        }
+
+        public float BaseValue
+        {
+            get { return _baseValue; }
+            set { _baseValue = value; }
         }
 
         public Stat(float value) => _baseValue = value;
@@ -49,13 +58,38 @@ namespace AvatarBA.Stats
         /// Removes a modifier from the list if exists and mark the value to be updated
         /// </summary>
         /// <param name="modifier">Modifier</param>
-        public void RemoveModifier(StatModifier modifier)
+        /// <returns> If managed to remove it </returns>
+        public bool RemoveModifier(StatModifier modifier)
         {
-            if(!_statModifiers.Contains(modifier))
-                return;
+            if(_statModifiers.Remove(modifier))
+            {
+                _isDirty = true;
+                return true;
+            }
+            
+            return false;
+        }
 
-            _isDirty = true;
-            _statModifiers.Remove(modifier);
+        /// <summary>
+        /// Remove all modifiers from one source
+        /// </summary>
+        /// <param name="source">Object source of modifiers</param>
+        /// <returns> If removed something or not </returns>
+        public bool RemoveModifiersFromSource(object source)
+        {
+            bool removed = false;
+
+            for(int i = _statModifiers.Count - 1; i >= 0; i--)
+            {
+                if(_statModifiers[i].Source == source)
+                {
+                    _isDirty = true;
+                    removed = true;
+                    _statModifiers.RemoveAt(i);
+                }
+            }
+
+            return removed;
         }
 
         /// <summary>

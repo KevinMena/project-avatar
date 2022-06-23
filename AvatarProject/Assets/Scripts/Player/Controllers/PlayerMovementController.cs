@@ -8,8 +8,6 @@ namespace AvatarBA
         [Header("References")]
         [SerializeField] private MovementInputProvider _provider;
 
-        [SerializeField] private DashAbility _dashAbility;
-
         [Header("Settings")]
         [SerializeField] private Vector3 _movementDirection;
 
@@ -23,14 +21,16 @@ namespace AvatarBA
 
         private Camera _gameplayCamera;
 
-        public PlayerController PController => base.Controller as PlayerController;
+        private PlayerStatsController _statsController;
 
         protected override void Awake() 
         {
             base.Awake();
+            _statsController = GetComponent<PlayerStatsController>();
             _gameplayCamera = Camera.main;
         }
 
+        // TO BE DELETED
         private void Start() 
         {
             _provider.OnDash += OnDash;
@@ -40,6 +40,7 @@ namespace AvatarBA
         {
             _provider.OnDash -= OnDash;
         }
+        //
 
         private void Update()
         {
@@ -59,7 +60,7 @@ namespace AvatarBA
         /// Ask the _provider to gather the current information about the inputs and 
         /// updates the corresponding information.
         /// </summary>
-        private void UpdateState()
+        protected override void UpdateState()
         {
             InputState currentState = _provider.GetState();
             _desiredDirection.x = currentState.movementDirection.x;
@@ -70,7 +71,7 @@ namespace AvatarBA
         /// <summary>
         /// Calculates and moves the player.
         /// </summary>
-        private void Move()
+        protected override void Move()
         {
             //Get the two axes from the camera and flatten them on the XZ plane
             Vector3 cameraForward = _gameplayCamera.transform.forward;
@@ -85,7 +86,7 @@ namespace AvatarBA
             _movementDirection = Vector3.ClampMagnitude(adjustedMovement, 1f);
 
             // Cache the current movement speed
-            float movementSpeed = PController.PStatsController.GetStatValue("movementSpeed");
+            float movementSpeed = _statsController.GetStatValue("movementSpeed");
 
             // Cache velocity last frame
             Vector3 previousVelocity = _rigidbody.velocity;
@@ -99,7 +100,7 @@ namespace AvatarBA
         /// <summary>
         /// Calculates and rotates the player
         /// </summary>
-        private void Rotate()
+        protected override void Rotate()
         {
             // Get rotation from movement
             Vector3 targetDirection = _movementDirection;
