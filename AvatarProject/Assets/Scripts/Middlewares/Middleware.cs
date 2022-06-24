@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace AvatarBA
 {
-    public abstract class Middleware : ScriptableObject
+    public abstract class Middleware : MonoBehaviour
     {
-        public virtual void Process(ref InputState currentState) { }
+        public abstract void Process(ref InputState currentState);
     }
 }

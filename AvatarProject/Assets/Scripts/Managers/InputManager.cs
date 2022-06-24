@@ -1,35 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 using System;
 
 namespace AvatarBA
 {    
-    [CreateAssetMenu(fileName = "Input Manager", menuName ="Middleware/Input Middleware")]
-    public class InputManager : Middleware
+    [CreateAssetMenu(fileName = "InputManager", menuName ="Managers/Input Manager")]
+    public class InputManager : ScriptableObject
     {
-        // Logic variables
-        [SerializeField] 
-        private MovementInputProvider provider = default;
+        public event UnityAction<Vector2> MovementEvent = delegate { };
+        public event UnityAction<Vector2> MousePositionEvent = delegate { };
+        public event UnityAction DashEvent = delegate { };
 
-        // Movement variables
-        private Vector2 _movementInput;
-
-        private Vector2 _mousePosition;
-
-        private bool _canDash;
-        
-        // Input variables
         private PlayerInputActions _playerInput = null;
-
-        // FOR NOW
-        public event Action OnCoreAbility1;
-
-        public event Action OnCoreAbility2;
-
-        public event Action OnCoreAbility3;
-
-        public event Action OnCoreAbility4;
-
 
         private void OnEnable() 
         {
@@ -40,7 +23,6 @@ namespace AvatarBA
             }
 
             EnableInput();
-            provider?.Subscribe(this);
         }
 
         private void OnDisable()
@@ -51,36 +33,24 @@ namespace AvatarBA
 
         private void OnMousePosition(InputAction.CallbackContext context)
         {
-            _mousePosition = context.ReadValue<Vector2>();
+            MousePositionEvent.Invoke(context.ReadValue<Vector2>());
         }
 
         private void OnMove(InputAction.CallbackContext context)
         {
-            _movementInput = context.ReadValue<Vector2>();
-        }
-
-        private void OnMoveFinished(InputAction.CallbackContext context)
-        {
-            _movementInput = Vector2.zero;
+            MovementEvent.Invoke(context.ReadValue<Vector2>());
         }
 
         private void OnDash(InputAction.CallbackContext context)
         {
-            provider.Dash();
-        }
-
-        public override void Process(ref InputState currentState)
-        {
-            currentState.movementDirection = _movementInput;
-            currentState.canDash = true;
-            currentState.mousePosition = _mousePosition;
+            DashEvent.Invoke();
         }
 
         private void SetCallbacks()
         {
             _playerInput.Gameplay.Mouse.performed += OnMousePosition;
             _playerInput.Gameplay.Movement.performed += OnMove;
-            _playerInput.Gameplay.Movement.canceled += OnMoveFinished;
+            _playerInput.Gameplay.Movement.canceled += OnMove;
             _playerInput.Gameplay.Dash.performed += OnDash;
         }
 
@@ -88,9 +58,8 @@ namespace AvatarBA
         {
             _playerInput.Gameplay.Mouse.performed -= OnMousePosition;
             _playerInput.Gameplay.Movement.performed -= OnMove;
-            _playerInput.Gameplay.Movement.canceled -= OnMoveFinished;
+            _playerInput.Gameplay.Movement.canceled -= OnMove;
             _playerInput.Gameplay.Dash.performed -= OnDash;
-            
         }
 
         public void EnableInput()
@@ -102,6 +71,5 @@ namespace AvatarBA
         {
             _playerInput.Gameplay.Disable();
         }
-
     }
 }

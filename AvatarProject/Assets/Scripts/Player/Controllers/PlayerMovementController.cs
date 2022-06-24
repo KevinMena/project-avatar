@@ -30,18 +30,6 @@ namespace AvatarBA
             _gameplayCamera = Camera.main;
         }
 
-        // TO BE DELETED
-        private void Start() 
-        {
-            _provider.OnDash += OnDash;
-        }
-
-        private void OnDisable() 
-        {
-            _provider.OnDash -= OnDash;
-        }
-        //
-
         private void Update()
         {
             UpdateState();
@@ -65,7 +53,7 @@ namespace AvatarBA
             InputState currentState = _provider.GetState();
             _desiredDirection.x = currentState.movementDirection.x;
             _desiredDirection.z = currentState.movementDirection.y;
-            _mousePosition = currentState.mousePosition;
+            _mousePosition = currentState.targetPosition;
         }
 
         /// <summary>
@@ -130,17 +118,6 @@ namespace AvatarBA
             }
 
             return Vector3.zero;
-        }
-
-        private void OnDash()
-        {
-            // if(_dashAbility.state == AbilityState.cooldown) return;
-
-            // _dashAbility.Trigger();
-            // StartCoroutine(_dashAbility.TriggerCO(_rigidbody, 
-            //                                     t => StartCoroutine(LoseControl(t))
-            //                                     ));
-            // StartCoroutine(_dashAbility.CooldownCountdown());
         }
     }
 }
