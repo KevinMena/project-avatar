@@ -1,46 +1,103 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+using AvatarBA.UI;
+using AvatarBA.Common;
 
 namespace AvatarBA
 { 
     public class PlayerAbilityController : MonoBehaviour
     {
-        // What do i want this to do?
-        // 1. This has to be the container for all the core abilities of the player
-        // Meaning: Dash ability (every character has one, but the effects it gains is different)
-        // We have 4 core abilities that the player will be gaining through the stages
-        // They will gain new effects, meaning, evolving with player choises
-        // For now every character will have 3 base abilities at the beginning of the game and later on 
-        // unlock the 4th one that is kinda like an ultimate ability. As said, every one of them will
-        // evolve during gameplay or change drastically (another ability)
-        // 2. This has to control the usage of every ability: trigger the abilities passing all the information
-        // the abilities need and control the cooldown of every single one of them
-        // 3. Change/add effect to the abilities or the abilities itself
-
-        // FOR NOW
+        [Header("References")]
         [SerializeField]
         private InputManager _inputManager;
-        //
 
         [SerializeField]
-        private Ability _dashAbility;
-
-        private AbilityState _dashState;
+        private AbilityUI _abilitiesDisplay;
+        
+        [Header("Abilities")]
+        [SerializeField]
+        private Ability _dash;
 
         [SerializeField]
-        private Ability[] _coreAbilities;
+        private Ability _leftAbility;
 
-        private AbilityState[] _coreStates;
+        [SerializeField]
+        private Ability _rightAbility;
+
+        [SerializeField]
+        private Ability _ultimate;
+
+        private const int _dashSlot = 0;
+        private const int _leftSlot = 1;
+        private const int _rightSlot = 2;
+        private const int _ultimateSlot = 3;
+
+        private Dictionary<int, AbilityState> _states;
+
+        private void Awake() 
+        {
+            _inputManager.DashEvent += TriggerDash;
+        }
+
+        private void OnDisable()
+        {
+            _inputManager.DashEvent -= TriggerDash;
+        }
+
+        private void Start() 
+        {
+            _states = new Dictionary<int, AbilityState>()
+            {
+                {_dashSlot, AbilityState.ready},
+                {_leftSlot, AbilityState.ready},
+                {_rightSlot, AbilityState.ready},
+                {_ultimateSlot, AbilityState.ready},
+            };
+        }
 
         public void TriggerDash()
         {
-            if(_dashState == AbilityState.cooldown || _dashState == AbilityState.active)
+            AbilityState currentState = GetCurrentState(_dashSlot);
+
+            if(currentState != AbilityState.ready)
                 return;
             
-            StartCoroutine(_dashAbility.OnCooldown(_dashState));
-            StartCoroutine(_dashAbility.Trigger(gameObject));
+            StartCoroutine(TriggerRoutine(_dashSlot, _dash));
         }
 
+        private IEnumerator TriggerRoutine(int slot, Ability currentAbility)
+        {
+            CooldownTimer cooldownTimer = new CooldownTimer(currentAbility.Cooldown);
+
+            StartCoroutine(currentAbility.Trigger(gameObject));
+            UpdateState(slot, AbilityState.cooldown);
+
+            while(!cooldownTimer.IsComplete)
+            {
+                cooldownTimer.Update(Time.deltaTime);
+                UpdateDisplay(cooldownTimer.PercentElapsed, slot);
+                yield return null;
+            }
+
+            UpdateState(slot, AbilityState.ready);
+        }
+
+        private void UpdateDisplay(float current, int slot)
+        {
+            _abilitiesDisplay.UpdateIcon(current, slot);
+        }
+
+        private void UpdateState(int slot, AbilityState state)
+        {
+            _states[slot] = state;
+        }
+
+        private AbilityState GetCurrentState(int slot)
+        {
+            return _states[slot];
+        }
     }
 }

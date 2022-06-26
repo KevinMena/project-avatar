@@ -1,40 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace AvatarBA
 {
-    public abstract class Ability : ScriptableObject
+    public class Ability : ScriptableObject
     {
+        [SerializeField]
+        protected Sprite _icon;
 
-        public Sprite icon;
+        [SerializeField]
 
-        public string abilityName = "New Ability";
+        protected string _name;
 
-        [TextArea]
-        public string description = "Description";
+        [SerializeField, TextArea]
+        protected string _description;
 
-        public float cooldown;
+        [SerializeField]
+        protected float _cooldown;
+        
+        [SerializeField]
+        protected float _activeTime;
 
-        public float activeTime;
+        [SerializeField]
+        protected float _cost;
 
-        public List<AbilityEffect> effects = new List<AbilityEffect>();
+        [SerializeField]
+        protected AbilityType _type;
 
-        public abstract void Initialize();
-        public abstract IEnumerator Trigger(GameObject owner);
+        [SerializeField]
+        protected List<AbilityEffect> _effects = new List<AbilityEffect>();
 
-        public IEnumerator OnCooldown(AbilityState currentState)
-        {
-            if(activeTime > 0)
-            {
-                currentState = AbilityState.active;
-                yield return new WaitForSeconds(activeTime);
-            }
+        public Sprite Icon => _icon;
+        public string Name  => _name;
+        public string Description => _description;
+        public float Cooldown => _cooldown;
+        public float ActiveTime => _activeTime;
+        public float Cost => _cost;
+        public AbilityType Type => _type;
+        public ref readonly List<AbilityEffect> Effects => ref _effects;
 
-            currentState = AbilityState.cooldown;
-            yield return new WaitForSeconds(cooldown);
-            currentState = AbilityState.ready;
-        }
+        public virtual void Initialize() { }
+        public virtual IEnumerator Trigger(GameObject owner) { yield return null; }
     }
 
     public enum AbilityState
@@ -42,5 +50,14 @@ namespace AvatarBA
         ready,
         active,
         cooldown   
+    }
+
+    public enum AbilityType
+    {
+        Fire,
+        Wind,
+        Earth,
+        Water,
+        Neutral
     }
 }

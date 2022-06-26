@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AvatarBA
 {
-    [CreateAssetMenu(fileName = "Dash Ability", menuName ="Abilities/Dash")]
+    [CreateAssetMenu(fileName = "Ability_Dash_", menuName ="Abilities/Dash")]
     public class DashAbility : Ability
     {
         [SerializeField] 
