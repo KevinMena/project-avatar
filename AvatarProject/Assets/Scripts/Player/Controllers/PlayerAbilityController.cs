@@ -15,7 +15,7 @@ namespace AvatarBA
         private InputManager _inputManager;
 
         [SerializeField]
-        private AbilityUI _abilitiesDisplay;
+        private AbilityDisplayManager _displayManager;
         
         [Header("Abilities")]
         [SerializeField]
@@ -87,7 +87,7 @@ namespace AvatarBA
 
         private void UpdateDisplay(float current, int slot)
         {
-            _abilitiesDisplay.UpdateIcon(current, slot);
+            _displayManager.UpdateIcon(current, slot);
         }
 
         private void UpdateState(int slot, AbilityState state)

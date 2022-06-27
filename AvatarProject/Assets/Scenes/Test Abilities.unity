@@ -21518,7 +21518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputManager: {fileID: 11400000, guid: 8612807aea4d844419da8531c21d86f6, type: 2}
-  _abilitiesDisplay: {fileID: 1724193732}
+  _displayManager: {fileID: 11400000, guid: 414be2a8ecd838d47a335955e91eee4f, type: 2}
   _dash: {fileID: 11400000, guid: 92e17554d62f46440b51674e4cd833ad, type: 2}
   _leftAbility: {fileID: 0}
   _rightAbility: {fileID: 0}
@@ -25236,6 +25236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 098cf8cecf3e6904087ac1ae9c251c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _manager: {fileID: 11400000, guid: 414be2a8ecd838d47a335955e91eee4f, type: 2}
   _slots:
   - {fileID: 895229019}
 --- !u!1 &1725138760
