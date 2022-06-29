@@ -8,9 +8,10 @@ namespace AvatarBA
     [CreateAssetMenu(fileName = "InputManager", menuName ="Managers/Input Manager")]
     public class InputManager : ScriptableObject
     {
-        public event UnityAction<Vector2> MovementEvent = delegate { };
-        public event UnityAction<Vector2> MousePositionEvent = delegate { };
-        public event UnityAction DashEvent = delegate { };
+        public event UnityAction<Vector2> MovementEvent;
+        public event UnityAction<Vector2> MousePositionEvent;
+        public event UnityAction DashEvent;
+        public event UnityAction MeleeAttackEvent;
 
         private PlayerInputActions _playerInput = null;
 
@@ -46,12 +47,18 @@ namespace AvatarBA
             DashEvent.Invoke();
         }
 
+        private void OnMeleeAtack(InputAction.CallbackContext context)
+        {
+            MeleeAttackEvent.Invoke();
+        }
+
         private void SetCallbacks()
         {
             _playerInput.Gameplay.Mouse.performed += OnMousePosition;
             _playerInput.Gameplay.Movement.performed += OnMove;
             _playerInput.Gameplay.Movement.canceled += OnMove;
             _playerInput.Gameplay.Dash.performed += OnDash;
+            _playerInput.Gameplay.MeleeAttack.performed += OnMeleeAtack;
         }
 
         private void RemoveCallbacks()
@@ -60,6 +67,7 @@ namespace AvatarBA
             _playerInput.Gameplay.Movement.performed -= OnMove;
             _playerInput.Gameplay.Movement.canceled -= OnMove;
             _playerInput.Gameplay.Dash.performed -= OnDash;
+            _playerInput.Gameplay.MeleeAttack.performed -= OnMeleeAtack;
         }
 
         public void EnableInput()
