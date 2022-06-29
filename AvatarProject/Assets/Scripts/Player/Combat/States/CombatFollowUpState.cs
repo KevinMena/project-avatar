@@ -1,5 +1,3 @@
-using AvatarBA.Patterns;
-
 namespace AvatarBA.Combat
 {
     public class CombatFollowUpState : CombatBaseState
@@ -7,29 +5,15 @@ namespace AvatarBA.Combat
         public CombatFollowUpState(CombatHandler owner) : base(owner)
         {
             stateName = "FollowUp Combo";
+            animationName = "AttackMagic2";
+            nextState = owner.FinisherState;
         }
 
         public override void OnEnter()
         {
             base.OnEnter();
 
-            // Get duration
-            attackDuration = 0.5f;
-            // Set animation for this attack
             UnityEngine.Debug.Log($"State: {stateName}");
-        }
-
-        public override void OnUpdate()
-        {
-            base.OnUpdate();
-
-            if(timer > attackDuration)
-            {
-                if(continueCombo)
-                    owner.SetState(owner.FinisherState);
-                else
-                    owner.SetStateToInitial();
-            }
         }
     }
 }

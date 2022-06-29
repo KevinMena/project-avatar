@@ -1,6 +1,5 @@
 using UnityEngine;
 
-using AvatarBA.Patterns;
 using AvatarBA.Combat;
 
 namespace AvatarBA
@@ -14,10 +13,10 @@ namespace AvatarBA
         private void Awake() 
         {
             _inputManager.MeleeAttackEvent += OnAttack;
-            _idleState = new CombatIdleState(this);
-            _entryState = new CombatEntryState(this);
-            _followUpState = new CombatFollowUpState(this);
             _finisherState = new CombatFinisherState(this);
+            _followUpState = new CombatFollowUpState(this);
+            _entryState = new CombatEntryState(this);
+            _idleState = new CombatIdleState(this);
             initialState = _idleState;
         }
 
@@ -35,7 +34,7 @@ namespace AvatarBA
             }
 
             CombatBaseState comboState = currentState as CombatBaseState;
-            comboState.ContinueCombo();
+            comboState.TriggerInput();
         }
     }
 }

@@ -23,11 +23,15 @@ namespace AvatarBA
 
         private PlayerStatsController _statsController;
 
+        // FOR TESTING PURPOSES
+        private Animator _animator;
+
         protected override void Awake() 
         {
             base.Awake();
             _statsController = GetComponent<PlayerStatsController>();
             _gameplayCamera = Camera.main;
+            _animator = GetComponent<Animator>();
         }
 
         private void Update()
@@ -72,6 +76,11 @@ namespace AvatarBA
                 cameraForward.normalized * _desiredDirection.z;
 
             _movementDirection = Vector3.ClampMagnitude(adjustedMovement, 1f);
+
+            if(_movementDirection != Vector3.zero)
+                _animator.SetBool("Moving", true);
+            else
+                _animator.SetBool("Moving", false);
 
             // Cache the current movement speed
             float movementSpeed = _statsController.GetStatValue("movementSpeed");

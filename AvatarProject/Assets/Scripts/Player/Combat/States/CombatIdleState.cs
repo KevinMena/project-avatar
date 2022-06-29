@@ -1,5 +1,3 @@
-using AvatarBA.Patterns;
-
 namespace AvatarBA.Combat
 {
     public class CombatIdleState : CombatState
