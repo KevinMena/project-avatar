@@ -21537,6 +21537,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputManager: {fileID: 11400000, guid: 8612807aea4d844419da8531c21d86f6, type: 2}
+  _combatManager:
+    _combatStatesData:
+    - StateName: Entry
+      AnimationName: AttackMagic1
+      AttackRange: 0
+    - StateName: FollowUp
+      AnimationName: AttackMagic2
+      AttackRange: 0
+    - StateName: Finisher
+      AnimationName: AttackMagic3
+      AttackRange: 0
 --- !u!1 &1520949672
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,18 +1,84 @@
+using UnityEngine;
+using System;
+
+using AvatarBA.Patterns;
+
 namespace AvatarBA.Combat
 {
-    public abstract class CombatState
+    [Serializable]
+    public struct CombatStateData
     {
-        protected CombatHandler owner;
+        public string StateName;
 
-        public CombatState(CombatHandler owner)
+        public string AnimationName;
+
+        public float AttackRange;
+    }
+
+    public class CombatState : State
+    {
+        private CombatManager _owner; 
+        protected string stateName;
+
+        // Animator for now
+        // protected Animator animator;
+        
+        protected string animationName;
+
+        protected float attackDuration = 0;
+        protected float attackRange = 0;
+        protected float damage = 0;
+
+        protected float timer = 0;
+
+        public CombatState(CombatManager owner, CombatStateData data) : base(owner) 
         {
-            this.owner= owner;
+            _owner = owner as CombatManager;
+            //animator = owner.GetComponent<Animator>();
+            stateName = data.StateName;
+            animationName = data.AnimationName;
+            attackRange = data.AttackRange;
         }
 
-        public abstract void OnEnter();
+        public override void OnEnter()
+        {
+            timer = 0;
+            damage = CalculateDamage();
+            attackDuration = CalculateAttackDuration();
+            //animator.SetTrigger(animationName);
+            UnityEngine.Debug.Log($"State: {stateName}");
+        }
 
-        public abstract void OnUpdate();
+        public override void OnExit()
+        {
+            
+        }
 
-        public abstract void OnExit();
+        public override void OnUpdate()
+        {
+            timer += Time.deltaTime;
+
+            if(timer > attackDuration)
+            {
+                _owner.SetNextState();
+            }
+        }
+
+        private float CalculateDamage()
+        {
+            return 0;
+        }
+
+        private float CalculateAttackDuration()
+        {
+            // AnimationClip[] animations = animator.runtimeAnimatorController.animationClips;
+            // foreach (var animation in animations)
+            // {
+            //     if(animation.name == animationName)
+            //         return animation.length;
+            // }
+
+            return 1f;
+        }
     }
 }

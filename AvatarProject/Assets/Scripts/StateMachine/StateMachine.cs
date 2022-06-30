@@ -1,43 +1,37 @@
-using UnityEngine;
-
 namespace AvatarBA.Patterns
 {
-    public class StateMachine : MonoBehaviour
+    public class StateMachine
     {
         protected State currentState;
         protected State initialState;
 
-        public State InitialState
-        {
-            get 
-            {
-                return initialState;
-            }
-        }
+        public State CurrentState => currentState;
 
-        protected virtual void Start()
+        public virtual void Start()
         {
             if(initialState != null)
                 SetState(initialState);
         }
 
-        protected void Update()
+        public virtual void Update()
         {
             currentState?.OnUpdate();
-            Transition triggeredTransition = currentState?.CheckTransitions();
-
-            if(triggeredTransition != null)
-                SetState(triggeredTransition.TargetState);
         }
 
-        public void SetState(State nextState)
+        protected void SetInitialState()
+        {
+            currentState = initialState;
+            currentState.OnEnter();
+        }
+
+        public virtual void SetState(State nextState)
         {
             currentState?.OnExit();
             currentState = nextState;
             currentState.OnEnter();
         }
 
-        public void SetStateToInitial()
+        public virtual void SetStateToInitial()
         {
             SetState(initialState);
         }

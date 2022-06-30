@@ -1,8 +1,10 @@
+using AvatarBA.Patterns;
+
 namespace AvatarBA.Combat
 {
-    public class CombatIdleState : CombatState
+    public class CombatIdleState : CombatTransitionState
     {
-        public CombatIdleState(CombatHandler owner) : base(owner)
+        public CombatIdleState(CombatManager owner, CombatState state) : base(owner, state)
         {
         }
 
@@ -11,8 +13,10 @@ namespace AvatarBA.Combat
             UnityEngine.Debug.Log("State: Idle");
         }
 
-        public override void OnExit() { }
-
-        public override void OnUpdate() { }
+        public override void OnUpdate() 
+        { 
+            if(attackTriggered)
+                TransitionToTarget();
+        }
     }
 }
