@@ -5,6 +5,9 @@ using AvatarBA.Patterns;
 
 namespace AvatarBA.Combat
 {
+    /// <summary>
+    /// Data necessary for every state in the combo
+    /// </summary>
     [Serializable]
     public struct CombatStateData
     {
@@ -15,6 +18,10 @@ namespace AvatarBA.Combat
         public float AttackRange;
     }
 
+    /// <summary>
+    /// State for the combat system. We calculate the damage if we trigger attacks on enemies
+    /// and play the animations of the combat.
+    /// </summary>
     public class CombatState : State
     {
         private CombatManager _owner; 
@@ -38,35 +45,31 @@ namespace AvatarBA.Combat
         public override void OnEnter()
         {
             timer = 0;
-            damage = CalculateDamage();
-            attackDuration = CalculateAttackDuration();
+            damage = _owner.CalculateAttackDamage();
+            attackDuration = _owner.CalculateAttackDuration(animationName);
             _owner.SetAnimation(animationName);
             UnityEngine.Debug.Log($"State: {stateName}");
-        }
-
-        public override void OnExit()
-        {
-            
         }
 
         public override void OnUpdate()
         {
             timer += Time.deltaTime;
 
+            // If the attack is done then we transition to the transition state.
             if(timer > attackDuration)
             {
                 _owner.SetNextState();
             }
         }
 
-        private float CalculateDamage()
-        {
-            return 0;
-        }
+        public override void OnExit() { }
 
-        private float CalculateAttackDuration()
+        /// <summary>
+        /// Logic for finding if anny targets hit and damage the enemies
+        /// </summary>
+        public void Attack()
         {
-            return _owner.GetAnimationLength(animationName);
+
         }
     }
 }

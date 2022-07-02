@@ -4,6 +4,10 @@ using AvatarBA.Patterns;
 
 namespace AvatarBA.Combat
 {
+    /// <summary>
+    /// Manager of the combat system. The system is combo based combat of a number of states.
+    /// We keep the current combo index to know when to finish the combo and to reset all the states.
+    /// </summary>
     [Serializable]
     public class CombatManager : StateMachine
     {
@@ -21,16 +25,11 @@ namespace AvatarBA.Combat
         // TODO: CHANGED THIS
         private const float timerForInput = 0.8f;
 
-        private Animator _animator;
-
-        public Animator Anim
-        {
-            set => _animator = value;
-        }
+        protected Animator animator;
 
         public bool AttackTriggered => _attackTriggered;
 
-        public override void Start()
+        protected override void Start()
         {
             GenerateStates();
             initialState = _transitions[0];
@@ -38,6 +37,10 @@ namespace AvatarBA.Combat
             SetInitialState();
         }
 
+        /// <summary>
+        /// Instantiate all the necessary combat states and transitions states
+        /// depending on the length of the combo. Also instantiate the idle state
+        /// </summary>
         private void GenerateStates()
         {
             int numberStates = _combatStatesData.Length;
@@ -59,6 +62,10 @@ namespace AvatarBA.Combat
             }
         }
 
+        /// <summary>
+        /// Transition to one of the main combo states. In this states we don't register inputs
+        /// </summary>
+        /// <param name="nextState"> Combo state to transition </param>
         public void SetMainState(State nextState)
         {
             _currentComboIndex++;
@@ -67,12 +74,18 @@ namespace AvatarBA.Combat
             SetState(nextState);
         }
 
+        /// <summary>
+        /// Reset the state machine and reset combo count
+        /// </summary>
         public override void SetStateToInitial()
         {
             _currentComboIndex = 0;
             base.SetStateToInitial();
         }
 
+        /// <summary>
+        /// Transition to the next transition state in which we receive inputs to keep the combo
+        /// </summary>
         public void SetNextState()
         {
             _isTransitioning = true;
@@ -84,20 +97,33 @@ namespace AvatarBA.Combat
             SetState(_transitions[_currentComboIndex]);
         }
 
-        public void TriggerCombo()
+        /// <summary>
+        /// Trigger if input received, only if we are in a transition state
+        /// </summary>
+        public void OnAttack()
         {
             if(_isTransitioning)
                 _attackTriggered = true;
         }
 
+        /// <summary>
+        /// TODO: CHANGE THIS
+        /// Trigger the animation of the current combo state
+        /// </summary>
+        /// <param name="animationName"> Name of the animation </param>
         public void SetAnimation(string animationName)
         {
-            _animator.SetTrigger(animationName);
+            animator.SetTrigger(animationName);
         }
 
+        /// <summary>
+        /// Get the length of the animation we want to play
+        /// </summary>
+        /// <param name="animationName"> Name of the animation </param>
+        /// <returns> Length </returns>
         public float GetAnimationLength(string animationName)
         {
-            AnimationClip[] animations = _animator.runtimeAnimatorController.animationClips;
+            AnimationClip[] animations = animator.runtimeAnimatorController.animationClips;
             foreach (var animation in animations)
             {
                 if(animation.name == animationName)
@@ -105,6 +131,25 @@ namespace AvatarBA.Combat
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Calculate current damage of the attack depending on the user stats
+        /// </summary>
+        /// <returns> Damage of the attack </returns>
+        public virtual float CalculateAttackDamage() 
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// Calculate how long it will take for the attack to finish depending on the
+        /// user stats
+        /// </summary>
+        /// <returns> Length of the attack </returns>
+        public virtual float CalculateAttackDuration(string animationName)
+        {
+            return  0;
         }
     }
 }

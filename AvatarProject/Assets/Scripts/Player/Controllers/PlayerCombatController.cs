@@ -4,22 +4,19 @@ using AvatarBA.Combat;
 
 namespace AvatarBA
 {
-    public class PlayerCombatController : MonoBehaviour
+    public class PlayerCombatController : CombatManager
     {
         [Header("References")]
         [SerializeField]
         private InputManager _inputManager;
 
-        [SerializeField]
-        private CombatManager _combatManager;
-
-        // For now
-        private Animator _animator;
+        private PlayerStatsController _statsController;
 
         private void Awake() 
         {
             _inputManager.MeleeAttackEvent += OnAttack;
-            _animator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
+            _statsController = GetComponent<PlayerStatsController>();
         }
 
         private void OnDisable() 
@@ -27,20 +24,18 @@ namespace AvatarBA
             _inputManager.MeleeAttackEvent -= OnAttack;
         }
 
-        private void Start() 
+        public override float CalculateAttackDamage()
         {
-            _combatManager.Start();
-            _combatManager.Anim = _animator;
+            return _statsController.GetStatValue("attackPower");
         }
 
-        private void Update() 
+        public override float CalculateAttackDuration(string animationName)
         {
-            _combatManager.Update();
-        }
+            float animationLenght = GetAnimationLength(animationName);
+            float attackSpeed = _statsController.GetStatValue("attackSpeed");
 
-        private void OnAttack()
-        {
-            _combatManager.TriggerCombo();
+            // TODO: If attack speed is different than 1 then change play rate of the animation
+            return (1 / attackSpeed) * animationLenght;
         }
     }
 }

@@ -1,19 +1,21 @@
+using UnityEngine;
+
 namespace AvatarBA.Patterns
 {
-    public class StateMachine
+    public class StateMachine : MonoBehaviour
     {
         protected State currentState;
         protected State initialState;
 
         public State CurrentState => currentState;
 
-        public virtual void Start()
+        protected virtual void Start()
         {
             if(initialState != null)
                 SetState(initialState);
         }
 
-        public virtual void Update()
+        protected virtual void Update()
         {
             currentState?.OnUpdate();
         }

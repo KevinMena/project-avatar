@@ -21536,18 +21536,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24310bc5c2dfc0f4dbc12291b854f5a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _combatStatesData:
+  - StateName: Entry
+    AnimationName: AttackMagic1
+    AttackRange: 0
+  - StateName: FollowUp
+    AnimationName: AttackMagic2
+    AttackRange: 0
+  - StateName: Finisher
+    AnimationName: AttackMagic3
+    AttackRange: 0
   _inputManager: {fileID: 11400000, guid: 8612807aea4d844419da8531c21d86f6, type: 2}
-  _combatManager:
-    _combatStatesData:
-    - StateName: Entry
-      AnimationName: AttackMagic1
-      AttackRange: 0
-    - StateName: FollowUp
-      AnimationName: AttackMagic2
-      AttackRange: 0
-    - StateName: Finisher
-      AnimationName: AttackMagic3
-      AttackRange: 0
 --- !u!1 &1520949672
 GameObject:
   m_ObjectHideFlags: 0
