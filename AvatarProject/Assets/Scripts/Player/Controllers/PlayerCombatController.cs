@@ -13,14 +13,13 @@ namespace AvatarBA
         [SerializeField]
         private CombatManager _combatManager;
 
+        // For now
+        private Animator _animator;
+
         private void Awake() 
         {
             _inputManager.MeleeAttackEvent += OnAttack;
-            // _finisherState = new CombatFinisherState(this);
-            // _followUpState = new CombatFollowUpState(this);
-            // _entryState = new CombatEntryState(this);
-            // _idleState = new CombatIdleState(this);
-            // initialState = _idleState;
+            _animator = GetComponent<Animator>();
         }
 
         private void OnDisable() 
@@ -31,6 +30,7 @@ namespace AvatarBA
         private void Start() 
         {
             _combatManager.Start();
+            _combatManager.Anim = _animator;
         }
 
         private void Update() 
@@ -40,15 +40,6 @@ namespace AvatarBA
 
         private void OnAttack()
         {
-            // if(currentState.GetType() == typeof(CombatIdleState))
-            // {
-            //     SetState(EntryState);
-            //     return;
-            // }
-
-            // CombatBaseState comboState = currentState as CombatBaseState;
-            // comboState.TriggerInput();
-
             _combatManager.TriggerCombo();
         }
     }

@@ -15,13 +15,26 @@ namespace AvatarBA.Combat
 
         private int _currentComboIndex = 0;
 
+        private bool _attackTriggered = false;
+        private bool _isTransitioning = false;
+
         // TODO: CHANGED THIS
         private const float timerForInput = 0.8f;
+
+        private Animator _animator;
+
+        public Animator Anim
+        {
+            set => _animator = value;
+        }
+
+        public bool AttackTriggered => _attackTriggered;
 
         public override void Start()
         {
             GenerateStates();
             initialState = _transitions[0];
+            _isTransitioning = true;
             SetInitialState();
         }
 
@@ -49,6 +62,8 @@ namespace AvatarBA.Combat
         public void SetMainState(State nextState)
         {
             _currentComboIndex++;
+            _isTransitioning = false;
+            _attackTriggered = false;
             SetState(nextState);
         }
 
@@ -60,22 +75,36 @@ namespace AvatarBA.Combat
 
         public void SetNextState()
         {
+            _isTransitioning = true;
             if(_currentComboIndex >= _combatStates.Length)
             {
                 SetStateToInitial();
                 return;
             }
-            
             SetState(_transitions[_currentComboIndex]);
         }
 
         public void TriggerCombo()
         {
-            Type currentType = currentState.GetType();
-            if(currentType == typeof(CombatTransitionState) || currentType == typeof(CombatIdleState))
+            if(_isTransitioning)
+                _attackTriggered = true;
+        }
+
+        public void SetAnimation(string animationName)
+        {
+            _animator.SetTrigger(animationName);
+        }
+
+        public float GetAnimationLength(string animationName)
+        {
+            AnimationClip[] animations = _animator.runtimeAnimatorController.animationClips;
+            foreach (var animation in animations)
             {
-                (currentState as CombatTransitionState).ContinueCombo();
+                if(animation.name == animationName)
+                    return animation.length;
             }
+
+            return 0;
         }
     }
 }

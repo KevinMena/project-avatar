@@ -8,7 +8,6 @@ namespace AvatarBA.Combat
         private CombatManager _owner; 
         private float _baseTriggeredTimer = 0;
         private float _attackTriggeredTimer = 0;
-        protected bool attackTriggered = false;
 
         public CombatTransitionState(CombatManager owner, CombatState state, float timer = 0) : base(owner, state)
         {
@@ -27,21 +26,11 @@ namespace AvatarBA.Combat
         {
             _attackTriggeredTimer -= Time.deltaTime;
             
-            if(attackTriggered)
+            if(_owner.AttackTriggered)
                 TransitionToTarget();
 
             if(_attackTriggeredTimer <= 0)
                 owner.SetStateToInitial();
-        }
-
-        public override void OnExit()
-        {
-            attackTriggered = false;
-        }
-
-        public void ContinueCombo()
-        {
-            attackTriggered = true;
         }
 
         protected override void TransitionToTarget()

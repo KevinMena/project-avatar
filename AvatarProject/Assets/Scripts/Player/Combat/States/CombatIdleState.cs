@@ -4,8 +4,11 @@ namespace AvatarBA.Combat
 {
     public class CombatIdleState : CombatTransitionState
     {
+        private CombatManager _owner;
+
         public CombatIdleState(CombatManager owner, CombatState state) : base(owner, state)
         {
+            _owner = owner;
         }
 
         public override void OnEnter()
@@ -15,7 +18,7 @@ namespace AvatarBA.Combat
 
         public override void OnUpdate() 
         { 
-            if(attackTriggered)
+            if(_owner.AttackTriggered)
                 TransitionToTarget();
         }
     }

@@ -19,10 +19,6 @@ namespace AvatarBA.Combat
     {
         private CombatManager _owner; 
         protected string stateName;
-
-        // Animator for now
-        // protected Animator animator;
-        
         protected string animationName;
 
         protected float attackDuration = 0;
@@ -34,7 +30,6 @@ namespace AvatarBA.Combat
         public CombatState(CombatManager owner, CombatStateData data) : base(owner) 
         {
             _owner = owner as CombatManager;
-            //animator = owner.GetComponent<Animator>();
             stateName = data.StateName;
             animationName = data.AnimationName;
             attackRange = data.AttackRange;
@@ -45,7 +40,7 @@ namespace AvatarBA.Combat
             timer = 0;
             damage = CalculateDamage();
             attackDuration = CalculateAttackDuration();
-            //animator.SetTrigger(animationName);
+            _owner.SetAnimation(animationName);
             UnityEngine.Debug.Log($"State: {stateName}");
         }
 
@@ -71,14 +66,7 @@ namespace AvatarBA.Combat
 
         private float CalculateAttackDuration()
         {
-            // AnimationClip[] animations = animator.runtimeAnimatorController.animationClips;
-            // foreach (var animation in animations)
-            // {
-            //     if(animation.name == animationName)
-            //         return animation.length;
-            // }
-
-            return 1f;
+            return _owner.GetAnimationLength(animationName);
         }
     }
 }
