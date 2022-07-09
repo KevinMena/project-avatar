@@ -43,6 +43,7 @@ namespace AvatarBA
 
         public virtual void Initialize() { }
         public virtual IEnumerator Trigger(GameObject owner) { yield return null; }
+        public virtual bool PassRequirements() { return true; }
     }
 
     public enum AbilityState

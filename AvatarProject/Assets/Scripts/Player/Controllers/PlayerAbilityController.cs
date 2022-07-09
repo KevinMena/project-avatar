@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-using AvatarBA.UI;
 using AvatarBA.Common;
 
 namespace AvatarBA
@@ -60,12 +58,35 @@ namespace AvatarBA
 
         public void TriggerDash()
         {
-            AbilityState currentState = GetCurrentState(_dashSlot);
+            TriggerAbility(_dashSlot, _dash);
+        }
+
+        public void TriggerLeftSlot()
+        {
+            TriggerAbility(_leftSlot, _leftAbility);
+        }
+
+        public void TriggerRightSlot()
+        {
+            TriggerAbility(_rightSlot, _rightAbility);
+        }
+
+        public void TriggerUltimate()
+        {
+            TriggerAbility(_ultimateSlot, _ultimate);
+        }
+
+        public void TriggerAbility(int slot, Ability currentAbility)
+        {
+            if(!currentAbility.PassRequirements())
+                return;
+            
+            AbilityState currentState = GetCurrentState(slot);
 
             if(currentState != AbilityState.ready)
                 return;
             
-            StartCoroutine(TriggerRoutine(_dashSlot, _dash));
+            StartCoroutine(TriggerRoutine(slot, currentAbility));
         }
 
         private IEnumerator TriggerRoutine(int slot, Ability currentAbility)
@@ -83,6 +104,27 @@ namespace AvatarBA
             }
 
             UpdateState(slot, AbilityState.ready);
+        }
+
+        public void ReplaceAbility(int slot, Ability newAbility)
+        {
+            switch (slot)
+            {
+                case 0:
+                    _dash = newAbility;
+                    break;
+                case 1:
+                    _leftAbility = newAbility;
+                    break;
+                case 2:
+                    _rightAbility = newAbility;
+                    break;
+                case 3:
+                    _ultimate = newAbility;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void UpdateDisplay(float current, int slot)
