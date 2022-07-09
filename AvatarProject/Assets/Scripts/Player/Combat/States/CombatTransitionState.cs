@@ -1,5 +1,6 @@
 using UnityEngine;
 using AvatarBA.Patterns;
+using AvatarBA.Debugging;
 
 namespace AvatarBA.Combat
 {
@@ -23,7 +24,7 @@ namespace AvatarBA.Combat
         public override void OnEnter()
         {
             _attackTriggeredTimer = _baseTriggeredTimer;
-            UnityEngine.Debug.Log($"State: Transition");
+            GameDebug.Log("State: Transition");
         }
 
         public override void OnUpdate()

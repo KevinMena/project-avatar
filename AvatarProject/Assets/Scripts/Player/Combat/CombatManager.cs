@@ -13,6 +13,12 @@ namespace AvatarBA.Combat
     {
         [SerializeField]
         private CombatStateData[] _combatStatesData;
+
+        [SerializeField]
+        private LayerMask _hittableLayer;
+
+        [SerializeField]
+        private Transform _hitPoint;
         
         private CombatState[] _combatStates;
         private CombatTransitionState[] _transitions;
@@ -25,8 +31,8 @@ namespace AvatarBA.Combat
         // TODO: CHANGED THIS
         private const float timerForInput = 0.8f;
 
-        protected Animator animator;
-
+        public LayerMask HittableLayer => _hittableLayer;
+        public Transform HitPoint => _hitPoint;
         public bool AttackTriggered => _attackTriggered;
 
         protected override void Start()
@@ -100,38 +106,25 @@ namespace AvatarBA.Combat
         /// <summary>
         /// Trigger if input received, only if we are in a transition state
         /// </summary>
-        public void OnAttack()
+        protected void OnAttack()
         {
             if(_isTransitioning)
                 _attackTriggered = true;
         }
 
         /// <summary>
+        /// Change the current state of the movement, we want to stop movement whenever
+        /// doing an attack and get it back on idle
+        /// </summary>
+        /// <param name="state"></param>
+        public virtual void ChangeMovement(bool state) { }
+
+        /// <summary>
         /// TODO: CHANGE THIS
         /// Trigger the animation of the current combo state
         /// </summary>
-        /// <param name="animationName"> Name of the animation </param>
-        public void SetAnimation(string animationName)
-        {
-            animator.SetTrigger(animationName);
-        }
-
-        /// <summary>
-        /// Get the length of the animation we want to play
-        /// </summary>
-        /// <param name="animationName"> Name of the animation </param>
-        /// <returns> Length </returns>
-        public float GetAnimationLength(string animationName)
-        {
-            AnimationClip[] animations = animator.runtimeAnimatorController.animationClips;
-            foreach (var animation in animations)
-            {
-                if(animation.name == animationName)
-                    return animation.length;
-            }
-
-            return 0;
-        }
+        /// <param name="animationName"> Hash name of the animation </param>
+        public virtual void SetAnimation(int animation) { }
 
         /// <summary>
         /// Calculate current damage of the attack depending on the user stats
@@ -150,6 +143,12 @@ namespace AvatarBA.Combat
         public virtual float CalculateAttackDuration(string animationName)
         {
             return  0;
+        }
+
+        private void OnDrawGizmos() 
+        {
+            if(currentState != null && currentState.GetType() == typeof(CombatState))
+                (currentState as CombatState).OnDrawGizmos();
         }
     }
 }

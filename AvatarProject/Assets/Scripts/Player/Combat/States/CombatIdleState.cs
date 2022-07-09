@@ -1,4 +1,4 @@
-using AvatarBA.Patterns;
+using AvatarBA.Debugging;
 
 namespace AvatarBA.Combat
 {
@@ -10,6 +10,8 @@ namespace AvatarBA.Combat
     {
         private CombatManager _owner;
 
+        private readonly int IdleAnimation = UnityEngine.Animator.StringToHash("Idle");
+
         public CombatIdleState(CombatManager owner, CombatState state) : base(owner, state)
         {
             _owner = owner;
@@ -17,7 +19,14 @@ namespace AvatarBA.Combat
 
         public override void OnEnter()
         {
-            UnityEngine.Debug.Log("State: Idle");
+            _owner.ChangeMovement(true);
+            _owner.SetAnimation(IdleAnimation);
+            GameDebug.Log("State: Idle");
+        }
+
+        public override void OnExit()
+        {
+            _owner.ChangeMovement(false);
         }
 
         public override void OnUpdate() 

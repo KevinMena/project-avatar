@@ -15,7 +15,13 @@ namespace AvatarBA
             _rigidbody = GetComponent<Rigidbody>();
         }
 
-        public void DisableMovement() => _canMove = false;
+        public void DisableMovement()
+        {
+            _canMove = false;
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
+            
         public void EnableMovement() => _canMove = true;
 
         protected abstract void UpdateState();

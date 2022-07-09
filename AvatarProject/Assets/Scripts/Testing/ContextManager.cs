@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AvatarBA
@@ -9,7 +7,8 @@ namespace AvatarBA
         [SerializeField]
         private InputManager _inputManager = default;
 
-        private void Start() {
+        private void Start() 
+        {
             _inputManager?.EnableInput();
         }
 

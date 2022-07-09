@@ -1,5 +1,6 @@
-using System.Collections;
 using UnityEngine;
+
+using AvatarBA.Common;
 
 namespace AvatarBA
 {
@@ -9,29 +10,27 @@ namespace AvatarBA
         [SerializeField] private MovementInputProvider _provider;
 
         [Header("Settings")]
-        [SerializeField] private Vector3 _movementDirection;
-
-        [SerializeField] private Vector3 _mousePosition;
-
         [SerializeField] private float _rotationSpeed = 0;
 
         [SerializeField] private LayerMask _terrainLayer;
 
+        private Vector3 _movementDirection;
+        private Vector3 _mousePosition;
         private Vector3 _desiredDirection;
 
         private Camera _gameplayCamera;
 
         private PlayerStatsController _statsController;
 
-        // FOR TESTING PURPOSES
-        private Animator _animator;
+        private AnimationController _animationController;
+        private readonly int MoveAnimation = Animator.StringToHash("Run");
 
         protected override void Awake() 
         {
             base.Awake();
             _statsController = GetComponent<PlayerStatsController>();
             _gameplayCamera = Camera.main;
-            _animator = GetComponent<Animator>();
+            _animationController = GetComponent<AnimationController>();
         }
 
         private void Update()
@@ -78,9 +77,9 @@ namespace AvatarBA
             _movementDirection = Vector3.ClampMagnitude(adjustedMovement, 1f);
 
             if(_movementDirection != Vector3.zero)
-                _animator.SetBool("Moving", true);
+                _animationController.PlayAnimation(MoveAnimation);
             else
-                _animator.SetBool("Moving", false);
+                _animationController.PlayInitialAnimation();
 
             // Cache the current movement speed
             float movementSpeed = _statsController.GetStatValue("movementSpeed");

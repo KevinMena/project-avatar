@@ -23,7 +23,7 @@ namespace AvatarBA
                 SetCallbacks();
             }
 
-            EnableInput();
+            //EnableInput();
         }
 
         private void OnDisable()
