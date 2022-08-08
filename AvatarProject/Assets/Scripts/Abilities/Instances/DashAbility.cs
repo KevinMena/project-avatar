@@ -30,7 +30,7 @@ namespace AvatarBA
                 movementController.AddForce(desiredVelocity, ForceMode.VelocityChange);
             }
 
-            foreach (var effect in _effects)
+            foreach (var effect in Effects)
             {
                 effect.Cast();
             }

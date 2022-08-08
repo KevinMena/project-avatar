@@ -49,10 +49,10 @@ namespace AvatarBA
         {
             _states = new Dictionary<int, AbilityState>()
             {
-                {_dashSlot, AbilityState.ready},
-                {_leftSlot, AbilityState.ready},
-                {_rightSlot, AbilityState.ready},
-                {_ultimateSlot, AbilityState.ready},
+                {_dashSlot, AbilityState.Ready},
+                {_leftSlot, AbilityState.Ready},
+                {_rightSlot, AbilityState.Ready},
+                {_ultimateSlot, AbilityState.Ready},
             };
         }
 
@@ -83,7 +83,7 @@ namespace AvatarBA
             
             AbilityState currentState = GetCurrentState(slot);
 
-            if(currentState != AbilityState.ready)
+            if(currentState != AbilityState.Ready)
                 return;
             
             StartCoroutine(TriggerRoutine(slot, currentAbility));
@@ -94,7 +94,7 @@ namespace AvatarBA
             CooldownTimer cooldownTimer = new CooldownTimer(currentAbility.Cooldown);
 
             StartCoroutine(currentAbility.Trigger(gameObject));
-            UpdateState(slot, AbilityState.cooldown);
+            UpdateState(slot, AbilityState.Cooldown);
 
             while(!cooldownTimer.IsComplete)
             {
@@ -103,7 +103,7 @@ namespace AvatarBA
                 yield return null;
             }
 
-            UpdateState(slot, AbilityState.ready);
+            UpdateState(slot, AbilityState.Ready);
         }
 
         public void ReplaceAbility(int slot, Ability newAbility)

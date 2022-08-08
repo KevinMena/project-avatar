@@ -123,7 +123,7 @@ namespace AvatarBA.Combat
         /// TODO: CHANGE THIS
         /// Trigger the animation of the current combo state
         /// </summary>
-        /// <param name="animationName"> Hash name of the animation </param>
+        /// <param name="animation"> Hash name of the animation </param>
         public virtual void SetAnimation(int animation) { }
 
         /// <summary>

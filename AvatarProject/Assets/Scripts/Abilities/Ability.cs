@@ -1,45 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace AvatarBA
 {
     public class Ability : ScriptableObject
     {
         [SerializeField]
-        protected Sprite _icon;
+        protected Sprite icon;
 
         [SerializeField]
-
-        protected string _name;
+        protected string abilityName;
 
         [SerializeField, TextArea]
-        protected string _description;
+        protected string description;
 
         [SerializeField]
-        protected float _cooldown;
+        protected float cooldown;
         
         [SerializeField]
-        protected float _activeTime;
+        protected float activeTime;
 
         [SerializeField]
-        protected float _cost;
+        protected float cost;
 
         [SerializeField]
-        protected AbilityType _type;
+        protected AbilityType type;
 
         [SerializeField]
-        protected List<AbilityEffect> _effects = new List<AbilityEffect>();
+        protected List<AbilityEffect> effects = new List<AbilityEffect>();
 
-        public Sprite Icon => _icon;
-        public string Name  => _name;
-        public string Description => _description;
-        public float Cooldown => _cooldown;
-        public float ActiveTime => _activeTime;
-        public float Cost => _cost;
-        public AbilityType Type => _type;
-        public ref readonly List<AbilityEffect> Effects => ref _effects;
+        public Sprite Icon => icon;
+        public string Name  => abilityName;
+        public string Description => description;
+        public float Cooldown => cooldown;
+        public float ActiveTime => activeTime;
+        public float Cost => cost;
+        public AbilityType Type => type;
+        public ref readonly List<AbilityEffect> Effects => ref effects;
 
         public virtual void Initialize() { }
         public virtual IEnumerator Trigger(GameObject owner) { yield return null; }
@@ -48,9 +46,9 @@ namespace AvatarBA
 
     public enum AbilityState
     {
-        ready,
-        active,
-        cooldown   
+        Ready,
+        Active,
+        Cooldown   
     }
 
     public enum AbilityType
