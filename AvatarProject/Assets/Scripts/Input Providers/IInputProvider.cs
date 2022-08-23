@@ -8,9 +8,9 @@ namespace AvatarBA
     [Serializable]
     public struct InputState
     {
-        public Vector2 movementDirection;
+        public Vector3 movementDirection;
 
-        public Vector2 targetPosition;
+        public Vector3 targetPosition;
     }
 
     public abstract class IInputProvider : ScriptableObject

@@ -43,7 +43,7 @@ namespace AvatarBA
 
         public override void Process(ref InputState currentState)
         {
-            currentState.movementDirection = _movementPosition;
+            currentState.movementDirection = new Vector3(_movementPosition.x, 0, _movementPosition.y);
             currentState.targetPosition = _mousePosition;
         }
     }

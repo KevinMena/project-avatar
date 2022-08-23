@@ -12,6 +12,7 @@ namespace AvatarBA.AI
         private Action bestAction;
 
         private bool _isDeciding = false;
+        private bool _doingAction = false;
 
         private void Start()
         {
@@ -21,13 +22,15 @@ namespace AvatarBA.AI
 
         private void Update()
         {
-            if (!_isDeciding)
+            if (!_isDeciding && !_doingAction)
                 StartCoroutine(ExecuteBestAction());
         }
 
         private IEnumerator ExecuteBestAction()
         {
+            _doingAction = true;
             yield return bestAction.Execute(gameObject);
+            _doingAction = false;
             yield return CalculateBestAction();
         }
 

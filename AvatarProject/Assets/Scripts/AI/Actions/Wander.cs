@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using AvatarBA.NPC;
+
 namespace AvatarBA.AI.Actions
 {
     [CreateAssetMenu(fileName = "AI_Action_Wander", menuName = "AI/Actions/Wander")]
@@ -20,11 +22,12 @@ namespace AvatarBA.AI.Actions
 
             Vector3 targetPosition = new Vector3(owner.transform.position.x + distanceX, owner.transform.position.y, owner.transform.position.z + distanceZ);
 
-            //if(owner.TryGetComponent(out CharacterMovementController movementController))
-            //{
-
-            //}
-            Debug.Log($"Wandering to {targetPosition}");
+            if (owner.TryGetComponent(out NPCMiddleware movementMiddleware))
+            {
+                movementMiddleware.SetDestination(targetPosition);
+            }
+            Debug.Log($"Wandering to {targetPosition} ");
+            yield return new WaitForSeconds(3f);
         }
     }
 }

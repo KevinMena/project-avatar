@@ -54,8 +54,7 @@ namespace AvatarBA
         protected override void UpdateState()
         {
             InputState currentState = _provider.GetState();
-            _desiredDirection.x = currentState.movementDirection.x;
-            _desiredDirection.z = currentState.movementDirection.y;
+            _desiredDirection = currentState.movementDirection;
             _mousePosition = currentState.targetPosition;
         }
 
