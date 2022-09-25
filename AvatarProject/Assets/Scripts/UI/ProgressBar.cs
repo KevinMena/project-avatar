@@ -16,6 +16,9 @@ namespace AvatarBA.UI
 
         private float _current;
 
+        public int Minimum { get { return _minimum; } set { _minimum = value; } }
+        public int Maximum { get { return _maximum; } set { _maximum = value; } }
+
         public void ChangeCurrent(float amount)
         {
             _current = amount;

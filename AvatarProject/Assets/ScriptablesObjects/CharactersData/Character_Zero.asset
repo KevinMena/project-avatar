@@ -17,16 +17,9 @@ MonoBehaviour:
   _description: Description
   _icon: {fileID: 0}
   _prefab: {fileID: 0}
-  _stats:
-  - Type: {fileID: 11400000, guid: a1aa4d59e227396498063cd51e46d00f, type: 2}
-    DefaultValue: 100
-  - Type: {fileID: 11400000, guid: 03ded0c60dd283c41a5b4f6d5b4d97dd, type: 2}
-    DefaultValue: 7
-  - Type: {fileID: 11400000, guid: 05ce190c1d3e07843a85acc4c346bebc, type: 2}
-    DefaultValue: 3
-  - Type: {fileID: 11400000, guid: ec1556fc4effea34d9a89aa3ec4f1dd2, type: 2}
-    DefaultValue: 5
-  - Type: {fileID: 11400000, guid: 166b7f6b93137404db3325255d0db252, type: 2}
-    DefaultValue: 7
-  - Type: {fileID: 11400000, guid: edeef98993e66d843b67e62eafa336e3, type: 2}
-    DefaultValue: 8
+  _baseHealth: 100
+  _baseAttackPower: 7
+  _baseAttackSpeed: 0.3
+  _baseDefense: 5
+  _baseMovementSpeed: 7
+  _baseSpiritPower: 8

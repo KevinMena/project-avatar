@@ -7,13 +7,31 @@ namespace AvatarBA.Debugging
     {
         [SerializeField]
         private GameObject _player;
-
+        
         [SerializeField]
-        private string[] _statsIds = new string[9];
+        private Text _healthText;
+        [SerializeField]
+        private Text _attackPowerText;
+        [SerializeField]
+        private Text _attackSpeedText;
+        [SerializeField]
+        private Text _defenseText;
+        [SerializeField]
+        private Text _movementSpeedText;
+        [SerializeField]
+        private Text _spiritPowerText;
 
         private PlayerStatsController _statsController;
 
-        private Text[] _statsText = new Text[9];
+        private string[] _statsIds = new string[6] 
+                                    { 
+                                        "Health",
+                                        "Attack Power", 
+                                        "Attack Speed",
+                                        "Defense",
+                                        "Movement Speed",
+                                        "Spirit Power"
+                                    };
 
         private bool _isDirty = false;
 
@@ -24,12 +42,6 @@ namespace AvatarBA.Debugging
 
         private void Start() 
         {
-            for(int i = 0; i < _statsIds.Length; i++)
-            {
-                Transform child = this.transform.GetChild(i);
-                _statsText[i] = child.GetComponent<Text>();
-            }
-
             _isDirty = true;
         }
 
@@ -41,12 +53,23 @@ namespace AvatarBA.Debugging
 
         private void UpdateStats()
         {
-            for(int i = 0; i < _statsIds.Length; i++)
-            {
-                //float value = _statsController.GetStatValue(_statsIds[i]);
-                //string displayName = _statsController.GetStatDisplayName(_statsIds[i]);
-                //_statsText[i].text = $"{displayName} = {value}";
-            }
+            float value = _statsController.Health;
+            _healthText.text = $"{_statsIds[0]} = {value}";
+
+            value = _statsController.AttackPower;
+            _attackPowerText.text = $"{_statsIds[1]} = {value}";
+
+            value = _statsController.AttackSpeed;
+            _attackSpeedText.text = $"{_statsIds[2]} = {value}";
+
+            value = _statsController.Defense;
+            _defenseText.text = $"{_statsIds[3]} = {value}";
+
+            value = _statsController.MovementSpeed;
+            _movementSpeedText.text = $"{_statsIds[4]} = {value}";
+
+            value = _statsController.SpiritPower;
+            _spiritPowerText.text = $"{_statsIds[5]} = {value}";
 
             _isDirty = false;
         }
