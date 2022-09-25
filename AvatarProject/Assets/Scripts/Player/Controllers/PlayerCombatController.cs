@@ -37,18 +37,17 @@ namespace AvatarBA
 
         public override float CalculateAttackDamage()
         {
-            return _statsController.GetStatValue("attackPower");
+            return _statsController.AttackPower;
         }
 
         public override float CalculateAttackDuration(string animationName)
         {
             float animationLenght = _animationController.GetAnimationLength(animationName);
-            float attackSpeed = _statsController.GetStatValue("attackSpeed");
+            float attackSpeed = _statsController.AttackSpeed;
 
             // If attack speed is different than 1 change play rate of the animation so is faster
-            float animMultiplier = 1 / attackSpeed;
-            _animationController.ChangeAnimationSpeed("AttackSpeed", animMultiplier);
-            return animMultiplier * animationLenght;
+            _animationController.ChangeAnimationSpeed("AttackSpeed", attackSpeed);
+            return attackSpeed * animationLenght;
         }
 
         public override void ChangeMovement(bool state)

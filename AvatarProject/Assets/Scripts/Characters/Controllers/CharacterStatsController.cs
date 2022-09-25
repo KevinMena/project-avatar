@@ -10,9 +10,19 @@ namespace AvatarBA
         [SerializeField] 
         protected CharacterData _characterData;
 
-        protected Dictionary<string, Stat> _currentStats;
+        private Stat _health;
+        private Stat _attackPower;
+        private Stat _attackSpeed;
+        private Stat _defense;
+        private Stat _movementSpeed;
+        private Stat _spiritPower;
 
-        protected Dictionary<string, string> _displayNamesStats;
+        public float Health => _health != null ? _health.Value: 0;
+        public float AttackPower => _attackPower != null ? _attackPower.Value : 0;
+        public float AttackSpeed => _attackSpeed != null ? _attackSpeed.Value : 0;
+        public float Defense => _defense != null ? _defense.Value : 0;
+        public float MovementSpeed => _movementSpeed != null ? _movementSpeed.Value : 0;
+        public float SpiritPower => _spiritPower != null ? _spiritPower.Value : 0;
 
         protected virtual void Start()
         {
@@ -21,60 +31,29 @@ namespace AvatarBA
 
         public void CreateRuntimeValues()
         {
-            _currentStats = new Dictionary<string, Stat>();
-            _displayNamesStats = new Dictionary<string, string>();
-
-            foreach (var stat in _characterData.Stats)
-            {
-                _currentStats.Add(stat.Type.Id, new Stat(stat.DefaultValue));
-                _displayNamesStats.Add(stat.Type.Id, stat.Type.DisplayName);
-            }
+            _health = new Stat(_characterData.BaseHealth);
+            _attackPower = new Stat(_characterData.BaseAttackPower);
+            _attackSpeed = new Stat(_characterData.BaseAttackSpeed);
+            _defense = new Stat(_characterData.BaseDefense);
+            _movementSpeed = new Stat(_characterData.BaseMovementSpeed);
+            _spiritPower = new Stat(_characterData.BaseSpiritPower);
         }
 
-        /// <summary>
-        /// Returns the current runtime value for a stat
-        /// </summary>
-        /// <param name="id">Identifier for the stat</param>
-        public float GetStatValue(string id)
+        public void ApplyChangeToStat(Stat stat, float value, StatModifierType modifierType)
         {
-            if(_currentStats.TryGetValue(id, out var result))
-                return result.Value;
-
-            return -1;
+            StatModifier modifier = new StatModifier(value, modifierType);
+            stat.AddModifier(modifier);
         }
 
-        public string GetStatDisplayName(string id)
+        public void RemoveChangeToStat(Stat stat, float value, StatModifierType modifierType)
         {
-            if(_displayNamesStats.TryGetValue(id, out var result))
-                return result;
-
-            return "";
+            StatModifier modifier = new StatModifier(value, modifierType);
+            stat.RemoveModifier(modifier);
         }
 
-        public void ApplyChangeToStat(string id, float value, StatModifierType modifierType)
+        public void RemoveChangeToStatFromSource(Stat stat, object source)
         {
-            if(_currentStats.TryGetValue(id, out var stat))
-            {
-                StatModifier modifier = new StatModifier(value, modifierType);
-                stat.AddModifier(modifier);
-            }
-        }
-
-        public void RemoveChangeToStat(string id, float value, StatModifierType modifierType)
-        {
-            if(_currentStats.TryGetValue(id, out var stat))
-            {
-                StatModifier modifier = new StatModifier(value, modifierType);
-                stat.RemoveModifier(modifier);
-            }
-        }
-
-        public void RemoveChangeToStatFromSource(string id, object source)
-        {
-            if(_currentStats.TryGetValue(id, out var stat))
-            {
-                stat.RemoveModifiersFromSource(source);
-            }
+            stat.RemoveModifiersFromSource(source);
         }
     }
 }

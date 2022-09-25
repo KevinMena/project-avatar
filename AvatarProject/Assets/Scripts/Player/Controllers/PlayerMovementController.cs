@@ -81,7 +81,7 @@ namespace AvatarBA
                 _animationController.PlayInitialAnimation();
 
             // Cache the current movement speed
-            float movementSpeed = _statsController.GetStatValue("movementSpeed");
+            float movementSpeed = _statsController.MovementSpeed;
 
             // Cache velocity last frame
             Vector3 previousVelocity = _rigidbody.velocity;

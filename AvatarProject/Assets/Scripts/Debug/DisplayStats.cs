@@ -43,9 +43,9 @@ namespace AvatarBA.Debugging
         {
             for(int i = 0; i < _statsIds.Length; i++)
             {
-                float value = _statsController.GetStatValue(_statsIds[i]);
-                string displayName = _statsController.GetStatDisplayName(_statsIds[i]);
-                _statsText[i].text = $"{displayName} = {value}";
+                //float value = _statsController.GetStatValue(_statsIds[i]);
+                //string displayName = _statsController.GetStatDisplayName(_statsIds[i]);
+                //_statsText[i].text = $"{displayName} = {value}";
             }
 
             _isDirty = false;

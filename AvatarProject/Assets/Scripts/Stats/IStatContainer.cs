@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace AvatarBA.Stats
 {
     /// <summary>
@@ -13,16 +11,11 @@ namespace AvatarBA.Stats
         /// <returns></returns>
         void CreateRuntimeValues();
 
-        /// <summary>
-        /// Returns base value of the stat
-        /// </summary>
-        /// <param name="id">Identifier of the stat</param>
-        /// <returns></returns>
-        float GetStatValue(string id);
+        void ApplyChangeToStat(Stat stat, float amount, StatModifierType modifierType);
 
-        void ApplyChangeToStat(string id, float amount, StatModifierType modifierType);
+        void RemoveChangeToStat(Stat stat, float amount, StatModifierType modifierType);
 
-        void RemoveChangeToStat(string id, float amount, StatModifierType modifierType);
+        void RemoveChangeToStatFromSource(Stat stat, object source);
     }
     
 }
