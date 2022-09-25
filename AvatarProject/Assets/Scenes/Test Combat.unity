@@ -10013,6 +10013,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 766619817}
+  - component: {fileID: 766619818}
   m_Layer: 5
   m_Name: StatsUI
   m_TagString: Untagged
@@ -10041,6 +10042,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &766619818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766619816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 313ba039ff2116b46a09a7e17c1b774d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _manager: {fileID: 11400000, guid: 47194612f78f999468c015a84a1b3f2f, type: 2}
+  _health: {fileID: 510198841}
 --- !u!1 &773600022
 GameObject:
   m_ObjectHideFlags: 0
@@ -34534,6 +34549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _characterData: {fileID: 11400000, guid: 11e504fb548aa994494b4f3502e71461, type: 2}
+  _displayManager: {fileID: 11400000, guid: 47194612f78f999468c015a84a1b3f2f, type: 2}
 --- !u!136 &1884413811987422765
 CapsuleCollider:
   m_ObjectHideFlags: 0

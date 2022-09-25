@@ -2,34 +2,35 @@ using UnityEngine;
 
 using AvatarBA.UI;
 
-namespace AvatarBA
+namespace AvatarBA.Managers
 {
     [CreateAssetMenu(fileName = "AbilityDisplayManager", menuName ="Managers/Ability Display Manager")]
     public class AbilityDisplayManager : ScriptableObject
     {
-        private AbilityUI _currentInterface = null;
+        private AbilityUI _currentUI = null;
 
-        public void SetInterface(AbilityUI ui)
+        public void Subscribe(AbilityUI current)
         {
-            if(_currentInterface != null)
+            if (_currentUI != null)
                 return;
-            
-            _currentInterface = ui;
+
+            _currentUI = current;
         }
 
-        public void UnsetInterface()
+        public void UnSubscribe(AbilityUI current)
         {
-            _currentInterface = null;
+            if(current == _currentUI)
+                _currentUI = null;
         }
 
         public void UpdateDisplay(int slot, float current)
         {
-            _currentInterface?.UpdateDisplay(slot, current);
+            _currentUI?.UpdateDisplay(slot, current);
         }
 
         public void UpdateIcon(int slot, Sprite icon)
         {
-            _currentInterface?.UpdateIcon(slot, icon);
+            _currentUI?.UpdateIcon(slot, icon);
         }
     }
 }

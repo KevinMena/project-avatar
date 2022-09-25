@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using AvatarBA.Managers;
+
 namespace AvatarBA.UI
 {
     public class AbilityUI : MonoBehaviour
@@ -14,12 +16,12 @@ namespace AvatarBA.UI
 
         private void Start() 
         {
-            _manager.SetInterface(this);    
+            _manager.Subscribe(this);    
         }
 
         private void OnDestroy()
         {
-            _manager.UnsetInterface();
+            _manager.UnSubscribe(this);
         }
 
         public void UpdateDisplay(int slotNumber, float current)

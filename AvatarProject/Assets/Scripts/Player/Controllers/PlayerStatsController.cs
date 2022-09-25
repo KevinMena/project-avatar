@@ -1,12 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
-using AvatarBA.Stats;
+
+using AvatarBA.Managers;
 
 namespace AvatarBA
 {    
     public class PlayerStatsController : CharacterStatsController
     {
-        // Soon to be determine what to do here
+        [SerializeField]
+        protected StatsDisplayManager _displayManager;
+
+        protected override void Start()
+        {
+            base.Start();
+            _displayManager.UpdateMaxHealth(BaseHealth);
+        }
     }
 }
 

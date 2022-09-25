@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
+
 using AvatarBA.Stats;
 
 namespace AvatarBA
@@ -23,6 +23,13 @@ namespace AvatarBA
         public float Defense => _defense != null ? _defense.Value : 0;
         public float MovementSpeed => _movementSpeed != null ? _movementSpeed.Value : 0;
         public float SpiritPower => _spiritPower != null ? _spiritPower.Value : 0;
+
+        public float BaseHealth => _health != null ? _health.BaseValue : 0;
+        public float BaseAttackPower => _attackPower != null ? _attackPower.BaseValue : 0;
+        public float BaseAttackSpeed => _attackSpeed != null ? _attackSpeed.BaseValue : 0;
+        public float BaseDefense => _defense != null ? _defense.BaseValue : 0;
+        public float BaseMovementSpeed => _movementSpeed != null ? _movementSpeed.BaseValue : 0;
+        public float BaseSpiritPower => _spiritPower != null ? _spiritPower.BaseValue : 0;
 
         protected virtual void Start()
         {

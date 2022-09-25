@@ -4,6 +4,7 @@ using UnityEngine;
 
 using AvatarBA.Common;
 using AvatarBA.Abilities;
+using AvatarBA.Managers;
 
 namespace AvatarBA
 { 
