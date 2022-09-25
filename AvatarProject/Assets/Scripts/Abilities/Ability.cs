@@ -1,9 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace AvatarBA
+using AvatarBA.Abilities.Effects;
+
+namespace AvatarBA.Abilities
 {
+    [CreateAssetMenu(fileName = "Ability_", menuName = "Abilities/New Ability")]
     public class Ability : ScriptableObject
     {
         [SerializeField]
@@ -28,7 +30,10 @@ namespace AvatarBA
         protected AbilityType type;
 
         [SerializeField]
-        protected List<AbilityEffect> effects = new List<AbilityEffect>();
+        protected AbilityEffect[] featureEffects;
+
+        [SerializeField]
+        protected AbilityEffect[] effects;
 
         public Sprite Icon => icon;
         public string Name  => abilityName;
@@ -37,11 +42,31 @@ namespace AvatarBA
         public float ActiveTime => activeTime;
         public float Cost => cost;
         public AbilityType Type => type;
-        public ref readonly List<AbilityEffect> Effects => ref effects;
+        public ref readonly AbilityEffect[] Features => ref featureEffects;
+        public ref readonly AbilityEffect[] Effects => ref effects;
 
         public virtual void Initialize() { }
-        public virtual IEnumerator Trigger(GameObject owner) { yield return null; }
-        public virtual bool PassRequirements() { return true; }
+
+        public virtual IEnumerator Trigger(GameObject owner) 
+        {
+            foreach (var feature in Features)
+            {
+                if(owner.TryGetComponent(out Character character))
+                {
+                    character.StartCoroutine(feature.Cast(owner));
+                }
+            }
+
+            foreach (var effect in Effects)
+            {
+                if (owner.TryGetComponent(out Character character))
+                {
+                    character.StartCoroutine(effect.Cast(owner));
+                }
+            }
+
+            yield return null; 
+        }
     }
 
     public enum AbilityState

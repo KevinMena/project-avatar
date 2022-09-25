@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f316796deee674290c30d34d3e6459, type: 3}
+  m_Name: Ability_Dash
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 47cc4fbdfe10fea4cb3aa2a9647aa547, type: 3}
+  abilityName: Normal Dash
+  description: The user moves quickly forward becoming invulnerable to damage for
+    a short amount of time.
+  cooldown: 1.5
+  activeTime: 0
+  cost: 0
+  type: 4
+  featureEffects: []
+  effects:
+  - {fileID: 11400000, guid: d8265591f20436748bf0e84e7928a33f, type: 2}

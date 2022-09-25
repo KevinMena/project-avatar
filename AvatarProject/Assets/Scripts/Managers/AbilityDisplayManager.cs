@@ -17,14 +17,19 @@ namespace AvatarBA
             _currentInterface = ui;
         }
 
-        private void UnsetInterface()
+        public void UnsetInterface()
         {
             _currentInterface = null;
         }
 
-        public void UpdateIcon(float current, int slot)
+        public void UpdateDisplay(int slot, float current)
         {
-            _currentInterface?.UpdateIcon(current, slot);
+            _currentInterface?.UpdateDisplay(slot, current);
+        }
+
+        public void UpdateIcon(int slot, Sprite icon)
+        {
+            _currentInterface?.UpdateIcon(slot, icon);
         }
     }
 }

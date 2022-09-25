@@ -1,19 +1,15 @@
+using System.Collections;
 using UnityEngine;
 
-namespace AvatarBA
+namespace AvatarBA.Abilities.Effects
 {
     public abstract class AbilityEffect : ScriptableObject
     {
         [SerializeField]
         private string _name;
 
-        [SerializeField, TextArea]
-        private string _description;
-
         public string Name => _name;
 
-        public string Description => _description;
-
-        public abstract void Cast();
+        public abstract IEnumerator Cast(GameObject owner);
     }
 }

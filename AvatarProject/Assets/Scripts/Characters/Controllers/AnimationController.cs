@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 namespace AvatarBA.Common
@@ -6,11 +7,10 @@ namespace AvatarBA.Common
     public class AnimationController : MonoBehaviour
     {
         private Animator _animator;
-        private AnimationState[] _states;
 
-        private Dictionary<string, AnimationClip> _clips;
+        private Dictionary<string, AnimatorState> _states;
         private int _currentAnimation;
-        private readonly int IdleAnimation = Animator.StringToHash("Idle"); 
+        private readonly int IdleAnimation = Animator.StringToHash("Idle");
 
         private void Awake()
         {
@@ -20,12 +20,13 @@ namespace AvatarBA.Common
         private void Start() 
         {
             _currentAnimation = IdleAnimation;
-            _clips = new Dictionary<string, AnimationClip>();
-            AnimationClip[] animations = _animator.runtimeAnimatorController.animationClips;
+            //TODO: Change this to have every state for layer
+            AnimatorState[] _allStates = GetAnimatorStateInfo(0);
+            _states = new Dictionary<string, AnimatorState>();
 
-            foreach (AnimationClip animation in animations)
+            foreach (var state in _allStates)
             {
-                _clips[animation.name] = animation;
+                _states[state.name] = state;
             }
         }
 
@@ -46,12 +47,36 @@ namespace AvatarBA.Common
 
         public float GetAnimationLength(string animationName)
         {
-            if(_clips.TryGetValue(animationName, out var animation))
+            if(_states.TryGetValue(animationName, out var animationState))
             {
-                return animation.length;
+                return (animationState.motion as AnimationClip).length;
             }
 
             return 0;
         }
+
+        public void ChangeAnimationSpeed(string parameter, float value)
+        {
+            float currentValue = _animator.GetFloat(parameter);
+            if (currentValue != 0 && currentValue - value < 0.01)
+                return;
+
+            _animator.SetFloat(parameter, value);
+        }
+
+        public AnimatorState[] GetAnimatorStateInfo(int layer)
+        {
+            AnimatorController ac = _animator.runtimeAnimatorController as AnimatorController;
+            List<AnimatorState> allStates = new List<AnimatorState>();
+            AnimatorControllerLayer currentLayer = ac.layers[layer];
+            ChildAnimatorState[] animStates = currentLayer.stateMachine.states;
+            foreach (ChildAnimatorState j in animStates)
+            {
+                allStates.Add(j.state);
+            }
+
+            return allStates.ToArray();
+        }
     }
+
 }

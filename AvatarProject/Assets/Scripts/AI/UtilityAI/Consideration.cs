@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace AvatarBA.AI
+namespace AvatarBA.AI.UtilityAI
 {
     public abstract class Consideration : ScriptableObject
     {

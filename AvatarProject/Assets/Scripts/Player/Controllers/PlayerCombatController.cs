@@ -37,7 +37,6 @@ namespace AvatarBA
 
         public override float CalculateAttackDamage()
         {
-            // TODO: Change this to take into account critical chance
             return _statsController.GetStatValue("attackPower");
         }
 
@@ -46,8 +45,10 @@ namespace AvatarBA
             float animationLenght = _animationController.GetAnimationLength(animationName);
             float attackSpeed = _statsController.GetStatValue("attackSpeed");
 
-            // TODO: If attack speed is different than 1 then change play rate of the animation
-            return (1 / attackSpeed) * animationLenght;
+            // If attack speed is different than 1 change play rate of the animation so is faster
+            float animMultiplier = 1 / attackSpeed;
+            _animationController.ChangeAnimationSpeed("AttackSpeed", animMultiplier);
+            return animMultiplier * animationLenght;
         }
 
         public override void ChangeMovement(bool state)

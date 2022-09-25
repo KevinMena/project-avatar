@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace AvatarBA
+namespace AvatarBA.Abilities
 {
     [CreateAssetMenu(fileName = "Ability_Dash_", menuName ="Abilities/Dash")]
     public class DashAbility : Ability
@@ -32,7 +32,7 @@ namespace AvatarBA
 
             foreach (var effect in Effects)
             {
-                effect.Cast();
+                effect.Cast(owner);
             }
             
             yield return null;

@@ -3,9 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using AvatarBA.Common;
+using AvatarBA.Abilities;
 
 namespace AvatarBA
 { 
+    public enum AbilitySlot
+    {
+        Dash,
+        Left,
+        Right,
+        Ultimate
+    }
+
     public class PlayerAbilityController : MonoBehaviour
     {
         [Header("References")]
@@ -28,12 +37,7 @@ namespace AvatarBA
         [SerializeField]
         private Ability _ultimate;
 
-        private const int _dashSlot = 0;
-        private const int _leftSlot = 1;
-        private const int _rightSlot = 2;
-        private const int _ultimateSlot = 3;
-
-        private Dictionary<int, AbilityState> _states;
+        private AbilityState[] _abilityStates;
 
         private void Awake() 
         {
@@ -47,38 +51,38 @@ namespace AvatarBA
 
         private void Start() 
         {
-            _states = new Dictionary<int, AbilityState>()
-            {
-                {_dashSlot, AbilityState.Ready},
-                {_leftSlot, AbilityState.Ready},
-                {_rightSlot, AbilityState.Ready},
-                {_ultimateSlot, AbilityState.Ready},
-            };
+            _abilityStates = new AbilityState[4] 
+                            { 
+                                AbilityState.Ready, 
+                                AbilityState.Ready, 
+                                AbilityState.Ready, 
+                                AbilityState.Ready 
+                            };
         }
 
         public void TriggerDash()
         {
-            TriggerAbility(_dashSlot, _dash);
+            TriggerAbility(AbilitySlot.Dash, _dash);
         }
 
         public void TriggerLeftSlot()
         {
-            TriggerAbility(_leftSlot, _leftAbility);
+            TriggerAbility(AbilitySlot.Left, _leftAbility);
         }
 
         public void TriggerRightSlot()
         {
-            TriggerAbility(_rightSlot, _rightAbility);
+            TriggerAbility(AbilitySlot.Right, _rightAbility);
         }
 
         public void TriggerUltimate()
         {
-            TriggerAbility(_ultimateSlot, _ultimate);
+            TriggerAbility(AbilitySlot.Ultimate, _ultimate);
         }
 
-        public void TriggerAbility(int slot, Ability currentAbility)
+        public void TriggerAbility(AbilitySlot slot, Ability currentAbility)
         {
-            if(!currentAbility.PassRequirements())
+            if(!PassRequirements(currentAbility.Cost))
                 return;
             
             AbilityState currentState = GetCurrentState(slot);
@@ -89,7 +93,7 @@ namespace AvatarBA
             StartCoroutine(TriggerRoutine(slot, currentAbility));
         }
 
-        private IEnumerator TriggerRoutine(int slot, Ability currentAbility)
+        private IEnumerator TriggerRoutine(AbilitySlot slot, Ability currentAbility)
         {
             CooldownTimer cooldownTimer = new CooldownTimer(currentAbility.Cooldown);
 
@@ -99,11 +103,16 @@ namespace AvatarBA
             while(!cooldownTimer.IsComplete)
             {
                 cooldownTimer.Update(Time.deltaTime);
-                UpdateDisplay(cooldownTimer.PercentElapsed, slot);
+                UpdateDisplay(slot, cooldownTimer.PercentElapsed);
                 yield return null;
             }
 
             UpdateState(slot, AbilityState.Ready);
+        }
+
+        private bool PassRequirements(float cost)
+        {
+            return true;
         }
 
         public void ReplaceAbility(int slot, Ability newAbility)
@@ -127,19 +136,24 @@ namespace AvatarBA
             }
         }
 
-        private void UpdateDisplay(float current, int slot)
+        private void UpdateState(AbilitySlot slot, AbilityState state)
         {
-            _displayManager.UpdateIcon(current, slot);
+            _abilityStates[(int) slot] = state;
         }
 
-        private void UpdateState(int slot, AbilityState state)
+        private AbilityState GetCurrentState(AbilitySlot slot)
         {
-            _states[slot] = state;
+            return _abilityStates[(int) slot];
         }
 
-        private AbilityState GetCurrentState(int slot)
+        private void UpdateDisplay(AbilitySlot slot, float current)
         {
-            return _states[slot];
+            _displayManager.UpdateDisplay((int)slot, current);
+        }
+
+        private void UpdateIcon(AbilitySlot slot, Ability ability)
+        {
+            _displayManager.UpdateIcon((int)slot, ability.Icon);
         }
     }
 }

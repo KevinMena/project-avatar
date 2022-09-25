@@ -27,8 +27,6 @@ namespace AvatarBA.Combat
 
         private bool _attackTriggered = false;
         private bool _isTransitioning = false;
-
-        // TODO: CHANGED THIS
         private const float timerForInput = 0.8f;
 
         public LayerMask HittableLayer => _hittableLayer;

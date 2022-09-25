@@ -17,9 +17,19 @@ namespace AvatarBA.UI
             _manager.SetInterface(this);    
         }
 
-        public void UpdateIcon(float current, int slotNumber)
+        private void OnDestroy()
+        {
+            _manager.UnsetInterface();
+        }
+
+        public void UpdateDisplay(int slotNumber, float current)
         {
             _slots[slotNumber].ChangeCurrent(current);
+        }
+
+        public void UpdateIcon(int slotNumber, Sprite icon)
+        {
+            _slots[(slotNumber)].ChangeIcon(icon);
         }
     }
 }

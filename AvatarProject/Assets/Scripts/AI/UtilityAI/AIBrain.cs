@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AvatarBA.AI
+namespace AvatarBA.AI.UtilityAI
 {
     public class AIBrain : MonoBehaviour
     {
