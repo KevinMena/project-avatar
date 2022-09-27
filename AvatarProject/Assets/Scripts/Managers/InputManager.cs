@@ -12,6 +12,7 @@ namespace AvatarBA
         public event UnityAction<Vector2> MousePositionEvent;
         public event UnityAction DashEvent;
         public event UnityAction MeleeAttackEvent;
+        public event UnityAction LeftAbilityEvent;
 
         private PlayerInputActions _playerInput = null;
 
@@ -22,8 +23,6 @@ namespace AvatarBA
                 _playerInput = new PlayerInputActions();
                 SetCallbacks();
             }
-
-            //EnableInput();
         }
 
         private void OnDisable()
@@ -52,6 +51,11 @@ namespace AvatarBA
             MeleeAttackEvent.Invoke();
         }
 
+        private void OnLeftAbility(InputAction.CallbackContext context)
+        {
+            LeftAbilityEvent.Invoke();
+        }
+
         private void SetCallbacks()
         {
             _playerInput.Gameplay.Mouse.performed += OnMousePosition;
@@ -59,6 +63,7 @@ namespace AvatarBA
             _playerInput.Gameplay.Movement.canceled += OnMove;
             _playerInput.Gameplay.Dash.performed += OnDash;
             _playerInput.Gameplay.MeleeAttack.performed += OnMeleeAtack;
+            _playerInput.Gameplay.LeftAbility.performed += OnLeftAbility;
         }
 
         private void RemoveCallbacks()
@@ -68,6 +73,7 @@ namespace AvatarBA
             _playerInput.Gameplay.Movement.canceled -= OnMove;
             _playerInput.Gameplay.Dash.performed -= OnDash;
             _playerInput.Gameplay.MeleeAttack.performed -= OnMeleeAtack;
+            _playerInput.Gameplay.LeftAbility.performed -= OnLeftAbility;
         }
 
         public void EnableInput()
@@ -75,7 +81,7 @@ namespace AvatarBA
             _playerInput.Gameplay.Enable();
         }
 
-        private void DisableInput()
+        public void DisableInput()
         {
             _playerInput.Gameplay.Disable();
         }

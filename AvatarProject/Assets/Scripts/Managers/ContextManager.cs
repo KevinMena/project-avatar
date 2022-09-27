@@ -12,5 +12,9 @@ namespace AvatarBA
             _inputManager?.EnableInput();
         }
 
+        private void OnDestroy()
+        {
+            _inputManager?.DisableInput();
+        }
     }
 }

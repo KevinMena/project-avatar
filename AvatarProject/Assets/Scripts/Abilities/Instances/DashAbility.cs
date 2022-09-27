@@ -14,7 +14,7 @@ namespace AvatarBA.Abilities
 
         public override IEnumerator Trigger(GameObject owner)
         {
-            if(owner.TryGetComponent<CharacterMovementController>(out CharacterMovementController movementController))
+            if(owner.TryGetComponent(out CharacterMovementController movementController))
             {
                 // Calculate correct direction base on where the camera is looking
                 Vector3 desiredDirection = owner.transform.forward;
@@ -24,18 +24,13 @@ namespace AvatarBA.Abilities
 
                 movementController.LoseControl(_dashTime);
 
-                if(owner.TryGetComponent<Character>(out Character character))
+                if(owner.TryGetComponent(out Character character))
                     character.BecomeInvulnerable();
 
                 movementController.AddForce(desiredVelocity, ForceMode.VelocityChange);
             }
 
-            foreach (var effect in Effects)
-            {
-                effect.Cast(owner);
-            }
-            
-            yield return null;
+            return base.Trigger(owner);
         }
     }
 }

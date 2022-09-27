@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace AvatarBA.Abilities.Effects
@@ -10,6 +9,6 @@ namespace AvatarBA.Abilities.Effects
 
         public string Name => _name;
 
-        public abstract IEnumerator Cast(GameObject owner);
+        public abstract void Cast(GameObject owner);
     }
 }

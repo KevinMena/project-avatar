@@ -19,6 +19,8 @@ namespace AvatarBA.Combat
         public string AnimationName;
 
         public float AttackRange;
+
+        public float AttackAngle;
     }
 
     /// <summary>
@@ -28,27 +30,26 @@ namespace AvatarBA.Combat
     public class CombatState : State, ICollisionable
     {
         private CombatManager _owner; 
-        private Hitbox _hitbox;
+        private ConeHitbox _hitbox;
 
         private string _stateName;
         private string _animationName;
         private readonly int _animationHash;
 
         private float _attackDuration = 0;
-        private float _attackRange = 0;
         private float _attackDamage = 0;
 
         private float _timer = 0;
 
         public CombatState(CombatManager owner, CombatStateData data) : base(owner) 
         {
-            _owner = owner as CombatManager;
+            _owner = owner;
             _stateName = data.StateName;
             _animationName = data.AnimationName;
             _animationHash = Animator.StringToHash(data.AnimationName);
-            _attackRange = data.AttackRange;
             
-            _hitbox = new Hitbox(_attackRange / 2, _owner.HittableLayer);
+
+            _hitbox = new ConeHitbox(data.AttackRange, data.AttackAngle, _owner.HittableLayer);
             _hitbox.SubscribeCollider(this);
         }
 
@@ -84,7 +85,7 @@ namespace AvatarBA.Combat
         public void CollisionedWith(Collider collider)
         {
             GameDebug.Log($"Collisioned with {collider.name} in state: {_stateName}");
-            if(collider.TryGetComponent<Character>(out Character character))
+            if(collider.TryGetComponent(out Character character))
             {
                 character.DoDamage(_attackDamage);
             }
@@ -96,6 +97,8 @@ namespace AvatarBA.Combat
         public void Attack()
         {
             _hitbox.Position = _owner.HitPoint.position;
+            _hitbox.Forward = _owner.HitPoint.forward;
+            _hitbox.Right = _owner.HitPoint.right;
             _hitbox.CheckCollision();
         }
 

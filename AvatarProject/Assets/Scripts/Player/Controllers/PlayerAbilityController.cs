@@ -43,11 +43,13 @@ namespace AvatarBA
         private void Awake() 
         {
             _inputManager.DashEvent += TriggerDash;
+            _inputManager.LeftAbilityEvent += TriggerLeftSlot;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             _inputManager.DashEvent -= TriggerDash;
+            _inputManager.LeftAbilityEvent -= TriggerLeftSlot;
         }
 
         private void Start() 
@@ -59,6 +61,8 @@ namespace AvatarBA
                                 AbilityState.Ready, 
                                 AbilityState.Ready 
                             };
+
+            SetupAbilities();
         }
 
         public void TriggerDash()
@@ -116,25 +120,42 @@ namespace AvatarBA
             return true;
         }
 
-        public void ReplaceAbility(int slot, Ability newAbility)
+        private void SetupAbilities()
+        {
+            if (_dash != null)
+                UpdateIcon(AbilitySlot.Dash, _dash);
+
+            if (_leftAbility != null)
+                UpdateIcon(AbilitySlot.Left, _leftAbility);
+
+            if (_rightAbility != null)
+                UpdateIcon(AbilitySlot.Right, _rightAbility);
+
+            if (_ultimate != null)
+                UpdateIcon(AbilitySlot.Ultimate, _ultimate);
+        }
+
+        public void ReplaceAbility(AbilitySlot slot, Ability newAbility)
         {
             switch (slot)
             {
-                case 0:
+                case AbilitySlot.Dash:
                     _dash = newAbility;
                     break;
-                case 1:
+                case AbilitySlot.Left:
                     _leftAbility = newAbility;
                     break;
-                case 2:
+                case AbilitySlot.Right:
                     _rightAbility = newAbility;
                     break;
-                case 3:
+                case AbilitySlot.Ultimate:
                     _ultimate = newAbility;
                     break;
                 default:
                     break;
             }
+
+            UpdateIcon(slot, newAbility);
         }
 
         private void UpdateState(AbilitySlot slot, AbilityState state)

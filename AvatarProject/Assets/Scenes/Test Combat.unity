@@ -9656,7 +9656,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 740827621}
   m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
-  m_LocalPosition: {x: -7.2886915, y: 5.433013, z: -5.94202}
+  m_LocalPosition: {x: -7.2886915, y: 5.433013, z: -6.000947}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19059,6 +19059,7 @@ GameObject:
   - component: {fileID: 1257741830}
   - component: {fileID: 1257741829}
   - component: {fileID: 1257741828}
+  - component: {fileID: 1257741832}
   m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
@@ -19144,6 +19145,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1257741832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257741827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8a17071caf878b4f941f399ad609094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shootPosition: {fileID: 0}
+  _invulnerableDuration: 0.5
+  _invulnerableDelta: 0.15
 --- !u!1 &1258480801
 GameObject:
   m_ObjectHideFlags: 0
@@ -20755,7 +20771,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367393779}
   m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
-  m_LocalPosition: {x: -7.2886915, y: 5.433013, z: -5.94202}
+  m_LocalPosition: {x: -7.2886915, y: 5.433013, z: -6.000947}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20792,7 +20808,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.122241, y: 1}
+    m_SensorSize: {x: 1.7775891, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -25618,7 +25634,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1621116038
 RectTransform:
   m_ObjectHideFlags: 0
@@ -26401,6 +26417,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1699380251}
+  - component: {fileID: 1699380252}
   m_Layer: 5
   m_Name: LeftSlot
   m_TagString: Untagged
@@ -26429,6 +26446,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1699380252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699380250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc499f99e7cc4864a9335986bdfa9e79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bar: {fileID: 1398006218}
+  _minimum: 0
+  _maximum: 1
 --- !u!1 &1701766724
 GameObject:
   m_ObjectHideFlags: 0
@@ -26952,6 +26984,7 @@ MonoBehaviour:
   _manager: {fileID: 11400000, guid: 414be2a8ecd838d47a335955e91eee4f, type: 2}
   _slots:
   - {fileID: 895229019}
+  - {fileID: 1699380252}
 --- !u!1 &1725138760
 GameObject:
   m_ObjectHideFlags: 0
@@ -34416,8 +34449,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputManager: {fileID: 11400000, guid: 8612807aea4d844419da8531c21d86f6, type: 2}
   _displayManager: {fileID: 11400000, guid: 414be2a8ecd838d47a335955e91eee4f, type: 2}
-  _dash: {fileID: 11400000, guid: 1f336b5c6605b3345be832248c7b9b59, type: 2}
-  _leftAbility: {fileID: 0}
+  _dash: {fileID: 11400000, guid: 6a70d954e66cf584b9f1da0761f31b88, type: 2}
+  _leftAbility: {fileID: 11400000, guid: b44c28a35d0cb414c8e7d086c6cfa3fb, type: 2}
   _rightAbility: {fileID: 0}
   _ultimate: {fileID: 0}
 --- !u!114 &1884413811987422738
@@ -34435,13 +34468,16 @@ MonoBehaviour:
   _combatStatesData:
   - StateName: Entry
     AnimationName: Entry
-    AttackRange: 1
+    AttackRange: 2
+    AttackAngle: 45
   - StateName: FollowUp
     AnimationName: FollowUp
-    AttackRange: 2
+    AttackRange: 2.25
+    AttackAngle: 45
   - StateName: Finisher
     AnimationName: Finisher
-    AttackRange: 2.5
+    AttackRange: 2.25
+    AttackAngle: 60
   _hittableLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -34493,7 +34529,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1884413811987422760}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.3417437, y: -0.00000071525574, z: 0.0049271584}
+  m_LocalPosition: {x: -1.3417437, y: -0.00000071525574, z: -0.054}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34596,6 +34632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e793f1e018fef42ae4a69174c19203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _shootPosition: {fileID: 8417353822261669383}
   _invulnerableDuration: 0.5
   _invulnerableDelta: 0.15
 --- !u!1 &1884413812030302760
@@ -34622,7 +34659,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1884413812030302760}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

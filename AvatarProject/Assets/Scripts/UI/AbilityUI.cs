@@ -31,7 +31,7 @@ namespace AvatarBA.UI
 
         public void UpdateIcon(int slotNumber, Sprite icon)
         {
-            _slots[(slotNumber)].ChangeIcon(icon);
+            _slots[slotNumber].ChangeIcon(icon);
         }
     }
 }

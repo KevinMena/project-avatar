@@ -11,7 +11,8 @@
                     "id": "a2bd010a-1f1a-42e9-ab1e-60c299e969b4",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Dash",
@@ -19,7 +20,8 @@
                     "id": "b0daeefd-6cd5-4b57-8ea7-8d7a4f4c659f",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Mouse",
@@ -27,7 +29,8 @@
                     "id": "536b1903-bf6b-4c5e-ab98-25fa7b3b24d3",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "MeleeAttack",
@@ -35,7 +38,17 @@
                     "id": "64f33ede-25b7-40e2-a395-d108e7ac970b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftAbility",
+                    "type": "Button",
+                    "id": "9917e151-31b1-46b6-9c2e-7e2386fe723b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -124,6 +137,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "MeleeAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3a942431-e8f4-44d3-a069-5a90335e819d",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftAbility",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

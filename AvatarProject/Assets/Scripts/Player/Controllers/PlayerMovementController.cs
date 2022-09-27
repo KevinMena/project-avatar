@@ -126,6 +126,12 @@ namespace AvatarBA
 
             return Vector3.zero;
         }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, transform.forward);
+        }
     }
 }
 
