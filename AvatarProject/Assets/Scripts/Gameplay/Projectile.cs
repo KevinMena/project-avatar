@@ -15,9 +15,14 @@ namespace AvatarBA.Combat
         [SerializeField]
         private float _speed = 0;
 
+        [SerializeField]
+        private float _lifeTime = 0;
+
         private GameObject _owner;
 
         private Rigidbody rb;
+
+        private float _lifeTimer = 0;
 
         private void Awake()
         {
@@ -28,6 +33,10 @@ namespace AvatarBA.Combat
 
         private void Update()
         {
+            _lifeTime -= Time.deltaTime;
+            if (_lifeTime <= 0)
+                Explode();
+
             Move();
         }
 
@@ -35,6 +44,7 @@ namespace AvatarBA.Combat
         {
             _baseDamage = damage;
             _owner = owner;
+            _lifeTimer = _lifeTime;
         }
 
         public void Move()
@@ -43,7 +53,7 @@ namespace AvatarBA.Combat
             transform.Translate(desiredVelocity);
         }
 
-        private void Destroy()
+        private void Explode()
         {
             // Play VFX
             Destroy(gameObject);
@@ -64,7 +74,7 @@ namespace AvatarBA.Combat
                 }
             }
 
-            Destroy();
+            Explode();
         }
     }
 }

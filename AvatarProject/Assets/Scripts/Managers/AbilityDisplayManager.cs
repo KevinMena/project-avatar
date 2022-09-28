@@ -23,9 +23,19 @@ namespace AvatarBA.Managers
                 _currentUI = null;
         }
 
-        public void UpdateDisplay(int slot, float current)
+        public void StartTimer(int slot, float maxTimer)
         {
-            _currentUI?.UpdateDisplay(slot, current);
+            _currentUI?.StartTimer(slot, maxTimer);
+        }
+
+        public void EndTimer(int slot)
+        {
+            _currentUI?.EndTimer(slot);
+        }
+
+        public void UpdateDisplay(int slot, float current, float timer)
+        {
+            _currentUI?.UpdateDisplay(slot, current, timer);
         }
 
         public void UpdateIcon(int slot, Sprite icon)

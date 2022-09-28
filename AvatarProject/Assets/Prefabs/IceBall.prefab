@@ -132,3 +132,4 @@ MonoBehaviour:
     m_Bits: 128
   _baseDamage: 0
   _speed: 15
+  _lifeTime: 3

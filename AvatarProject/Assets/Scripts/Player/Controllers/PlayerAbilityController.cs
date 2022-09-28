@@ -39,6 +39,8 @@ namespace AvatarBA
         private Ability _ultimate;
 
         private AbilityState[] _abilityStates;
+        private Timer[] _cooldownTimers;
+        private Timer[] _activeTimers;
 
         private void Awake() 
         {
@@ -59,12 +61,28 @@ namespace AvatarBA
         private void Start() 
         {
             _abilityStates = new AbilityState[4] 
-                            { 
-                                AbilityState.Ready, 
-                                AbilityState.Ready, 
-                                AbilityState.Ready, 
-                                AbilityState.Ready 
-                            };
+            { 
+                AbilityState.Ready, 
+                AbilityState.Ready, 
+                AbilityState.Ready, 
+                AbilityState.Ready 
+            };
+
+            _cooldownTimers = new Timer[4]
+            {
+                new Timer(0),
+                new Timer(0),
+                new Timer(0),
+                new Timer(0)
+            };
+
+            _activeTimers = new Timer[4]
+            {
+                new Timer(0),
+                new Timer(0),
+                new Timer(0),
+                new Timer(0)
+            };
 
             SetupAbilities();
         }
@@ -108,19 +126,40 @@ namespace AvatarBA
         }
 
         private IEnumerator TriggerRoutine(AbilitySlot slot, Ability currentAbility)
-        {
-            CooldownTimer cooldownTimer = new CooldownTimer(currentAbility.Cooldown);
-
+        {     
+            // Trigger ability
             StartCoroutine(currentAbility.Trigger(gameObject));
+
+            // Use Timer is the ability has active time
+            if(currentAbility.ActiveTime != 0)
+            {
+                Timer activeTimer = _activeTimers[(int)slot];
+                activeTimer.TotalTime = currentAbility.ActiveTime;
+                UpdateState(slot, AbilityState.Active);
+
+                activeTimer.Start();
+                while (!activeTimer.IsComplete)
+                {
+                    activeTimer.Update(Time.deltaTime);
+                    // Update UI
+                    yield return null;
+                }
+            }
+
+            // Use Timer for the cooldown of the ability
+            Timer cooldownTimer = _cooldownTimers[(int)slot];
+            cooldownTimer.TotalTime = currentAbility.Cooldown;
             UpdateState(slot, AbilityState.Cooldown);
 
+            cooldownTimer.Start();
+            StartDisplay(slot, currentAbility.Cooldown);
             while(!cooldownTimer.IsComplete)
             {
                 cooldownTimer.Update(Time.deltaTime);
-                UpdateDisplay(slot, cooldownTimer.PercentElapsed);
+                UpdateDisplay(slot, cooldownTimer.PercentElapsed, cooldownTimer.RemainingTime);
                 yield return null;
             }
-
+            EndDisplay(slot);
             UpdateState(slot, AbilityState.Ready);
         }
 
@@ -177,9 +216,19 @@ namespace AvatarBA
             return _abilityStates[(int) slot];
         }
 
-        private void UpdateDisplay(AbilitySlot slot, float current)
+        private void StartDisplay(AbilitySlot slot, float maxTimer)
         {
-            _displayManager.UpdateDisplay((int)slot, current);
+            _displayManager.StartTimer((int) slot, maxTimer);
+        }
+
+        private void EndDisplay(AbilitySlot slot)
+        {
+            _displayManager.EndTimer((int)slot);
+        }
+
+        private void UpdateDisplay(AbilitySlot slot, float current, float currentTimer)
+        {
+            _displayManager.UpdateDisplay((int)slot, current, currentTimer);
         }
 
         private void UpdateIcon(AbilitySlot slot, Ability ability)

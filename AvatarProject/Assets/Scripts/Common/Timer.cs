@@ -1,13 +1,13 @@
 using System;
 
 namespace AvatarBA.Common
-{    
-    public class CooldownTimer 
+{
+    public class Timer
     {
         private float _totalTime;
         private float _remainingTime;
 
-        public float TotalTime { get => _totalTime; private set => _totalTime = value; }
+        public float TotalTime { get => _totalTime; set => _totalTime = value; }
         public float RemainingTime { get => _remainingTime; private set => _remainingTime = value; }
 
         public float TimeElapsed => TotalTime - RemainingTime;
@@ -17,7 +17,7 @@ namespace AvatarBA.Common
         public event Action OnTimerStarted;
         public event Action OnTimerCompleted;
 
-        public CooldownTimer(float totalTime)
+        public Timer(float totalTime)
         {
             TotalTime = totalTime;
             RemainingTime = TotalTime;
@@ -31,11 +31,11 @@ namespace AvatarBA.Common
 
         public void Update(float deltaTime)
         {
-            if(RemainingTime > 0)
+            if (RemainingTime > 0)
             {
                 RemainingTime -= deltaTime;
 
-                if(RemainingTime <= 0)
+                if (RemainingTime <= 0)
                     OnTimerCompleted?.Invoke();
             }
         }

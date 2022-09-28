@@ -12,7 +12,7 @@ namespace AvatarBA.UI
 
         [Header("Display")]
         [SerializeField]
-        private ProgressBar[] _slots;
+        private IconTimer[] _slots;
 
         private void Start() 
         {
@@ -24,14 +24,24 @@ namespace AvatarBA.UI
             _manager.UnSubscribe(this);
         }
 
-        public void UpdateDisplay(int slotNumber, float current)
+        public void StartTimer(int slot, float maxTimer)
         {
-            _slots[slotNumber].ChangeCurrent(current);
+            _slots[slot].StartTimer(maxTimer);
         }
 
-        public void UpdateIcon(int slotNumber, Sprite icon)
+        public void EndTimer(int slot)
         {
-            _slots[slotNumber].ChangeIcon(icon);
+            _slots[slot].EndTimer();
+        }
+
+        public void UpdateDisplay(int slot, float current, float timer)
+        {
+            _slots[slot].ChangeCurrent(current, timer);
+        }
+
+        public void UpdateIcon(int slot, Sprite icon)
+        {
+            _slots[slot].ChangeIcon(icon);
         }
     }
 }
