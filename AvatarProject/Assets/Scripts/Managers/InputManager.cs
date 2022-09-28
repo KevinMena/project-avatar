@@ -13,6 +13,8 @@ namespace AvatarBA
         public event UnityAction DashEvent;
         public event UnityAction MeleeAttackEvent;
         public event UnityAction LeftAbilityEvent;
+        public event UnityAction RightAbilityEvent;
+        public event UnityAction UltimateAbilityEvent;
 
         private PlayerInputActions _playerInput = null;
 
@@ -56,6 +58,16 @@ namespace AvatarBA
             LeftAbilityEvent.Invoke();
         }
 
+        private void OnRightAbility(InputAction.CallbackContext context)
+        {
+            RightAbilityEvent.Invoke();
+        }
+
+        private void OnUltimateAbility(InputAction.CallbackContext context)
+        {
+            UltimateAbilityEvent.Invoke();
+        }
+
         private void SetCallbacks()
         {
             _playerInput.Gameplay.Mouse.performed += OnMousePosition;
@@ -64,6 +76,8 @@ namespace AvatarBA
             _playerInput.Gameplay.Dash.performed += OnDash;
             _playerInput.Gameplay.MeleeAttack.performed += OnMeleeAtack;
             _playerInput.Gameplay.LeftAbility.performed += OnLeftAbility;
+            _playerInput.Gameplay.RightAbility.performed += OnRightAbility;
+            _playerInput.Gameplay.UltimateAbility.performed += OnUltimateAbility;
         }
 
         private void RemoveCallbacks()
@@ -74,6 +88,8 @@ namespace AvatarBA
             _playerInput.Gameplay.Dash.performed -= OnDash;
             _playerInput.Gameplay.MeleeAttack.performed -= OnMeleeAtack;
             _playerInput.Gameplay.LeftAbility.performed -= OnLeftAbility;
+            _playerInput.Gameplay.RightAbility.performed -= OnRightAbility;
+            _playerInput.Gameplay.UltimateAbility.performed -= OnUltimateAbility;
         }
 
         public void EnableInput()

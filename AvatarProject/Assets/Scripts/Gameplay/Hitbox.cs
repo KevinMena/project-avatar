@@ -1,6 +1,5 @@
 using UnityEngine;
-
-using AvatarBA.Interfaces;
+using UnityEngine.Events;
 
 namespace AvatarBA.Combat
 {
@@ -14,6 +13,7 @@ namespace AvatarBA.Combat
     public abstract class Hitbox
     {
         protected Vector3 _position;
+        protected Quaternion _rotation;
         protected LayerMask _mask;
         protected ColliderState _state;
 
@@ -23,9 +23,10 @@ namespace AvatarBA.Combat
 
         protected Color _currentColor;
 
-        protected ICollisionable _collider;
+        public UnityAction<Collider> OnCollision;
 
         public Vector3 Position { get => _position; set => _position = value; }
+        public Quaternion Rotation { get => _rotation; set => _rotation = value; }
         public ColliderState State { get => _state; }
 
         public Hitbox(LayerMask mask)
@@ -36,11 +37,6 @@ namespace AvatarBA.Combat
             _closedColor = Color.red;
             _openColor = Color.blue;
             _collidingColor = Color.green;
-        }
-
-        public void SubscribeCollider(ICollisionable collider)
-        {
-            _collider = collider;
         }
 
         public void StartCheckCollision()

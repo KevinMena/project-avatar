@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aae6f0dcadc3494facdefe77b222c2b, type: 3}
   m_Name: Ability_IceBall
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 4cdb089e351e06144a1a6bdfc5228eae, type: 3}
+  icon: {fileID: 21300000, guid: 82bc47ea22958f5429e481afebbf982e, type: 3}
   abilityName: Ice Ball
   description: The user condenses the a great amount of water to turn it into a dangerous
     ice shard in the form of a ball.
@@ -22,3 +22,4 @@ MonoBehaviour:
   type: 3
   effects: []
   _prefab: {fileID: 450495840689797894, guid: 69b527b17d871324d9b69b5507c9a3a1, type: 3}
+  _baseDamage: 0

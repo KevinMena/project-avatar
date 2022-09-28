@@ -1,10 +1,8 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 
 using AvatarBA.Patterns;
 using AvatarBA.Debugging;
-using AvatarBA.Interfaces;
 
 namespace AvatarBA.Combat
 {
@@ -27,7 +25,7 @@ namespace AvatarBA.Combat
     /// State for the combat system. We calculate the damage if we trigger attacks on enemies
     /// and play the animations of the combat.
     /// </summary>
-    public class CombatState : State, ICollisionable
+    public class CombatState : State
     {
         private CombatManager _owner; 
         private ConeHitbox _hitbox;
@@ -50,7 +48,7 @@ namespace AvatarBA.Combat
             
 
             _hitbox = new ConeHitbox(data.AttackRange, data.AttackAngle, _owner.HittableLayer);
-            _hitbox.SubscribeCollider(this);
+            _hitbox.OnCollision += CollisionedWith;
         }
 
         public override void OnEnter()
@@ -82,6 +80,9 @@ namespace AvatarBA.Combat
             _hitbox.StopCheckCollision();
         }
 
+        /// <summary>
+        /// Handle what to do with entities collided
+        /// </summary>
         public void CollisionedWith(Collider collider)
         {
             GameDebug.Log($"Collisioned with {collider.name} in state: {_stateName}");

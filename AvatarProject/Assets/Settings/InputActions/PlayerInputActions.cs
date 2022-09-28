@@ -71,6 +71,24 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""44ed7f6e-37ff-4abd-a267-e2582f1fe9cd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UltimateAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc834e1c-de51-4108-b3cf-750fe0a5654c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +190,28 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""LeftAbility"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e47da4cb-6789-4bb9-8542-2cc62f2f7f2c"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66e7419a-4cc4-4867-a6c2-abb0ca08f972"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UltimateAbility"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +225,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Gameplay_Mouse = m_Gameplay.FindAction("Mouse", throwIfNotFound: true);
         m_Gameplay_MeleeAttack = m_Gameplay.FindAction("MeleeAttack", throwIfNotFound: true);
         m_Gameplay_LeftAbility = m_Gameplay.FindAction("LeftAbility", throwIfNotFound: true);
+        m_Gameplay_RightAbility = m_Gameplay.FindAction("RightAbility", throwIfNotFound: true);
+        m_Gameplay_UltimateAbility = m_Gameplay.FindAction("UltimateAbility", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -249,6 +291,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Mouse;
     private readonly InputAction m_Gameplay_MeleeAttack;
     private readonly InputAction m_Gameplay_LeftAbility;
+    private readonly InputAction m_Gameplay_RightAbility;
+    private readonly InputAction m_Gameplay_UltimateAbility;
     public struct GameplayActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -258,6 +302,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Mouse => m_Wrapper.m_Gameplay_Mouse;
         public InputAction @MeleeAttack => m_Wrapper.m_Gameplay_MeleeAttack;
         public InputAction @LeftAbility => m_Wrapper.m_Gameplay_LeftAbility;
+        public InputAction @RightAbility => m_Wrapper.m_Gameplay_RightAbility;
+        public InputAction @UltimateAbility => m_Wrapper.m_Gameplay_UltimateAbility;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -282,6 +328,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @LeftAbility.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftAbility;
                 @LeftAbility.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftAbility;
                 @LeftAbility.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLeftAbility;
+                @RightAbility.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightAbility;
+                @RightAbility.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightAbility;
+                @RightAbility.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightAbility;
+                @UltimateAbility.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateAbility;
+                @UltimateAbility.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateAbility;
+                @UltimateAbility.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateAbility;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -301,6 +353,12 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @LeftAbility.started += instance.OnLeftAbility;
                 @LeftAbility.performed += instance.OnLeftAbility;
                 @LeftAbility.canceled += instance.OnLeftAbility;
+                @RightAbility.started += instance.OnRightAbility;
+                @RightAbility.performed += instance.OnRightAbility;
+                @RightAbility.canceled += instance.OnRightAbility;
+                @UltimateAbility.started += instance.OnUltimateAbility;
+                @UltimateAbility.performed += instance.OnUltimateAbility;
+                @UltimateAbility.canceled += instance.OnUltimateAbility;
             }
         }
     }
@@ -312,5 +370,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnMouse(InputAction.CallbackContext context);
         void OnMeleeAttack(InputAction.CallbackContext context);
         void OnLeftAbility(InputAction.CallbackContext context);
+        void OnRightAbility(InputAction.CallbackContext context);
+        void OnUltimateAbility(InputAction.CallbackContext context);
     }
 }

@@ -1,4 +1,5 @@
 using AvatarBA.Debugging;
+using UnityEngine;
 
 namespace AvatarBA.Combat
 {
@@ -9,6 +10,8 @@ namespace AvatarBA.Combat
     public class CombatIdleState : CombatTransitionState
     {
         private CombatManager _owner;
+
+        private float _startComboTimer = 0;
 
         private readonly int IdleAnimation = UnityEngine.Animator.StringToHash("Idle");
 
@@ -21,6 +24,7 @@ namespace AvatarBA.Combat
         {
             _owner.ChangeMovement(true);
             _owner.SetAnimation(IdleAnimation);
+            _startComboTimer = _owner.LastComboDelay;
             GameDebug.Log("State: Idle");
         }
 
@@ -31,6 +35,14 @@ namespace AvatarBA.Combat
 
         public override void OnUpdate() 
         { 
+            if(_owner.FromLastCombo)
+            {
+                _startComboTimer -= Time.deltaTime;
+
+                if (_startComboTimer > 0)
+                    return;
+            }
+
             if(_owner.AttackTriggered)
                 TransitionToTarget();
         }

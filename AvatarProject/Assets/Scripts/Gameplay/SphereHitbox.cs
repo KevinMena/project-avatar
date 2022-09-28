@@ -31,7 +31,7 @@ namespace AvatarBA.Combat
                 if (alreadyHit.Contains(hit))
                     continue;
 
-                _collider?.CollisionedWith(hit);
+                OnCollision?.Invoke(hit);
 
                 alreadyHit.Add(hit);
             }

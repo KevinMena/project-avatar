@@ -6,16 +6,13 @@ namespace AvatarBA.Combat
 {
     public class BoxHitbox : Hitbox
     {
-        Vector3 _distance;
-        Quaternion _rotation;
+        Vector3 _size;
 
-        public Vector3 Distance => _distance;
-        public Quaternion Rotation => _rotation;
+        public Vector3 Size => _size;
 
-        public BoxHitbox(float distance, Quaternion rotation, LayerMask mask) : base(mask)
+        public BoxHitbox(Vector3 size, LayerMask mask) : base(mask)
         {
-            _distance = new Vector3(distance, distance / 2, distance);
-            _rotation = rotation;
+            _size = size;
         }
 
         public override void CheckCollision()
@@ -23,7 +20,7 @@ namespace AvatarBA.Combat
             if (_state == ColliderState.Closed)
                 return;
 
-            Collider[] hitColliders = Physics.OverlapBox(Position, Distance, Rotation, _mask);
+            Collider[] hitColliders = Physics.OverlapBox(Position, Size, Rotation, _mask);
 
             List<Collider> alreadyHit = new List<Collider>();
 
@@ -35,7 +32,7 @@ namespace AvatarBA.Combat
                 if (alreadyHit.Contains(hit))
                     continue;
 
-                _collider?.CollisionedWith(hit);
+                OnCollision?.Invoke(hit);
 
                 alreadyHit.Add(hit);
             }
@@ -44,7 +41,8 @@ namespace AvatarBA.Combat
         public override void OnDrawGizmos()
         {
             Gizmos.color = _currentColor;
-            Gizmos.DrawWireCube(Position, Distance);
+            Gizmos.matrix = Matrix4x4.TRS(Position, Rotation, Vector3.one);
+            Gizmos.DrawWireCube(Vector3.zero, new Vector3(Size.x * 2, Size.y * 2, Size.z * 2));
         }
     }
 }

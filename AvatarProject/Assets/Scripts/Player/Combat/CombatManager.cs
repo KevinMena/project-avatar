@@ -27,11 +27,16 @@ namespace AvatarBA.Combat
 
         private bool _attackTriggered = false;
         private bool _isTransitioning = false;
+        private bool _fromLastCombo = false;
         private const float timerForInput = 0.8f;
+        private const float lastComboDelay = 0.5f;
 
         public LayerMask HittableLayer => _hittableLayer;
         public Transform HitPoint => _hitPoint;
         public bool AttackTriggered => _attackTriggered;
+        public bool IsLastCombo => _currentComboIndex >= _combatStates.Length;
+        public bool FromLastCombo => _fromLastCombo;
+        public float LastComboDelay => lastComboDelay;
 
         protected override void Start()
         {
@@ -75,6 +80,7 @@ namespace AvatarBA.Combat
             _currentComboIndex++;
             _isTransitioning = false;
             _attackTriggered = false;
+            _fromLastCombo = false;
             SetState(nextState);
         }
 
@@ -93,8 +99,9 @@ namespace AvatarBA.Combat
         public void SetNextState()
         {
             _isTransitioning = true;
-            if(_currentComboIndex >= _combatStates.Length)
+            if(IsLastCombo)
             {
+                _fromLastCombo = true;
                 SetStateToInitial();
                 return;
             }

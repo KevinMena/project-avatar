@@ -44,12 +44,16 @@ namespace AvatarBA
         {
             _inputManager.DashEvent += TriggerDash;
             _inputManager.LeftAbilityEvent += TriggerLeftSlot;
+            _inputManager.RightAbilityEvent += TriggerRightSlot;
+            _inputManager.UltimateAbilityEvent += TriggerUltimate;
         }
 
         private void OnDestroy()
         {
             _inputManager.DashEvent -= TriggerDash;
             _inputManager.LeftAbilityEvent -= TriggerLeftSlot;
+            _inputManager.RightAbilityEvent -= TriggerRightSlot;
+            _inputManager.UltimateAbilityEvent -= TriggerUltimate;
         }
 
         private void Start() 
@@ -87,6 +91,11 @@ namespace AvatarBA
 
         public void TriggerAbility(AbilitySlot slot, Ability currentAbility)
         {
+            // Send message of ability not unlocked
+            if (currentAbility == null)
+                return;
+
+            // Send message of not meeting requirements
             if(!PassRequirements(currentAbility.Cost))
                 return;
             
