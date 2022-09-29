@@ -10,10 +10,13 @@ namespace AvatarBA
         [SerializeField]
         protected StatsDisplayManager _displayManager;
 
+        private const string HEALTH_STAT = "health";
+        private const string MAX_HEALTH_STAT = "maxHealth";
+
         protected override void Start()
         {
             base.Start();
-            _displayManager.UpdateMaxHealth(BaseHealth);
+            _displayManager.UpdateMaxHealth(GetStat(MAX_HEALTH_STAT));
         }
     }
 }

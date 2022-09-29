@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using AvatarBA.Stats;
+
 namespace AvatarBA
 {
     [CreateAssetMenu(fileName = "Character_", menuName ="Characters/New Character")]
@@ -21,23 +23,8 @@ namespace AvatarBA
         [SerializeField] 
         private GameObject _prefab = null;
 
-        [SerializeField, Range(0, 200)]
-        private float _baseHealth = 0;
-
-        [SerializeField, Range(0, 10)]
-        private float _baseAttackPower = 0;
-
-        [SerializeField, Range(0, 1)]
-        private float _baseAttackSpeed = 0;
-
-        [SerializeField, Range(0, 10)]
-        private float _baseDefense = 0;
-
-        [SerializeField, Range(0, 10)]
-        private float _baseMovementSpeed = 0;
-
-        [SerializeField, Range(0, 10)]
-        private float _baseSpiritPower = 0;
+        [SerializeField]
+        private StatBase[] _stats;
 
         public int Id => _id;
 
@@ -49,11 +36,6 @@ namespace AvatarBA
 
         public GameObject Prefab => _prefab;
 
-        public float BaseHealth => _baseHealth;
-        public float BaseAttackPower => _baseAttackPower;
-        public float BaseAttackSpeed => _baseAttackSpeed;
-        public float BaseDefense => _baseDefense;
-        public float BaseMovementSpeed => _baseMovementSpeed;
-        public float BaseSpiritPower => _baseSpiritPower;
+        public ref StatBase[] Stats => ref _stats;
     }
 }

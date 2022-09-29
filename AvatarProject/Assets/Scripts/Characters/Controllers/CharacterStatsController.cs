@@ -1,35 +1,18 @@
+using System.Collections.Generic;
+
 using UnityEngine;
 
 using AvatarBA.Stats;
 
 namespace AvatarBA
-{    
+{
     public class CharacterStatsController : MonoBehaviour, IStatContainer
     {
         [Header("References")]
-        [SerializeField] 
+        [SerializeField]
         protected CharacterData _characterData;
 
-        private Stat _health;
-        private Stat _attackPower;
-        private Stat _attackSpeed;
-        private Stat _defense;
-        private Stat _movementSpeed;
-        private Stat _spiritPower;
-
-        public float Health => _health != null ? _health.Value: 0;
-        public float AttackPower => _attackPower != null ? _attackPower.Value : 0;
-        public float AttackSpeed => _attackSpeed != null ? _attackSpeed.Value : 0;
-        public float Defense => _defense != null ? _defense.Value : 0;
-        public float MovementSpeed => _movementSpeed != null ? _movementSpeed.Value : 0;
-        public float SpiritPower => _spiritPower != null ? _spiritPower.Value : 0;
-
-        public float BaseHealth => _health != null ? _health.BaseValue : 0;
-        public float BaseAttackPower => _attackPower != null ? _attackPower.BaseValue : 0;
-        public float BaseAttackSpeed => _attackSpeed != null ? _attackSpeed.BaseValue : 0;
-        public float BaseDefense => _defense != null ? _defense.BaseValue : 0;
-        public float BaseMovementSpeed => _movementSpeed != null ? _movementSpeed.BaseValue : 0;
-        public float BaseSpiritPower => _spiritPower != null ? _spiritPower.BaseValue : 0;
+        protected Dictionary<string, KeyValuePair<string, Stat>> _runtimeStats;
 
         protected virtual void Start()
         {
@@ -38,29 +21,59 @@ namespace AvatarBA
 
         public void CreateRuntimeValues()
         {
-            _health = new Stat(_characterData.BaseHealth);
-            _attackPower = new Stat(_characterData.BaseAttackPower);
-            _attackSpeed = new Stat(_characterData.BaseAttackSpeed);
-            _defense = new Stat(_characterData.BaseDefense);
-            _movementSpeed = new Stat(_characterData.BaseMovementSpeed);
-            _spiritPower = new Stat(_characterData.BaseSpiritPower);
+            _runtimeStats = new Dictionary<string, KeyValuePair<string, Stat>>();
+
+            foreach (StatBase originalStat in _characterData.Stats)
+            {
+                _runtimeStats[originalStat.Type.Id] = new KeyValuePair<string, Stat>(originalStat.Type.DisplayName, new Stat(originalStat.DefaultValue));
+            }
         }
 
-        public void ApplyChangeToStat(Stat stat, float value, StatModifierType modifierType)
+        public KeyValuePair<string, float>[] GetAllStats()
         {
-            StatModifier modifier = new StatModifier(value, modifierType);
-            stat.AddModifier(modifier);
+            List<KeyValuePair<string, float>> stats = new List<KeyValuePair<string, float>>();
+
+            foreach(var stat in _runtimeStats.Values)
+            {
+                stats.Add(new KeyValuePair<string, float>(stat.Key, stat.Value.Value));
+            }
+
+            return stats.ToArray();
         }
 
-        public void RemoveChangeToStat(Stat stat, float value, StatModifierType modifierType)
+        public float GetStat(string id)
         {
-            StatModifier modifier = new StatModifier(value, modifierType);
-            stat.RemoveModifier(modifier);
+            if (_runtimeStats.TryGetValue(id, out var stat))
+                return stat.Value.Value;
+            return -1;
         }
 
-        public void RemoveChangeToStatFromSource(Stat stat, object source)
+        public string GetStatDisplayName(string id)
         {
-            stat.RemoveModifiersFromSource(source);
+            if (_runtimeStats.TryGetValue(id, out var stat))
+                return stat.Key;
+            return "";
+        }
+
+        public void ApplyChangeToStat(string id, float value, StatModifierType modifierType)
+        {
+            if (_runtimeStats.TryGetValue(id, out var stat))
+            {
+                StatModifier modifier = new StatModifier(value, modifierType);
+                stat.Value.AddModifier(modifier);
+            }
+        }
+
+        public void RemoveChangeToStat(string id, StatModifier modifier)
+        {
+            if (_runtimeStats.TryGetValue(id, out var stat))
+                stat.Value.RemoveModifier(modifier);
+        }
+
+        public void RemoveChangeToStatFromSource(string id, object source)
+        {
+            if (_runtimeStats.TryGetValue(id, out var stat))
+                stat.Value.RemoveModifiersFromSource(source);
         }
     }
 }

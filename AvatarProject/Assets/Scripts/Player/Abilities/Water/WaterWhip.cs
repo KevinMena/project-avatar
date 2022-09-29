@@ -19,6 +19,8 @@ namespace AvatarBA.Abilities
         [SerializeField]
         private LayerMask _mask;
 
+        private const string ATTACK_STAT = "attackPower";
+
         public override IEnumerator Trigger(GameObject owner)
         {
             // Create VFX
@@ -31,7 +33,7 @@ namespace AvatarBA.Abilities
                 // Calculate damage for the attack
                 float currentDamage = _baseDamage;
                 if (owner.TryGetComponent(out CharacterStatsController statsController))
-                    currentDamage += statsController.AttackPower;
+                    currentDamage += statsController.GetStat(ATTACK_STAT);
                 attack.Setup(Name, new Vector3(0.5f, 0.5f, _baseDistance / 2), _baseDistance, currentDamage, _mask, owner);
 
                 // Start attacking the area

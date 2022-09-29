@@ -11,11 +11,13 @@ namespace AvatarBA.Stats
         /// <returns></returns>
         void CreateRuntimeValues();
 
-        void ApplyChangeToStat(Stat stat, float amount, StatModifierType modifierType);
+        float GetStat(string id);
 
-        void RemoveChangeToStat(Stat stat, float amount, StatModifierType modifierType);
+        void ApplyChangeToStat(string id, float amount, StatModifierType modifierType);
 
-        void RemoveChangeToStatFromSource(Stat stat, object source);
+        void RemoveChangeToStat(string id, StatModifier modifier);
+
+        void RemoveChangeToStatFromSource(string id, object source);
     }
     
 }

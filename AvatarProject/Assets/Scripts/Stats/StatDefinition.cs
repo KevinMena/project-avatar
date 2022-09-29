@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace AvatarBA.Stats
 {
-    [CreateAssetMenu(fileName = "StatType_", menuName = "Stats/Type")]
-    public class StatType : ScriptableObject
+    [CreateAssetMenu(fileName = "StatDefinition_", menuName = "Stats/Definition")]
+    public class StatDefinition : ScriptableObject
     {
         /// <summary>
         /// Id for looking into collections
@@ -19,14 +19,13 @@ namespace AvatarBA.Stats
         private string _displayName;
 
         public string Id => _id;
-
         public string DisplayName => _displayName;
     }
 
     [Serializable]
     public struct StatBase
     {
-        public StatType Type;
+        public StatDefinition Type;
 
         public float DefaultValue;
     }

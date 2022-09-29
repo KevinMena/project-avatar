@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25efff3c0f840b54cab2f365c6d52ef2, type: 3}
-  m_Name: StatType_Defense
+  m_Script: {fileID: 11500000, guid: d5a8dea88add1a0408a2f6cb4689f9c0, type: 3}
+  m_Name: StatDefinition_MovementSpeed
   m_EditorClassIdentifier: 
-  _id: defense
-  _displayName: Defense
+  _id: movementSpeed
+  _displayName: Movement Speed

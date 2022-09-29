@@ -24,6 +24,7 @@ namespace AvatarBA
 
         private AnimationController _animationController;
         private readonly int MoveAnimation = Animator.StringToHash("Run");
+        private const string MOVEMENT_STAT = "movementSpeed";
 
         protected override void Awake() 
         {
@@ -81,7 +82,7 @@ namespace AvatarBA
                 _animationController.PlayInitialAnimation();
 
             // Cache the current movement speed
-            float movementSpeed = _statsController.MovementSpeed;
+            float movementSpeed = _statsController.GetStat(MOVEMENT_STAT);
 
             // Cache velocity last frame
             Vector3 previousVelocity = _rigidbody.velocity;

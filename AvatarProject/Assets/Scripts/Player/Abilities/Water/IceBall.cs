@@ -14,6 +14,8 @@ namespace AvatarBA.Abilities
         [SerializeField]
         private float _baseDamage;
 
+        private const string ATTACK_STAT = "attackPower";
+
         public override IEnumerator Trigger(GameObject owner)
         {
             Vector3 shootPosition = owner.transform.position;
@@ -30,7 +32,7 @@ namespace AvatarBA.Abilities
                 // Calculate damage for the projectile
                 float projectileDamage = _baseDamage;
                 if (owner.TryGetComponent(out CharacterStatsController statsController))
-                    projectileDamage += statsController.AttackPower;
+                    projectileDamage += statsController.GetStat(ATTACK_STAT);
                 projectile.Setup(projectileDamage, owner);
             }
 
