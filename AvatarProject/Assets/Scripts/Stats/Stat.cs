@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.tvOS;
 
 namespace AvatarBA.Stats
 {
@@ -67,6 +68,21 @@ namespace AvatarBA.Stats
                 return true;
             }
             
+            return false;
+        }
+
+        public bool RemoveModifier(string modifierId)
+        {
+            for (int i = _statModifiers.Count - 1; i >= 0; i--)
+            {
+                if (_statModifiers[i].Id == modifierId)
+                {
+                    _isDirty = true;
+                    _statModifiers.RemoveAt(i);
+                    return true;
+                }
+            }
+
             return false;
         }
 

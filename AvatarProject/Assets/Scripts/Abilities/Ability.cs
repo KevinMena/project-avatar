@@ -8,6 +8,9 @@ namespace AvatarBA.Abilities
     public class Ability : ScriptableObject
     {
         [SerializeField]
+        private string _id;
+
+        [SerializeField]
         protected Sprite icon;
 
         [SerializeField]
@@ -31,6 +34,7 @@ namespace AvatarBA.Abilities
         [SerializeField]
         protected AbilityEffect[] effects;
 
+        public string Id => _id;
         public Sprite Icon => icon;
         public string Name  => abilityName;
         public string Description => description;

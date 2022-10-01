@@ -24,9 +24,14 @@ namespace AvatarBA.UI
             _manager.UnSubscribe(this);
         }
 
-        public void StartTimer(int slot, float maxTimer)
+        public void StartCooldownTimer(int slot, float maxTimer)
         {
-            _slots[slot].StartTimer(maxTimer);
+            _slots[slot].StartCooldownTimer(maxTimer);
+        }
+
+        public void StartActiveTimer(int slot, float maxTimer)
+        {
+            _slots[slot].StartActiveTimer(maxTimer);
         }
 
         public void EndTimer(int slot)

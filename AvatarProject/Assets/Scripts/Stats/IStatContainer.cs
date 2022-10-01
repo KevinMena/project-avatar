@@ -13,9 +13,13 @@ namespace AvatarBA.Stats
 
         float GetStat(string id);
 
-        void ApplyChangeToStat(string id, float amount, StatModifierType modifierType);
+        void ApplyChangeToStat(string statId, string modifierId, float value, StatModifierType modifierType);
 
-        void RemoveChangeToStat(string id, StatModifier modifier);
+        void ApplyChangeToStat(string statId, string modifierId, float value, StatModifierType modifierType, object owner);
+
+        void RemoveChangeToStat(string statId, string modifierId);
+
+        void RemoveChangeToStat(string statId, StatModifier modifier);
 
         void RemoveChangeToStatFromSource(string id, object source);
     }

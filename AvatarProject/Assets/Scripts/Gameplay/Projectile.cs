@@ -1,10 +1,9 @@
-using AvatarBA.Debugging;
 using UnityEngine;
 
 namespace AvatarBA.Combat
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class Projectile : MonoBehaviour
+    public class Projectile : MonoBehaviour, IProjectile
     {
         [SerializeField]
         private LayerMask _mask;
@@ -24,6 +23,11 @@ namespace AvatarBA.Combat
 
         private float _lifeTimer = 0;
 
+        public LayerMask Mask => _mask;
+        public float BaseDamage => _baseDamage;
+        public float Speed => _speed;
+        public float LifeTime => _lifeTime;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
@@ -33,16 +37,17 @@ namespace AvatarBA.Combat
 
         private void Update()
         {
-            _lifeTime -= Time.deltaTime;
-            if (_lifeTime <= 0)
+            _lifeTimer -= Time.deltaTime;
+            if (_lifeTimer <= 0)
                 Explode();
 
             Move();
         }
 
-        public void Setup(float damage, GameObject owner)
+        public void Setup(float damage, LayerMask mask, GameObject owner)
         {
             _baseDamage = damage;
+            _mask = mask;
             _owner = owner;
             _lifeTimer = _lifeTime;
         }
@@ -53,15 +58,15 @@ namespace AvatarBA.Combat
             transform.Translate(desiredVelocity);
         }
 
-        private void Explode()
+        public void Explode()
         {
             // Play VFX
             Destroy(gameObject);
         }
 
-        private void OnTriggerEnter(Collider other)
+        public void OnEntityHit(Collider hit)
         {
-            GameObject entity = other.gameObject;
+            GameObject entity = hit.gameObject;
 
             if (entity == _owner)
                 return;
@@ -75,6 +80,11 @@ namespace AvatarBA.Combat
             }
 
             Explode();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            OnEntityHit(other);
         }
     }
 }

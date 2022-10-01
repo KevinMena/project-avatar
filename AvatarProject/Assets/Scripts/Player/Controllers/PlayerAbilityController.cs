@@ -138,10 +138,11 @@ namespace AvatarBA
                 UpdateState(slot, AbilityState.Active);
 
                 activeTimer.Start();
+                StartActiveDisplay(slot, currentAbility.ActiveTime);
                 while (!activeTimer.IsComplete)
                 {
                     activeTimer.Update(Time.deltaTime);
-                    // Update UI
+                    UpdateDisplay(slot, activeTimer.PercentElapsed, activeTimer.RemainingTime);
                     yield return null;
                 }
             }
@@ -152,7 +153,7 @@ namespace AvatarBA
             UpdateState(slot, AbilityState.Cooldown);
 
             cooldownTimer.Start();
-            StartDisplay(slot, currentAbility.Cooldown);
+            StartCooldownDisplay(slot, currentAbility.Cooldown);
             while(!cooldownTimer.IsComplete)
             {
                 cooldownTimer.Update(Time.deltaTime);
@@ -216,9 +217,14 @@ namespace AvatarBA
             return _abilityStates[(int) slot];
         }
 
-        private void StartDisplay(AbilitySlot slot, float maxTimer)
+        private void StartCooldownDisplay(AbilitySlot slot, float maxTimer)
         {
-            _displayManager.StartTimer((int) slot, maxTimer);
+            _displayManager.StartCooldownTimer((int) slot, maxTimer);
+        }
+
+        private void StartActiveDisplay(AbilitySlot slot, float maxTimer)
+        {
+            _displayManager.StartActiveTimer((int)slot, maxTimer);
         }
 
         private void EndDisplay(AbilitySlot slot)

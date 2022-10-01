@@ -35,13 +35,13 @@ namespace AvatarBA.Debugging
 
         private void UpdateStats()
         {
-            KeyValuePair<string, float>[] runtimeStats = _statsController.GetAllStats();
-            for(int i = 0; i < _stats.Length; i++)
-            {
-                _stats[i].text = $"{runtimeStats[i].Key} = {runtimeStats[i].Value}";
-            }
+            //KeyValuePair<string, float>[] runtimeStats = _statsController.GetAllStats();
+            //for(int i = 0; i < _stats.Length; i++)
+            //{
+            //    _stats[i].text = $"{runtimeStats[i].Key} = {runtimeStats[i].Value}";
+            //}
 
-            _isDirty = false;
+            //_isDirty = false;
         }
     }
 }

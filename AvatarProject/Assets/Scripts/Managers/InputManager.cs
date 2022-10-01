@@ -10,6 +10,7 @@ namespace AvatarBA
     {
         public event UnityAction<Vector2> MovementEvent;
         public event UnityAction<Vector2> MousePositionEvent;
+        public event UnityAction InteractEvent;
         public event UnityAction DashEvent;
         public event UnityAction MeleeAttackEvent;
         public event UnityAction LeftAbilityEvent;
@@ -68,11 +69,17 @@ namespace AvatarBA
             UltimateAbilityEvent.Invoke();
         }
 
+        private void OnInteract(InputAction.CallbackContext context)
+        {
+            InteractEvent.Invoke();
+        }
+
         private void SetCallbacks()
         {
             _playerInput.Gameplay.Mouse.performed += OnMousePosition;
             _playerInput.Gameplay.Movement.performed += OnMove;
             _playerInput.Gameplay.Movement.canceled += OnMove;
+            _playerInput.Gameplay.Interact.performed += OnInteract;
             _playerInput.Gameplay.Dash.performed += OnDash;
             _playerInput.Gameplay.MeleeAttack.performed += OnMeleeAtack;
             _playerInput.Gameplay.LeftAbility.performed += OnLeftAbility;
@@ -85,6 +92,7 @@ namespace AvatarBA
             _playerInput.Gameplay.Mouse.performed -= OnMousePosition;
             _playerInput.Gameplay.Movement.performed -= OnMove;
             _playerInput.Gameplay.Movement.canceled -= OnMove;
+            _playerInput.Gameplay.Interact.performed -= OnInteract;
             _playerInput.Gameplay.Dash.performed -= OnDash;
             _playerInput.Gameplay.MeleeAttack.performed -= OnMeleeAtack;
             _playerInput.Gameplay.LeftAbility.performed -= OnLeftAbility;

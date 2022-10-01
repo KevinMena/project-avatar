@@ -89,6 +89,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""4f310152-200f-4f11-a49e-31d923b2b8b1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,6 +221,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""UltimateAbility"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""259f4092-b767-4c0d-96a1-0330d7d19b6d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -227,6 +247,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Gameplay_LeftAbility = m_Gameplay.FindAction("LeftAbility", throwIfNotFound: true);
         m_Gameplay_RightAbility = m_Gameplay.FindAction("RightAbility", throwIfNotFound: true);
         m_Gameplay_UltimateAbility = m_Gameplay.FindAction("UltimateAbility", throwIfNotFound: true);
+        m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -293,6 +314,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_LeftAbility;
     private readonly InputAction m_Gameplay_RightAbility;
     private readonly InputAction m_Gameplay_UltimateAbility;
+    private readonly InputAction m_Gameplay_Interact;
     public struct GameplayActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -304,6 +326,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @LeftAbility => m_Wrapper.m_Gameplay_LeftAbility;
         public InputAction @RightAbility => m_Wrapper.m_Gameplay_RightAbility;
         public InputAction @UltimateAbility => m_Wrapper.m_Gameplay_UltimateAbility;
+        public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -334,6 +357,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @UltimateAbility.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateAbility;
                 @UltimateAbility.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateAbility;
                 @UltimateAbility.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateAbility;
+                @Interact.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnInteract;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -359,6 +385,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @UltimateAbility.started += instance.OnUltimateAbility;
                 @UltimateAbility.performed += instance.OnUltimateAbility;
                 @UltimateAbility.canceled += instance.OnUltimateAbility;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
         }
     }
@@ -372,5 +401,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnLeftAbility(InputAction.CallbackContext context);
         void OnRightAbility(InputAction.CallbackContext context);
         void OnUltimateAbility(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }

@@ -5,22 +5,25 @@ namespace AvatarBA.Stats
     [Serializable]
     public class StatModifier
     {
+        private string _id;
         private float _value;
         private StatModifierType _modifierType;
         private object _source;
 
+        public string Id => _id;
         public float Value => _value;
         public StatModifierType ModifierType => _modifierType;
         public object Source => _source;
 
-        public StatModifier(float value, StatModifierType modifierType, object source)
+        public StatModifier(string id, float value, StatModifierType modifierType, object source)
         {
+            _id = id;
             _value = value;
             _modifierType = modifierType;
             _source = source;
         }
 
-        public StatModifier(float value, StatModifierType modifierType) : this(value, modifierType, null) { }
+        public StatModifier(string id, float value, StatModifierType modifierType) : this(id, value, modifierType, null) { }
 
         /// <summary>
         /// Compares the type with other modifier to create an order

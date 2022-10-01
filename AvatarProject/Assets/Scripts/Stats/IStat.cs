@@ -8,6 +8,8 @@ namespace AvatarBA.Stats
 
         bool RemoveModifier(StatModifier modifier);
 
+        bool RemoveModifier(string modifierId);
+
         bool RemoveModifiersFromSource(object source);
     }
 }

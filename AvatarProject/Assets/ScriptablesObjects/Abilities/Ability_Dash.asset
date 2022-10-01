@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1ea89feeb739e745b011fa9c785fc54, type: 3}
   m_Name: Ability_Dash
   m_EditorClassIdentifier: 
+  _id: dash
   icon: {fileID: 21300000, guid: 47cc4fbdfe10fea4cb3aa2a9647aa547, type: 3}
   abilityName: Normal Dash
   description: The user moves quickly forward becoming invulnerable to damage for

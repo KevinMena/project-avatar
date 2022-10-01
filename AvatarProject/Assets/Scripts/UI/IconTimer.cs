@@ -13,9 +13,13 @@ namespace AvatarBA.UI
         private Image _cooldown;
 
         [SerializeField]
+        private Image _active;
+
+        [SerializeField]
         private TMP_Text _timer;
 
         private float _current;
+        private Image _currentEffect;
 
         private const float MINIMUM = 0;
         private const float MAXIMUM = 1;
@@ -23,16 +27,27 @@ namespace AvatarBA.UI
         public void StartTimer(float maxTimer)
         {
             _timer.SetText(maxTimer.ToString("F1"));
-            _cooldown.fillAmount = 1;
-            _cooldown.gameObject.SetActive(true);
+            _currentEffect.fillAmount = 1;
+            _currentEffect.gameObject.SetActive(true);
             _timer.gameObject.SetActive(true);
+        }
+
+        public void StartActiveTimer(float maxTimer)
+        {
+            _currentEffect = _active;
+            StartTimer(maxTimer);
+        }
+
+        public void StartCooldownTimer(float maxTimer)
+        {
+            _currentEffect = _cooldown;
+            StartTimer(maxTimer);
         }
 
         public void EndTimer()
         {
-            _cooldown.gameObject.SetActive(false);
-            _timer.gameObject.SetActive(false);
-            _cooldown.fillAmount = 1;
+            _currentEffect.gameObject.SetActive(false);
+            _currentEffect.fillAmount = 1;
             _timer.SetText("");
         }
 
@@ -48,7 +63,7 @@ namespace AvatarBA.UI
             float currentOffset = MAXIMUM - _current;
             float maximumOffset = MAXIMUM - MINIMUM;
             float fillAmount = currentOffset / maximumOffset;
-            _cooldown.fillAmount = fillAmount;
+            _currentEffect.fillAmount = fillAmount;
         }
 
         public void ChangeIcon(Sprite icon)

@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using AvatarBA.UI;
+using System.Collections.Generic;
 
 namespace AvatarBA.Managers
 {
@@ -24,6 +25,14 @@ namespace AvatarBA.Managers
                 _currentUI = null;
         }
 
+        public void Setup(KeyValuePair<string, StatRecord>[] runtimeStats)
+        {
+            if (_currentUI == null)
+                return;
+
+            _currentUI.Setup(runtimeStats);
+        }
+
         public void UpdateMaxHealth(float value)
         {
             _currentUI?.UpdateMaxHealth(value);
@@ -32,6 +41,11 @@ namespace AvatarBA.Managers
         public void UpdateHealthBar(float current)
         {
             _currentUI?.UpdateHealthBar(current);
+        }
+
+        public void UpdateStat(string id, StatRecord record)
+        {
+            _currentUI.UpdateStat(id, record);
         }
     }
 }

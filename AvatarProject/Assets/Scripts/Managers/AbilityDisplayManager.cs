@@ -23,9 +23,14 @@ namespace AvatarBA.Managers
                 _currentUI = null;
         }
 
-        public void StartTimer(int slot, float maxTimer)
+        public void StartCooldownTimer(int slot, float maxTimer)
         {
-            _currentUI?.StartTimer(slot, maxTimer);
+            _currentUI?.StartCooldownTimer(slot, maxTimer);
+        }
+
+        public void StartActiveTimer(int slot, float maxTimer)
+        {
+            _currentUI.StartActiveTimer(slot, maxTimer);
         }
 
         public void EndTimer(int slot)
