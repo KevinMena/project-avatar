@@ -5,10 +5,10 @@ using AvatarBA.Abilities.Effects;
 
 namespace AvatarBA.Abilities
 {
-    public class Ability : ScriptableObject
+    public abstract class Ability : ScriptableObject
     {
         [SerializeField]
-        private string _id;
+        protected string _id;
 
         [SerializeField]
         protected Sprite icon;
@@ -44,15 +44,8 @@ namespace AvatarBA.Abilities
         public AbilityType Type => type;
         public ref readonly AbilityEffect[] Effects => ref effects;
 
-        public virtual void Initialize() { }
-
-        public virtual IEnumerator Trigger(GameObject owner) 
-        {
-            foreach (var effect in Effects)
-                effect.Cast(owner);
-
-            yield return null; 
-        }
+        public abstract void Initialize();
+        public abstract IEnumerator Trigger(GameObject owner);
     }
 
     public enum AbilityState

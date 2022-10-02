@@ -12,6 +12,8 @@ namespace AvatarBA.Abilities
         [SerializeField] 
         private float _dashTime = 0;
 
+        public override void Initialize() { }
+
         public override IEnumerator Trigger(GameObject owner)
         {
             if(owner.TryGetComponent(out CharacterMovementController movementController))
@@ -30,7 +32,7 @@ namespace AvatarBA.Abilities
                 movementController.AddForce(desiredVelocity, ForceMode.VelocityChange);
             }
 
-            return base.Trigger(owner);
+            yield return null;
         }
     }
 }

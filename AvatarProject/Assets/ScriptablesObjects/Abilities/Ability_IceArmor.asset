@@ -22,5 +22,5 @@ MonoBehaviour:
   cost: 0
   type: 3
   effects: []
-  _baseAugment: 2
+  _baseModifier: 0.25
   _duration: 5

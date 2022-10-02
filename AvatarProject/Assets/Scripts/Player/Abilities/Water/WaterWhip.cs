@@ -6,34 +6,26 @@ using AvatarBA.Combat;
 namespace AvatarBA.Abilities
 {
     [CreateAssetMenu(fileName = "Ability_WaterWhip", menuName = "Abilities/Water/Water Whip")]
-    public class WaterWhip : Ability
+    public class WaterWhip : DamageAbility
     {
-        [SerializeField]
-        private GameObject _prefab;
-        [SerializeField]
-        private float _baseDamage = 0;
         [SerializeField]
         private float _baseDistance = 0;
         [SerializeField]
         private float _attackTime = 0;
-        [SerializeField]
-        private LayerMask _mask;
 
-        private const string ATTACK_STAT = "attackPower";
+        public override void Initialize() { }
 
         public override IEnumerator Trigger(GameObject owner)
         {
             // Create VFX
             // Instantiate area of attack
-            GameObject waterWhip = Instantiate(_prefab, owner.transform.position, owner.transform.rotation);
+            GameObject waterWhip = Instantiate(Prefab, owner.transform.position, owner.transform.rotation);
 
             // Generate attack prefab
             if (waterWhip.TryGetComponent(out BoxAreaAttack attack))
             {
                 // Calculate damage for the attack
-                float currentDamage = _baseDamage;
-                if (owner.TryGetComponent(out CharacterStatsController statsController))
-                    currentDamage += statsController.GetStat(ATTACK_STAT);
+                float currentDamage = CalculateDamage(owner);
                 attack.Setup(Name, new Vector3(0.5f, 0.5f, _baseDistance / 2), _baseDistance, currentDamage, _mask, owner);
 
                 // Start attacking the area
@@ -42,7 +34,7 @@ namespace AvatarBA.Abilities
                 attack.StopAttack();
             }
 
-            yield return base.Trigger(owner);
+            yield return null;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace AvatarBA.UI
         [SerializeField]
         private IconTimer[] _slots;
 
-        private void Start() 
+        private void Awake() 
         {
             _manager.Subscribe(this);    
         }

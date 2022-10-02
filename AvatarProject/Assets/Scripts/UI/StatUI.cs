@@ -22,7 +22,7 @@ namespace AvatarBA.UI
 
         private Dictionary<string, Text> _currentStats;
 
-        private void Start()
+        private void Awake()
         {
             _manager.Subscribe(this);
         }
