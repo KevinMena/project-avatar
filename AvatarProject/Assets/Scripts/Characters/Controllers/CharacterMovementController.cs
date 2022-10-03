@@ -3,24 +3,19 @@ using UnityEngine;
 
 namespace AvatarBA
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(CharacterController))]
     public abstract class CharacterMovementController : MonoBehaviour
     {
-        protected Rigidbody _rigidbody;
+        protected CharacterController _characterController;
 
         protected bool _canMove = true;
 
         protected virtual void Awake() 
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            _characterController = GetComponent<CharacterController>();
         }
 
-        public void DisableMovement()
-        {
-            _canMove = false;
-            _rigidbody.velocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
-        }
+        public void DisableMovement() => _canMove = false;
             
         public void EnableMovement() => _canMove = true;
 
@@ -50,9 +45,9 @@ namespace AvatarBA
             EnableMovement();
         }
 
-        public void AddForce(Vector3 velocity, ForceMode mode)
+        public void AddMovement(Vector3 direction)
         {
-            _rigidbody.AddForce(velocity, mode);
+            _characterController.Move(direction);
         }
     }
 }

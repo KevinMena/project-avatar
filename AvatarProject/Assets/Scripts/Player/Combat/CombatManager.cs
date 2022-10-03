@@ -129,7 +129,7 @@ namespace AvatarBA.Combat
         /// Move the user forward depending on the part of the combo
         /// </summary>
         /// <param name="distance"> Amount of distance has to move</param>
-        public virtual void AddMovement(float distance) { }
+        public virtual void AddMovement(float distance, float duration) { }
 
         /// <summary>
         /// TODO: CHANGE THIS

@@ -66,7 +66,7 @@ namespace AvatarBA.Combat
             _owner.SetAnimation(_animationHash);
             GameDebug.Log($"State: {_stateName}. Attack Duration: {_attackDuration}");
 
-            _owner.AddMovement(_attackMovementDistance);
+            _owner.AddMovement(_attackMovementDistance, _attackDuration);
             _hitbox.StartCheckCollision();
         }
 

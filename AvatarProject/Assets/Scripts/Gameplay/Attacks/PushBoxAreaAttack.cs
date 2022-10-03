@@ -18,8 +18,8 @@ namespace AvatarBA.Combat
         {
             if (hit.TryGetComponent(out CharacterMovementController characterMovementController))
             {
-                Vector3 velocity = _pushBackDirection * _pushBack;
-                characterMovementController.AddForce(velocity, ForceMode.Force);
+                Vector3 velocity = _pushBackDirection * _pushBack * Time.deltaTime;
+                characterMovementController.AddMovement(velocity);
             }
 
             base.HitEntity(hit);

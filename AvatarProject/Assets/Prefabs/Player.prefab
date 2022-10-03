@@ -3117,8 +3117,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6607612479111033760}
   - component: {fileID: 6607612479111033767}
-  - component: {fileID: 6607612479111033764}
-  - component: {fileID: 6607612479111033762}
+  - component: {fileID: 3716021233527839580}
   - component: {fileID: 6607612479111033754}
   - component: {fileID: 6607612479111033753}
   - component: {fileID: 6607612479111033785}
@@ -3171,8 +3170,8 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!136 &6607612479111033764
-CapsuleCollider:
+--- !u!143 &3716021233527839580
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3181,26 +3180,14 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 1.65
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.83, z: 0}
---- !u!54 &6607612479111033762
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6607612479111033761}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 84
-  m_CollisionDetection: 0
+  m_Height: 1.65
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.83, z: 0}
 --- !u!114 &6607612479111033754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3326,17 +3313,17 @@ MonoBehaviour:
     AnimationName: Entry
     AttackRange: 2
     AttackAngle: 45
-    AttackMovementDistance: 1
+    AttackMovementDistance: 3
   - StateName: FollowUp
     AnimationName: FollowUp
     AttackRange: 2.25
     AttackAngle: 45
-    AttackMovementDistance: 1
+    AttackMovementDistance: 3
   - StateName: Finisher
     AnimationName: Finisher
     AttackRange: 2.25
     AttackAngle: 60
-    AttackMovementDistance: 1.5
+    AttackMovementDistance: 3.5
   _hittableLayer:
     serializedVersion: 2
     m_Bits: 128

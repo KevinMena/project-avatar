@@ -2,6 +2,7 @@ using UnityEngine;
 
 using AvatarBA.Combat;
 using AvatarBA.Common;
+using System.Collections;
 
 namespace AvatarBA
 {
@@ -61,12 +62,25 @@ namespace AvatarBA
                 _movementController.DisableMovement();
         }
 
-        public override void AddMovement(float distance)
+        public override void AddMovement(float distance, float duration)
         {
-            // Cache direction, compute velocity and apply force
-            Vector3 direction = transform.forward;
-            Vector3 velocity = direction * distance;
-            _movementController.AddForce(velocity, ForceMode.VelocityChange);
+            StartCoroutine(MoveOwner(distance, duration));
+        }
+
+        private IEnumerator MoveOwner(float distance, float duration)
+        {
+            float speed = distance * Time.deltaTime;
+            Debug.Log(speed);
+            Vector3 movementDirection = transform.forward * speed;
+            Debug.Log(movementDirection);
+            float timer = Time.time;
+            while (Time.time < timer + duration)
+            {
+                Debug.Log(transform.forward);
+                Debug.Log(movementDirection);
+                _movementController.AddMovement(movementDirection);
+                yield return null;
+            }
         }
     }
 }

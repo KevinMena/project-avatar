@@ -22,17 +22,22 @@ namespace AvatarBA.Abilities
                 Vector3 desiredDirection = owner.transform.forward;
 
                 // Apply speed and calculate desire position
-                Vector3 desiredVelocity = desiredDirection * _dashSpeed;
+                Vector3 desiredVelocity = desiredDirection * _dashSpeed * Time.deltaTime;
 
-                movementController.LoseControl(_dashTime);
-
+                movementController.DisableMovement();
+                
                 if(owner.TryGetComponent(out Character character))
                     character.BecomeInvulnerable();
+                
+                float dashTimer = Time.time + _dashTime;
+                while(Time.time < dashTimer)
+                {
+                    movementController.AddMovement(desiredVelocity);
+                    yield return null;
+                }
 
-                movementController.AddForce(desiredVelocity, ForceMode.VelocityChange);
+                movementController.EnableMovement();
             }
-
-            yield return null;
         }
     }
 }

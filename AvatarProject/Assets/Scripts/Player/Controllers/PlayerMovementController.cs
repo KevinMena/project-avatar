@@ -30,22 +30,16 @@ namespace AvatarBA
         {
             base.Awake();
             _statsController = GetComponent<PlayerStatsController>();
-            _gameplayCamera = Camera.main;
             _animationController = GetComponent<AnimationController>();
+            _gameplayCamera = Camera.main;
         }
 
         private void Update()
         {
             UpdateState();
-        }
-
-        private void FixedUpdate() 
-        {
-            if(_canMove)
-            {
+            if (_canMove)
                 Move();
-                Rotate();
-            }
+            Rotate();
         }
 
         /// <summary>
@@ -75,6 +69,7 @@ namespace AvatarBA
                 cameraForward.normalized * _desiredDirection.z;
 
             _movementDirection = Vector3.ClampMagnitude(adjustedMovement, 1f);
+            _movementDirection.y = 0f;
 
             if(_movementDirection != Vector3.zero)
                 _animationController.PlayAnimation(MoveAnimation);
@@ -82,15 +77,11 @@ namespace AvatarBA
                 _animationController.PlayInitialAnimation();
 
             // Cache the current movement speed
-            float movementSpeed = _statsController.GetStat(MOVEMENT_STAT);
-
-            // Cache velocity last frame
-            Vector3 previousVelocity = _rigidbody.velocity;
+            float movementSpeed = _statsController.GetStat(MOVEMENT_STAT) * Time.deltaTime;
 
             // Apply speed and calculate desire position
             Vector3 desiredVelocity = _movementDirection * movementSpeed;
-            Vector3 velocityChange = desiredVelocity - previousVelocity;
-            _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+            _characterController.Move(desiredVelocity);
         }
         
         /// <summary>
@@ -113,8 +104,8 @@ namespace AvatarBA
             
             // Calculate and apply new rotation
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            Quaternion desiredRotation = Quaternion.Slerp(_rigidbody.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-            _rigidbody.rotation = desiredRotation;
+            Quaternion desiredRotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            transform.rotation = desiredRotation;
         }
 
         private Vector3 GetMousePosition()
