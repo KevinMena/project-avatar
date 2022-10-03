@@ -11,6 +11,8 @@ namespace AvatarBA
         public Vector3 movementDirection;
 
         public Vector3 targetPosition;
+
+        public bool ToMove;
     }
 
     public abstract class IInputProvider : ScriptableObject

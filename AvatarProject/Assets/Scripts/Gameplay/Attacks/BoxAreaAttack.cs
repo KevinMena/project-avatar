@@ -1,17 +1,14 @@
 using UnityEngine;
 
+using AvatarBA.Debugging;
+
 namespace AvatarBA.Combat
 {
     public class BoxAreaAttack : AreaAttack
     {
-        public override void Setup(string name, float distance, float damage, LayerMask mask, GameObject owner)
-        {
-            _attackName = name;
-            _damage = damage;
-            _distance = distance;
-        }
+        public BoxHitbox Hitbox => _hitbox as BoxHitbox;
 
-        public void Setup(string name, Vector3 size, float distance, float damage, LayerMask mask, GameObject owner)
+        public override void Setup(string name, Vector3 size, float distance, float damage, LayerMask mask, GameObject owner)
         {
             _attackName = name;
             _damage = damage;
@@ -32,8 +29,22 @@ namespace AvatarBA.Combat
         {
             _hitbox.StopCheckCollision();
             _isAttacking = false;
-
+            _alreadyHit.Clear();
             Destroy(gameObject);
+        }
+
+        protected override void HitEntity(Collider hit)
+        {
+            if (_alreadyHit.Contains(hit))
+                return;
+
+            _alreadyHit.Add(hit);
+
+            GameDebug.Log($"Collisioned with {hit.name} using {_attackName}");
+            if (hit.TryGetComponent(out Character character))
+            {
+                character.DoDamage(_damage);
+            }
         }
     }
 }

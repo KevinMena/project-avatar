@@ -1,6 +1,7 @@
-using AvatarBA.Debugging;
-
+using System.Collections.Generic;
 using UnityEngine;
+
+using AvatarBA.Debugging;
 
 namespace AvatarBA.Combat
 {
@@ -12,6 +13,7 @@ namespace AvatarBA.Combat
         protected float _distance;
 
         protected bool _isAttacking;
+        protected List<Collider> _alreadyHit = new List<Collider>();
 
         protected void OnDestroy()
         {
@@ -25,19 +27,12 @@ namespace AvatarBA.Combat
                 _hitbox.CheckCollision();
         }
 
-        public abstract void Setup(string name, float distance, float damage, LayerMask mask, GameObject owner);
+        public abstract void Setup(string name, Vector3 size, float distance, float damage, LayerMask mask, GameObject owner);
 
         public abstract void StartAttack();
         public abstract void StopAttack();
 
-        protected void HitEntity(Collider hit)
-        {
-            GameDebug.Log($"Collisioned with {hit.name} using {_attackName}");
-            if (hit.TryGetComponent(out Character character))
-            {
-                character.DoDamage(_damage);
-            }
-        }
+        protected abstract void HitEntity(Collider hit);
 
         protected void OnDrawGizmos()
         {

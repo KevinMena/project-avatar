@@ -3199,7 +3199,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!114 &6607612479111033754
 MonoBehaviour:
@@ -3326,14 +3326,17 @@ MonoBehaviour:
     AnimationName: Entry
     AttackRange: 2
     AttackAngle: 45
+    AttackMovementDistance: 1
   - StateName: FollowUp
     AnimationName: FollowUp
     AttackRange: 2.25
     AttackAngle: 45
+    AttackMovementDistance: 1
   - StateName: Finisher
     AnimationName: Finisher
     AttackRange: 2.25
     AttackAngle: 60
+    AttackMovementDistance: 1.5
   _hittableLayer:
     serializedVersion: 2
     m_Bits: 128

@@ -3,6 +3,7 @@ using System;
 
 using AvatarBA.Patterns;
 using AvatarBA.Debugging;
+using System.Collections.Generic;
 
 namespace AvatarBA.Combat
 {
@@ -19,6 +20,8 @@ namespace AvatarBA.Combat
         public float AttackRange;
 
         public float AttackAngle;
+
+        public float AttackMovementDistance;
     }
 
     /// <summary>
@@ -34,8 +37,11 @@ namespace AvatarBA.Combat
         private string _animationName;
         private readonly int _animationHash;
 
+        private float _attackMovementDistance = 0; 
         private float _attackDuration = 0;
         private float _attackDamage = 0;
+
+        private List<Collider> _alreadyHit;
 
         private float _timer = 0;
 
@@ -45,7 +51,8 @@ namespace AvatarBA.Combat
             _stateName = data.StateName;
             _animationName = data.AnimationName;
             _animationHash = Animator.StringToHash(data.AnimationName);
-            
+            _attackMovementDistance = data.AttackMovementDistance;
+            _alreadyHit = new List<Collider>();
 
             _hitbox = new ConeHitbox(data.AttackRange, data.AttackAngle, _owner.HittableLayer);
             _hitbox.OnCollision += CollisionedWith;
@@ -59,6 +66,7 @@ namespace AvatarBA.Combat
             _owner.SetAnimation(_animationHash);
             GameDebug.Log($"State: {_stateName}. Attack Duration: {_attackDuration}");
 
+            _owner.AddMovement(_attackMovementDistance);
             _hitbox.StartCheckCollision();
         }
 
@@ -78,15 +86,21 @@ namespace AvatarBA.Combat
         public override void OnExit() 
         {
             _hitbox.StopCheckCollision();
+            _alreadyHit.Clear();
         }
 
         /// <summary>
         /// Handle what to do with entities collided
         /// </summary>
-        public void CollisionedWith(Collider collider)
+        public void CollisionedWith(Collider hit)
         {
-            GameDebug.Log($"Collisioned with {collider.name} in state: {_stateName}");
-            if(collider.TryGetComponent(out Character character))
+            if (_alreadyHit.Contains(hit))
+                return;
+
+            _alreadyHit.Add(hit);
+
+            GameDebug.Log($"Collisioned with {hit.name} in state: {_stateName}");
+            if(hit.TryGetComponent(out Character character))
             {
                 character.DoDamage(_attackDamage);
             }

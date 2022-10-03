@@ -33,6 +33,7 @@ namespace AvatarBA.Combat
 
         public LayerMask HittableLayer => _hittableLayer;
         public Transform HitPoint => _hitPoint;
+        public bool Comboing => _currentComboIndex > 0;
         public bool AttackTriggered => _attackTriggered;
         public bool IsLastCombo => _currentComboIndex >= _combatStates.Length;
         public bool FromLastCombo => _fromLastCombo;
@@ -123,6 +124,12 @@ namespace AvatarBA.Combat
         /// </summary>
         /// <param name="state"></param>
         public virtual void ChangeMovement(bool state) { }
+
+        /// <summary>
+        /// Move the user forward depending on the part of the combo
+        /// </summary>
+        /// <param name="distance"> Amount of distance has to move</param>
+        public virtual void AddMovement(float distance) { }
 
         /// <summary>
         /// TODO: CHANGE THIS

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c5da91841231484d989ef877aaa5dc9, type: 3}
+  m_Name: Ability_Wave
+  m_EditorClassIdentifier: 
+  _id: wave
+  icon: {fileID: 21300000, guid: fc0b9871c325d8b498df36f8d42d5e76, type: 3}
+  abilityName: Wave
+  description: The user summons a tidal wave that pushes back the enemies and deals
+    damage in an area.
+  cooldown: 7
+  activeTime: 2
+  cost: 0
+  type: 3
+  effects: []
+  _prefab: {fileID: 6028013746605423237, guid: 1a6860024210a9e44ab89f190a708c42, type: 3}
+  _baseDamage: 6
+  _mask:
+    serializedVersion: 2
+    m_Bits: 128
+  _pushBack: 1
+  _baseDistance: 6
+  _attackTime: 2

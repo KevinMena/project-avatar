@@ -60,5 +60,13 @@ namespace AvatarBA
             else
                 _movementController.DisableMovement();
         }
+
+        public override void AddMovement(float distance)
+        {
+            // Cache direction, compute velocity and apply force
+            Vector3 direction = transform.forward;
+            Vector3 velocity = direction * distance;
+            _movementController.AddForce(velocity, ForceMode.VelocityChange);
+        }
     }
 }

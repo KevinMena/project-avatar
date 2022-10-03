@@ -17,6 +17,8 @@ namespace AvatarBA.NPC
 
         private Vector3 _desiredPosition;
 
+        private bool _move;
+
         private void Update()
         {
             UpdateState();
@@ -33,6 +35,8 @@ namespace AvatarBA.NPC
 
         protected override void Move()
         {
+            if (!_move) return;
+
             Vector3 movementDirection = _desiredPosition - transform.position;
 
             if (movementDirection.sqrMagnitude < 0.1f)
@@ -73,6 +77,7 @@ namespace AvatarBA.NPC
         {
             InputState currentState = _provider.GetState();
             _desiredPosition = currentState.movementDirection;
+            _move = currentState.ToMove;
         }
     }
 }

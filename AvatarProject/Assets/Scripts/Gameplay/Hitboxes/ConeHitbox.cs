@@ -34,17 +34,12 @@ namespace AvatarBA.Combat
             // Get all entities in a range defined by the distance
             Collider[] hitColliders = Physics.OverlapSphere(Position, Distance, _mask);
 
-            List<Collider> alreadyHit = new List<Collider>();
-
             _state = ColliderState.Open;
             ChangeGizmosColor();
 
             // Check if any entity hit is inside our cone of vision
             foreach (var hit in hitColliders)
             {
-                if (alreadyHit.Contains(hit))
-                    continue;
-
                 Vector3 directionToTarget = hit.transform.position - Position;
 
                 // Calculating the dot product of the angle towards the entity and
@@ -60,8 +55,6 @@ namespace AvatarBA.Combat
                 ChangeGizmosColor();
 
                 OnCollision?.Invoke(hit);
-
-                alreadyHit.Add(hit);
             }
         }
 
