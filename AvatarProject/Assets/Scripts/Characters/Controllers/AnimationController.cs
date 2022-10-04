@@ -61,7 +61,7 @@ namespace AvatarBA.Common
             if (currentValue != 0 && currentValue - value < 0.01)
                 return;
 
-            _animator.SetFloat(parameter, value);
+            _animator.SetFloat(parameter, 1 + value);
         }
 
         public AnimatorState[] GetAnimatorStateInfo(int layer)

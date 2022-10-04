@@ -22,7 +22,7 @@ namespace AvatarBA.Combat
 
         public override void OnEnter()
         {
-            _owner.ChangeMovement(true);
+            //_owner.ChangeMovement(true);
             _owner.SetAnimation(IdleAnimation);
             _startComboTimer = _owner.LastComboDelay;
             GameDebug.Log("State: Idle");
@@ -30,7 +30,7 @@ namespace AvatarBA.Combat
 
         public override void OnExit()
         {
-            _owner.ChangeMovement(false);
+            //_owner.ChangeMovement(false);
         }
 
         public override void OnUpdate() 

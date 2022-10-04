@@ -12,27 +12,31 @@ namespace AvatarBA.Abilities
         [SerializeField] 
         private float _dashTime = 0;
 
+        [SerializeField]
+        private float _dashDistance = 0;
+
         public override void Initialize() { }
 
         public override IEnumerator Trigger(GameObject owner)
         {
             if(owner.TryGetComponent(out CharacterMovementController movementController))
             {
-                // Calculate correct direction base on where the camera is looking
-                Vector3 desiredDirection = owner.transform.forward;
+                // Calculate correct direction base on where the owner is looking
+                Vector3 targetPosition = owner.transform.position + (owner.transform.forward * _dashDistance);
 
-                // Apply speed and calculate desire position
-                Vector3 desiredVelocity = desiredDirection * _dashSpeed * Time.deltaTime;
+                // Calculate the direction where the movement is going to be
+                Vector3 targetDirection = targetPosition - owner.transform.position;
 
                 movementController.DisableMovement();
                 
                 if(owner.TryGetComponent(out Character character))
                     character.BecomeInvulnerable();
-                
-                float dashTimer = Time.time + _dashTime;
-                while(Time.time < dashTimer)
+
+                while(targetDirection.magnitude > 0.1f)
                 {
-                    movementController.AddMovement(desiredVelocity);
+                    Vector3 movementDirection = _dashSpeed * Time.deltaTime * targetDirection.normalized;
+                    movementController.AddMovement(movementDirection);
+                    targetDirection = targetPosition - owner.transform.position;
                     yield return null;
                 }
 

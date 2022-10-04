@@ -1,9 +1,9 @@
-using UnityEngine;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 using AvatarBA.Patterns;
 using AvatarBA.Debugging;
-using System.Collections.Generic;
 
 namespace AvatarBA.Combat
 {
@@ -41,6 +41,10 @@ namespace AvatarBA.Combat
         private float _attackDuration = 0;
         private float _attackDamage = 0;
 
+        private float _startupDuration = 0;
+        private float _activeDuration = 0;
+        private float recoveryDuration = 0;
+
         private List<Collider> _alreadyHit;
 
         private float _timer = 0;
@@ -60,13 +64,16 @@ namespace AvatarBA.Combat
 
         public override void OnEnter()
         {
+            _owner.ChangeMovement(false);
             _timer = 0;
             _attackDamage = _owner.CalculateAttackDamage();
             _attackDuration = _owner.CalculateAttackDuration(_animationName);
+            _startupDuration = _attackDuration * 0.1f;
+            _activeDuration = _attackDuration * 0.8f;
             _owner.SetAnimation(_animationHash);
             GameDebug.Log($"State: {_stateName}. Attack Duration: {_attackDuration}");
 
-            _owner.AddMovement(_attackMovementDistance, _attackDuration);
+            _owner.AddMovement(_attackMovementDistance);
             _hitbox.StartCheckCollision();
         }
 
@@ -80,13 +87,20 @@ namespace AvatarBA.Combat
                 _owner.SetNextState();
             }
 
-            Attack();
+            // If the attack is just starting, then do nothing
+            if (_timer < _startupDuration)
+                return;
+
+            // Window of attack activated
+            if(_timer < _activeDuration)
+                Attack();
         }
 
         public override void OnExit() 
         {
             _hitbox.StopCheckCollision();
             _alreadyHit.Clear();
+            _owner.ChangeMovement(true);
         }
 
         /// <summary>

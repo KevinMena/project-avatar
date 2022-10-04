@@ -24,3 +24,4 @@ MonoBehaviour:
   effects: []
   _dashSpeed: 10
   _dashTime: 0.5
+  _dashDistance: 4

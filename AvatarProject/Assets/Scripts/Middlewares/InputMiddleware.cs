@@ -1,15 +1,12 @@
 using UnityEngine;
 
-namespace AvatarBA
+namespace AvatarBA.Managers
 {
     public class InputMiddleware : Middleware
     {
         // Logic variables
         [SerializeField]
         private InputManager _inputManager = default;
-
-        [SerializeField] 
-        private MovementInputProvider _provider = default;
 
         // Movement variables
         private Vector2 _movementPosition;
@@ -24,7 +21,7 @@ namespace AvatarBA
             _provider?.Subscribe(this);
         }
 
-        private void OnDisable() 
+        private void OnDestroy() 
         {
             _inputManager.MovementEvent -= OnMovement;
             _inputManager.MousePositionEvent -= OnMouseMovement;
@@ -43,8 +40,9 @@ namespace AvatarBA
 
         public override void Process(ref InputState currentState)
         {
-            currentState.movementDirection = new Vector3(_movementPosition.x, 0, _movementPosition.y);
-            currentState.targetPosition = _mousePosition;
+            currentState.MovementDirection = new Vector3(_movementPosition.x, 0, _movementPosition.y);
+            currentState.RotationDirection = _mousePosition;
+            currentState.Speed = -1;
         }
     }
 }

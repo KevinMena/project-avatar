@@ -1,13 +1,14 @@
 using UnityEngine;
 
 using AvatarBA.Common;
+using AvatarBA.Managers;
 
 namespace AvatarBA
 {
     public class PlayerMovementController : CharacterMovementController
     {
         [Header("References")]
-        [SerializeField] private MovementInputProvider _provider;
+        [SerializeField] private InputProvider _provider;
 
         [Header("Settings")]
         [SerializeField] private float _rotationSpeed = 0;
@@ -38,8 +39,10 @@ namespace AvatarBA
         {
             UpdateState();
             if (_canMove)
+            {
                 Move();
-            Rotate();
+                Rotate();
+            }
         }
 
         /// <summary>
@@ -49,8 +52,8 @@ namespace AvatarBA
         protected override void UpdateState()
         {
             InputState currentState = _provider.GetState();
-            _desiredDirection = currentState.movementDirection;
-            _mousePosition = currentState.targetPosition;
+            _desiredDirection = currentState.MovementDirection;
+            _mousePosition = currentState.RotationDirection;
         }
 
         /// <summary>

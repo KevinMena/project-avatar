@@ -51,7 +51,7 @@ namespace AvatarBA
 
             // If attack speed is different than 1 change play rate of the animation so is faster
             _animationController.ChangeAnimationSpeed("AttackSpeed", attackSpeed);
-            return attackSpeed * animationLenght;
+            return (1 - attackSpeed) * animationLenght;
         }
 
         public override void ChangeMovement(bool state)
@@ -62,24 +62,23 @@ namespace AvatarBA
                 _movementController.DisableMovement();
         }
 
-        public override void AddMovement(float distance, float duration)
+        public override void AddMovement(float distance)
         {
-            StartCoroutine(MoveOwner(distance, duration));
+            StartCoroutine(MoveOwner(distance));
         }
 
-        private IEnumerator MoveOwner(float distance, float duration)
+        private IEnumerator MoveOwner(float distance)
         {
-            float speed = distance * Time.deltaTime;
-            Debug.Log(speed);
-            Vector3 movementDirection = transform.forward * speed;
-            Debug.Log(movementDirection);
-            float timer = Time.time;
-            while (Time.time < timer + duration)
+            Vector3 targetPosition = transform.position + (transform.forward * distance);
+
+            Vector3 offset = targetPosition - transform.position;
+
+            while (offset.magnitude > 0.1f)
             {
-                Debug.Log(transform.forward);
-                Debug.Log(movementDirection);
+                Vector3 movementDirection = moveSpeed * Time.deltaTime * offset;
                 _movementController.AddMovement(movementDirection);
                 yield return null;
+                offset = targetPosition - transform.position;
             }
         }
     }

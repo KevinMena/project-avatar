@@ -1,11 +1,13 @@
 using UnityEngine;
 
+using AvatarBA.Managers;
+
 namespace AvatarBA.NPC
 {
     public class NPCMiddleware : Middleware
     {
         [SerializeField]
-        private MovementInputProvider _provider = default;
+        private InputProvider _provider = default;
 
         private Vector3 _movementPosition;
         private Vector3 _lastPosition;
@@ -15,7 +17,7 @@ namespace AvatarBA.NPC
             _provider?.Subscribe(this);
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             _provider?.UnSubscribe(this);
         }
@@ -30,8 +32,8 @@ namespace AvatarBA.NPC
 
         public override void Process(ref InputState currentState)
         {
-            currentState.movementDirection = _movementPosition;
-            currentState.targetPosition = _movementPosition;
+            currentState.MovementDirection = _movementPosition;
+            currentState.RotationDirection = _movementPosition;
         }
     }
 }

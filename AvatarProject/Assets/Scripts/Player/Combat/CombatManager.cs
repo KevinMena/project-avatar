@@ -23,13 +23,14 @@ namespace AvatarBA.Combat
         private CombatState[] _combatStates;
         private CombatTransitionState[] _transitions;
 
-        private int _currentComboIndex = 0;
+        protected int _currentComboIndex = 0;
 
-        private bool _attackTriggered = false;
-        private bool _isTransitioning = false;
-        private bool _fromLastCombo = false;
-        private const float timerForInput = 0.8f;
-        private const float lastComboDelay = 0.5f;
+        protected bool _attackTriggered = false;
+        protected bool _isTransitioning = false;
+        protected bool _fromLastCombo = false;
+        protected const float timerForInput = 0.8f;
+        protected const float lastComboDelay = 0.5f;
+        protected const float moveSpeed = 3f;
 
         public LayerMask HittableLayer => _hittableLayer;
         public Transform HitPoint => _hitPoint;
@@ -129,7 +130,7 @@ namespace AvatarBA.Combat
         /// Move the user forward depending on the part of the combo
         /// </summary>
         /// <param name="distance"> Amount of distance has to move</param>
-        public virtual void AddMovement(float distance, float duration) { }
+        public virtual void AddMovement(float distance) { }
 
         /// <summary>
         /// TODO: CHANGE THIS

@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using AvatarBA.Managers;
+
 namespace AvatarBA.NPC
 {
     public class NPCMovementController : CharacterMovementController
     {
         [Header("References")]
-        [SerializeField] private MovementInputProvider _provider;
+        [SerializeField] private InputProvider _provider;
 
         // TODO: Change this to use stats controller for NPC
         [SerializeField]
@@ -76,8 +78,7 @@ namespace AvatarBA.NPC
         protected override void UpdateState()
         {
             InputState currentState = _provider.GetState();
-            _desiredPosition = currentState.movementDirection;
-            _move = currentState.ToMove;
+            _desiredPosition = currentState.MovementDirection;
         }
     }
 }

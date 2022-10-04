@@ -15,9 +15,9 @@ namespace AvatarBA
             _characterController = GetComponent<CharacterController>();
         }
 
-        public void DisableMovement() => _canMove = false;
+        public virtual void DisableMovement() => _canMove = false;
             
-        public void EnableMovement() => _canMove = true;
+        public virtual void EnableMovement() => _canMove = true;
 
         protected abstract void UpdateState();
 
