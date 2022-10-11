@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Newtonsoft.Json.Linq;
 
 /// <summary>
 /// Generic Serializable Dictionary for Unity 2020.1 and above.
@@ -160,6 +161,17 @@ public class GenericDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISeria
         {
             array[arrayIndex] = pair;
             arrayIndex++;
+        }
+    }
+
+    public void CopyTo(GenericDictionary<TKey, TValue> other)
+    {
+        if (other == null)
+            throw new ArgumentException("The array cannot be null.");
+
+        foreach (var pair in dict)
+        {
+            other[pair.Key] = pair.Value;
         }
     }
 

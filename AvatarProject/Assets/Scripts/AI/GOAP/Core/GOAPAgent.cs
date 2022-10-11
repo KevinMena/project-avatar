@@ -23,7 +23,7 @@ namespace AvatarBA.AI.Core
 
         private bool _interruptPlan;
 
-        private List<WorldState> _currentWorldState;
+        private WorldContext _currentWorldContext;
 
         private float GOAL_COOLDOWN = 0.5f;
 
@@ -33,14 +33,20 @@ namespace AvatarBA.AI.Core
         {
             _planner = new Planner();
             _memory = new GOAPMemory();
-            _currentWorldState = new List<WorldState>();
-            _currentWorldState.Add(new WorldState("equippedMelee", true));
+            SetupWorld();
+            _currentWorldContext = new WorldContext();
+            _currentWorldContext.Add(new WorldState("equippedMelee", true));
+        }
+
+        private void OnDestroy()
+        {
+            CleanWorld();
         }
 
         private void Update()
         {
             // Every GOAL_COOLDOWN try and get a new plan
-            // Interrup current plan and execute new one
+            // Interrupt current plan and execute new one
             if (start)
             {
                 start = false;
@@ -53,7 +59,7 @@ namespace AvatarBA.AI.Core
             GameDebug.Log("Finding Plan");
             Action[] availableActions = _planner.GetAvailableActions(_actions.ToArray());
             ChooseGoal();
-            Queue<Action> plan = _planner.GetPlan(_currentGoal, availableActions, _currentWorldState);
+            Queue<Action> plan = _planner.GetPlan(_currentGoal, availableActions, _currentWorldContext);
 
             GameDebug.Log("Started Plan");
 
@@ -77,6 +83,33 @@ namespace AvatarBA.AI.Core
             }
 
             _currentGoal = goalsPriorities.Peek();
+        }
+
+        // This is for testing purposes
+        private void SetupWorld()
+        {
+            for(int i = 0; i < _actions.Count; i++)
+            {
+                _actions[i].SetupWorld();
+            }
+
+            for (int i = 0; i < _goals.Count; i++)
+            {
+                _goals[i].SetupWorld();
+            }
+        }
+
+        private void CleanWorld()
+        {
+            for (int i = 0; i < _actions.Count; i++)
+            {
+                _actions[i].CleanWorld();
+            }
+
+            for (int i = 0; i < _goals.Count; i++)
+            {
+                _goals[i].CleanWorld();
+            }
         }
     }
 }

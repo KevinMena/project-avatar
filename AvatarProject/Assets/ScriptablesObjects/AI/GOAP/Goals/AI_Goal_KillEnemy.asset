@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AI_Goal_KillEnemy
   m_EditorClassIdentifier: 
   _id: killEnemy
-  _desiredState:
+  _goalState:
   - Id: attackingTargetX
     Value: 1

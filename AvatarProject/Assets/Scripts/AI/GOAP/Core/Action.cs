@@ -10,16 +10,18 @@ namespace AvatarBA.AI.Core
         private string _id;
 
         [SerializeField]
-        private WorldState[] _preconditions;
+        private WorldStateSerializable[] _goalConditions;
 
         [SerializeField]
-        private WorldState[] _effects;
+        private WorldStateSerializable[] _afterEffects;
+
+        private WorldContext _preConditions = new WorldContext();
+
+        private WorldContext _effects = new WorldContext();
 
         public string Id => _id;
-
-        public WorldState[] Preconditions => _preconditions;
-
-        public WorldState[] Effects => _effects;
+        public ref readonly WorldContext PreConditions => ref _preConditions;
+        public ref readonly WorldContext Effects => ref _effects;
 
         public abstract bool IsValid();
 
@@ -27,13 +29,29 @@ namespace AvatarBA.AI.Core
 
         public bool MatchState(WorldState state)
         {
-            for(int i = 0; i < Effects.Length; i++)
+            return Effects.Contains(state);
+        }
+
+        // This is just for inserting information early, has to be change to look in the database
+        #region TESTING
+        public void SetupWorld()
+        {
+            for (int i = 0; i < _goalConditions.Length; i++)
             {
-                if (state.Id == Effects[i].Id)
-                    return true;
+                _preConditions.Add(new WorldState(_goalConditions[i].Id, _goalConditions[i].Value));
             }
 
-            return false;
+            for (int i = 0; i < _afterEffects.Length; i++)
+            {
+                _effects.Add(new WorldState(_afterEffects[i].Id, _afterEffects[i].Value));
+            }
         }
+
+        public void CleanWorld()
+        {
+            _preConditions.Clear();
+            _effects.Clear();
+        }
+        #endregion
     }
 }

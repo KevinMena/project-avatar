@@ -17,17 +17,12 @@ namespace AvatarBA.NPC
         [SerializeField]
         private float _rotationSpeed;
 
-        private Vector3 _desiredPosition;
-
-        private bool _move;
+        private Vector3 _targetPosition;
+        private Vector3 _targetRotation;
 
         private void Update()
         {
             UpdateState();
-        }
-
-        private void FixedUpdate()
-        {
             if (_canMove)
             {
                 Rotate();
@@ -37,48 +32,40 @@ namespace AvatarBA.NPC
 
         protected override void Move()
         {
-            if (!_move) return;
+            Vector3 movementDirection = _targetPosition - transform.position;
 
-            //Vector3 movementDirection = _desiredPosition - transform.position;
+            if (movementDirection.magnitude < 0.1f)
+                return;
 
-            //if (movementDirection.sqrMagnitude < 0.1f)
-            //{
-            //    _rigidbody.velocity = Vector3.zero;
-            //    return;
-            //}
+            movementDirection.Normalize();
+            movementDirection.y = 0;
 
-            //movementDirection.Normalize();
+            float speed = _movementSpeed * Time.deltaTime;
 
-            //// Cache velocity last frame
-            //Vector3 previousVelocity = _rigidbody.velocity;
-
-            //// Apply speed and calculate desire position
-            //Vector3 desiredVelocity = movementDirection * _movementSpeed;
-            //Vector3 velocityChange = desiredVelocity - previousVelocity;
-            //_rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+            Vector3 desiredVelocity = movementDirection * speed;
+            _characterController.Move(desiredVelocity);
         }
 
         protected override void Rotate()
         {
-            //if (Vector3.Distance(transform.position, _desiredPosition) < 0.1f)
-            //    return;
+            // Get rotation from movement
+            Vector3 rotationDirection = _targetRotation - transform.position;
+            rotationDirection.y = 0;
 
-            //// Get rotation from movement
-            //Vector3 targetDirection = _desiredPosition - transform.position;
+            if (rotationDirection.sqrMagnitude < 0.1f)
+                return;
 
-            //if (targetDirection.sqrMagnitude < 0.1f)
-            //    return;
-
-            //// Calculate and apply new rotation
-            //Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            //Quaternion desiredRotation = Quaternion.Slerp(_rigidbody.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-            //_rigidbody.rotation = desiredRotation;
+            // Calculate and apply new rotation
+            Quaternion targetRotation = Quaternion.LookRotation(rotationDirection);
+            Quaternion desiredRotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
+            transform.rotation = desiredRotation;
         }
 
         protected override void UpdateState()
         {
             InputState currentState = _provider.GetState();
-            _desiredPosition = currentState.MovementDirection;
+            _targetPosition = currentState.MovementDirection;
+            _targetRotation = currentState.RotationDirection;
         }
     }
 }

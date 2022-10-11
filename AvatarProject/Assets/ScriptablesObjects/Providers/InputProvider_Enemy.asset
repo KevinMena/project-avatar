@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f938abb68e462848a416e51eecad880, type: 3}
-  m_Name: InputProvider_Movement
+  m_Name: InputProvider_Enemy
   m_EditorClassIdentifier: 

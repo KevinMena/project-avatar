@@ -43,7 +43,6 @@ namespace AvatarBA.Combat
 
         private float _startupDuration = 0;
         private float _activeDuration = 0;
-        private float recoveryDuration = 0;
 
         private List<Collider> _alreadyHit;
 

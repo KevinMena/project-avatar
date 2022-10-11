@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: AI_Action_MeleeAttack
   m_EditorClassIdentifier: 
   _id: meleeAttack
-  _preconditions:
+  _goalConditions:
   - Id: atTargetX
     Value: 1
   - Id: equippedMelee
     Value: 1
-  _postconditions:
+  _afterEffects:
   - Id: attackingTargetX
     Value: 1

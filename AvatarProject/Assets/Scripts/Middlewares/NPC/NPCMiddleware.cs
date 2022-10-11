@@ -6,11 +6,7 @@ namespace AvatarBA.NPC
 {
     public class NPCMiddleware : Middleware
     {
-        [SerializeField]
-        private InputProvider _provider = default;
-
         private Vector3 _movementPosition;
-        private Vector3 _lastPosition;
 
         private void Awake()
         {
@@ -24,9 +20,6 @@ namespace AvatarBA.NPC
 
         public void SetDestination(Vector3 destination)
         {
-            if(destination == _movementPosition)
-                return;
-
             _movementPosition = destination;
         }
 

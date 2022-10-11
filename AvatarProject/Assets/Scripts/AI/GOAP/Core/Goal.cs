@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AvatarBA.AI.Core
@@ -9,11 +10,13 @@ namespace AvatarBA.AI.Core
         private string _id;
 
         [SerializeField]
-        private WorldState[] _desiredState;
+        private WorldStateSerializable[] _goalState;
+
+        private WorldContext _desiredContext = new WorldContext();
 
         public string Id => _id;
 
-        public WorldState[] DesiredState => _desiredState;
+        public ref readonly WorldContext DesiredContext => ref _desiredContext;
 
         public abstract bool IsValid();
 
@@ -40,5 +43,21 @@ namespace AvatarBA.AI.Core
         {
             return lhs.Id != rhs.Id;
         }
+
+        // This is just for inserting information early, has to be change to look in the database
+        #region TESTING
+        public void SetupWorld()
+        {
+            for (int i = 0; i < _goalState.Length; i++)
+            {
+                _desiredContext.Add(new WorldState(_goalState[i].Id, _goalState[i].Value));
+            }
+        }
+
+        public void CleanWorld()
+        {
+            _desiredContext.Clear();
+        }
+        #endregion
     }
 }

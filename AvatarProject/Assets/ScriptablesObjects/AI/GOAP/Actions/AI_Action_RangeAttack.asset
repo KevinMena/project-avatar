@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: AI_Action_RangeAttack
   m_EditorClassIdentifier: 
   _id: rangeAttack
-  _preconditions:
+  _goalConditions:
   - Id: nearTargetX
     Value: 1
   - Id: equippedRange
     Value: 1
-  _postconditions:
+  _afterEffects:
   - Id: attackingTargetX
     Value: 1
