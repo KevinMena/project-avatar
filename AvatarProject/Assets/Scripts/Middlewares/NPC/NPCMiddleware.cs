@@ -18,6 +18,11 @@ namespace AvatarBA.NPC
             _provider?.UnSubscribe(this);
         }
 
+        private void Start()
+        {
+            _movementPosition = transform.position;
+        }
+
         public void SetDestination(Vector3 destination)
         {
             _movementPosition = destination;
