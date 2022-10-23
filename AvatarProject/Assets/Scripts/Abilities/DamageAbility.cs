@@ -21,9 +21,9 @@ namespace AvatarBA.Abilities
 
         protected float CalculateDamage(GameObject owner)
         {
-            if(owner.TryGetComponent(out CharacterStatsController statsController))
+            if(owner.TryGetComponent(out Core ownerCore))
             {
-                float ownerAttack = statsController.GetStat("ATTACK_STAT");
+                float ownerAttack = ownerCore.Stats.GetStat("ATTACK_STAT");
                 return BaseDamage * ownerAttack;
             }
 

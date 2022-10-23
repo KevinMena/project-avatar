@@ -1,30 +1,21 @@
+using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 
 using AvatarBA.Stats;
 
 namespace AvatarBA
 {
-    public struct StatRecord
+    public class StatsControl : MonoBehaviour, IStatContainer
     {
-        public string DisplayName;
-        public Stat Stat;
-
-        public StatRecord(string name, Stat currentStat)
-        {
-            DisplayName = name;
-            Stat = currentStat;
-        }
-    }
-
-    public class CharacterStatsController : MonoBehaviour, IStatContainer
-    {
-        [Header("References")]
-        [SerializeField]
-        protected CharacterData _characterData;
+        protected Core _core;
 
         protected Dictionary<string, StatRecord> _runtimeStats;
+
+        private void Awake()
+        {
+            _core = GetComponent<Core>();
+        }
 
         protected virtual void Start()
         {
@@ -35,7 +26,7 @@ namespace AvatarBA
         {
             _runtimeStats = new Dictionary<string, StatRecord>();
 
-            foreach (StatBase originalStat in _characterData.Stats)
+            foreach (StatBase originalStat in _core.Data.Stats)
             {
                 _runtimeStats[originalStat.Type.Id] = new StatRecord(originalStat.Type.DisplayName, new Stat(originalStat.DefaultValue));
             }
@@ -45,7 +36,7 @@ namespace AvatarBA
         {
             List<KeyValuePair<string, float>> stats = new List<KeyValuePair<string, float>>();
 
-            foreach(var stat in _runtimeStats)
+            foreach (var stat in _runtimeStats)
             {
                 stats.Add(new KeyValuePair<string, float>(stat.Key, stat.Value.Stat.Value));
             }
@@ -88,7 +79,7 @@ namespace AvatarBA
             }
         }
 
-        public void ApplyChangeToStat(string statId, string modifierId, float value, StatModifierType modifierType, object owner)
+        public virtual void ApplyChangeToStat(string statId, string modifierId, float value, StatModifierType modifierType, object owner)
         {
             if (_runtimeStats.TryGetValue(statId, out var record))
             {

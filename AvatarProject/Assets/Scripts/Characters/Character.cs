@@ -21,9 +21,9 @@ namespace AvatarBA
 
         public Transform ShootPosition => _shootPosition;
 
-        public virtual void DoDamage(float damage) { }
+        public virtual void TakeDamage(float damage) { }
 
-        public virtual void DoHit(float damage, Vector2 hitPoint, Vector2 hitDirection) { }
+        public virtual void TakeHit(float damage, Vector2 hitDirection) { }
 
         public void BecomeInvulnerable()
         {

@@ -1,5 +1,7 @@
+using AvatarBA.Managers;
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.GridBrushBase;
 
 namespace AvatarBA.Abilities
 {
@@ -19,29 +21,33 @@ namespace AvatarBA.Abilities
 
         public override IEnumerator Trigger(GameObject owner)
         {
-            if(owner.TryGetComponent(out CharacterMovementController movementController))
+            if(owner.TryGetComponent(out Core ownerCore))
             {
                 // Calculate correct direction base on where the owner is looking
                 Vector3 targetPosition = owner.transform.position + (owner.transform.forward * _dashDistance);
 
-                // Calculate the direction where the movement is going to be
-                Vector3 targetDirection = targetPosition - owner.transform.position;
+                if (owner.TryGetComponent(out Health health))
+                    health.BecomeInvulnerable();
 
-                movementController.DisableMovement();
-                
-                if(owner.TryGetComponent(out Character character))
-                    character.BecomeInvulnerable();
+                ownerCore.Movement.DisableMovement();
 
-                while(targetDirection.magnitude > 0.1f)
+                Vector3 offset = targetPosition - owner.transform.position;
+                offset.y = 0;
+
+                float cSquared = offset.x * offset.x + offset.z * offset.z;
+
+                while (cSquared > 0.1f)
                 {
-                    Vector3 movementDirection = _dashSpeed * Time.deltaTime * targetDirection.normalized;
-                    movementController.AddMovement(movementDirection);
-                    targetDirection = targetPosition - owner.transform.position;
+                    ownerCore.Movement.Impulse(offset.normalized, _dashSpeed);
                     yield return null;
+                    offset = targetPosition - owner.transform.position;
+                    offset.y = 0;
+                    cSquared = offset.x * offset.x + offset.z * offset.z;
                 }
 
-                movementController.EnableMovement();
+                ownerCore.Movement.EnableMovement();
             }
+            yield return null;
         }
     }
 }

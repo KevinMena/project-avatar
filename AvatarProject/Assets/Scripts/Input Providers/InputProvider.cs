@@ -18,7 +18,7 @@ namespace AvatarBA.Managers
     public class InputProvider : ScriptableObject
     {
         private InputState currentState;
-        private List<Middleware> middlewares = new List<Middleware>();
+        private SortedDictionary<int, Middleware> middlewares = new SortedDictionary<int, Middleware>();
 
         public InputState GetState()
         {
@@ -26,25 +26,22 @@ namespace AvatarBA.Managers
 
             foreach (var middleware in middlewares)
             {
-                middleware.Process(ref currentState);
+                middleware.Value.Process(ref currentState);
             }
 
             return currentState;
         }
 
-        public void Subscribe(Middleware middleware)
+        public void Subscribe(Middleware middleware, int priority)
         {
-            if (middlewares.Contains(middleware))
-                return;
-
-            middlewares.Add(middleware);
+            middlewares.TryAdd(priority, middleware);
         }
 
-        public void UnSubscribe(Middleware middleware)
+        public void UnSubscribe(Middleware middleware, int priority)
         {
-            if (middlewares.Contains(middleware))
+            if (middlewares.ContainsValue(middleware))
             {
-                middlewares.Remove(middleware);
+                middlewares.Remove(priority);
             }
         }
     }

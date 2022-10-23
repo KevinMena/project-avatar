@@ -7,7 +7,6 @@ namespace AvatarBA
 {
     public class PlayerMovementController : CharacterMovementController
     {
-        [Header("References")]
         [SerializeField] private InputProvider _provider;
 
         [Header("Settings")]

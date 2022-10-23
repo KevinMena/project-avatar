@@ -18,11 +18,11 @@ namespace AvatarBA.Abilities
 
         protected IEnumerator ApplyChange(GameObject owner, string statToChange, StatModifierType type)
         {
-            if (owner.TryGetComponent(out CharacterStatsController statsController))
+            if (owner.TryGetComponent(out Core ownerCore))
             {
-                statsController.ApplyChangeToStat(statToChange, Id, BaseModifier, type);
+                ownerCore.Stats.ApplyChangeToStat(statToChange, Id, BaseModifier, type);
                 yield return new WaitForSeconds(_duration);
-                statsController.RemoveChangeToStat(statToChange, Id);
+                ownerCore.Stats.RemoveChangeToStat(statToChange, Id);
             }
         }
     }

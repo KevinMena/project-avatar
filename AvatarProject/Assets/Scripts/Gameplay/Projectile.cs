@@ -1,3 +1,4 @@
+using AvatarBA.Interfaces;
 using UnityEngine;
 
 namespace AvatarBA.Combat
@@ -73,9 +74,9 @@ namespace AvatarBA.Combat
 
             if (entity != null && entity.layer == _mask)
             {
-                if (entity.TryGetComponent(out Character character))
+                if (entity.TryGetComponent(out IDamageable damageable))
                 {
-                    character.DoHit(_baseDamage, entity.transform.position, entity.transform.position - transform.position);
+                    damageable.TakeHit(_baseDamage, entity.transform.position - transform.position);
                 }
             }
 

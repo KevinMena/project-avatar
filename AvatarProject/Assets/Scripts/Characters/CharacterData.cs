@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using AvatarBA.Stats;
+using AvatarBA.Abilities;
 
 namespace AvatarBA
 {
@@ -24,7 +25,13 @@ namespace AvatarBA
         private GameObject _prefab = null;
 
         [SerializeField]
+        private float _baseHealth;
+
+        [SerializeField]
         private StatBase[] _stats;
+
+        [SerializeField]
+        private Ability[] _initialAbilities;
 
         public int Id => _id;
 
@@ -36,6 +43,9 @@ namespace AvatarBA
 
         public GameObject Prefab => _prefab;
 
+        public float BaseHealth => _baseHealth;
+
         public ref StatBase[] Stats => ref _stats;
+        public ref Ability[] InitialAbilities => ref _initialAbilities;
     }
 }

@@ -12,24 +12,54 @@ namespace AvatarBA.Managers
 
         private void Awake()
         {
-            _provider?.Subscribe(this);
+            _provider?.Subscribe(this, _priority);
         }
 
         private void OnDestroy()
         {
-            _provider?.UnSubscribe(this);
+            _provider?.UnSubscribe(this, _priority);
         }
 
-        public void SetMovement(Vector3 movementDirection, Vector3 rotationDirection, float speed)
+        public void MoveToPoint(Vector3 targetPosition, float movementSpeed)
         {
-            _movementDirection = movementDirection;
-            _rotationDirection = rotationDirection;
-            _movementSpeed = speed;
+            StartCoroutine(MoveToPointCoroutine(targetPosition, movementSpeed));
+        }
+
+        private IEnumerator MoveToPointCoroutine(Vector3 targetPosition, float movementSpeed)
+        {
+            Vector3 offset = targetPosition - transform.position;
+
+            float cSquared = offset.x * offset.x + offset.y * offset.y;
+
+            while (cSquared > 0.1f)
+            {
+                _movementDirection = offset.normalized;
+                _rotationDirection = _movementDirection;
+                _movementSpeed = movementSpeed;
+
+                yield return null;
+                offset = targetPosition - transform.position;
+                cSquared = offset.x * offset.x + offset.y * offset.y;
+            }
+
+            Reset();
+        }
+
+        private void Reset()
+        {
+            _movementDirection = Vector3.zero;
+            _rotationDirection = Vector3.zero;
+            _movementSpeed = 0;
         }
 
         public override void Process(ref InputState currentState)
         {
-            
+            if (_movementDirection == Vector3.zero)
+                return;
+
+            currentState.MovementDirection = _movementDirection;
+            currentState.RotationDirection = _rotationDirection;
+            currentState.Speed = _movementSpeed;
         }
     }
 }

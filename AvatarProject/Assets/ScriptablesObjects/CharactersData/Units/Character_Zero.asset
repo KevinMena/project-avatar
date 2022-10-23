@@ -17,11 +17,8 @@ MonoBehaviour:
   _description: Description
   _icon: {fileID: 0}
   _prefab: {fileID: 0}
+  _baseHealth: 100
   _stats:
-  - Type: {fileID: 11400000, guid: 05d0a0181c0c00340893e1c06c95bdd3, type: 2}
-    DefaultValue: 100
-  - Type: {fileID: 11400000, guid: 12216a305b924ff4da218d4d4f521033, type: 2}
-    DefaultValue: 100
   - Type: {fileID: 11400000, guid: b215bec9ab4ad0b47a87fe17bb165af2, type: 2}
     DefaultValue: 7
   - Type: {fileID: 11400000, guid: 388e7d04ffaaf57418b466714f2cfdb2, type: 2}
@@ -32,3 +29,7 @@ MonoBehaviour:
     DefaultValue: 7
   - Type: {fileID: 11400000, guid: 6928a768aba338d42bb1effddb15dc67, type: 2}
     DefaultValue: 5
+  _initialAbilities:
+  - {fileID: 11400000, guid: 6a70d954e66cf584b9f1da0761f31b88, type: 2}
+  - {fileID: 11400000, guid: b44c28a35d0cb414c8e7d086c6cfa3fb, type: 2}
+  - {fileID: 11400000, guid: 7bfb6a3262e3e5e44b342a22c7f61f1a, type: 2}

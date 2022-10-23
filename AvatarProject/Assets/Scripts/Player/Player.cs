@@ -13,14 +13,14 @@ namespace AvatarBA
             playerStatsController = GetComponent<PlayerStatsController>();    
         }
 
-        public override void DoDamage(float damage)
+        public override void TakeDamage(float damage)
         {
             // Damage formula
             float appliedDamage = damage / playerStatsController.GetStat(DEFENSE_STAT);
             playerStatsController.ApplyChangeToHealth("damage", -appliedDamage, Stats.StatModifierType.Flat);
         }
 
-        public override void DoHit(float damage, Vector2 hitPoint, Vector2 hitDirection)
+        public override void TakeHit(float damage, Vector2 hitDirection)
         {
             // lose health and also move the character
         }

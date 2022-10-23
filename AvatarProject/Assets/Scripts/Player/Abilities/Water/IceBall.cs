@@ -14,15 +14,15 @@ namespace AvatarBA.Abilities
         {
             Vector3 shootPosition = owner.transform.position;
 
-            if(owner.TryGetComponent(out Character character))
+            if(owner.TryGetComponent(out Core ownerCore))
             {
-                shootPosition = character.ShootPosition.position;
+                shootPosition = ownerCore.ShootPosition.position;
             }
 
             // Calculate rotation of the projectile so always lands where the user is looking towards
             Quaternion projectileRotation = owner.transform.rotation;
-            RaycastHit hit;
-            if(Physics.Raycast(owner.transform.position, owner.transform.forward, out hit, 500f, Mask))
+
+            if(Physics.Raycast(owner.transform.position, owner.transform.forward, out RaycastHit hit, 500f, Mask))
             {
                 Vector3 direction = (hit.point - shootPosition).normalized;
                 projectileRotation = Quaternion.LookRotation(direction);

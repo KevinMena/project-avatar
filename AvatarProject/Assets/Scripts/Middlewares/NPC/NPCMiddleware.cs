@@ -10,12 +10,12 @@ namespace AvatarBA.NPC
 
         private void Awake()
         {
-            _provider?.Subscribe(this);
+            _provider?.Subscribe(this, _priority);
         }
 
         private void OnDestroy()
         {
-            _provider?.UnSubscribe(this);
+            _provider?.UnSubscribe(this, _priority);
         }
 
         private void Start()

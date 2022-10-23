@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using AvatarBA.Debugging;
+using AvatarBA.Interfaces;
 
 namespace AvatarBA.Combat
 {
@@ -41,9 +42,9 @@ namespace AvatarBA.Combat
             _alreadyHit.Add(hit);
 
             GameDebug.Log($"Collisioned with {hit.name} using {_attackName}");
-            if (hit.TryGetComponent(out Character character))
+            if (hit.TryGetComponent(out IDamageable damageable))
             {
-                character.DoDamage(_damage);
+                damageable.TakeDamage(_damage);
             }
         }
     }

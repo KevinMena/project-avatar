@@ -4,6 +4,7 @@ using UnityEngine;
 
 using AvatarBA.Patterns;
 using AvatarBA.Debugging;
+using AvatarBA.Interfaces;
 
 namespace AvatarBA.Combat
 {
@@ -113,9 +114,9 @@ namespace AvatarBA.Combat
             _alreadyHit.Add(hit);
 
             GameDebug.Log($"Collisioned with {hit.name} in state: {_stateName}");
-            if(hit.TryGetComponent(out Character character))
+            if(hit.TryGetComponent(out IDamageable damageable))
             {
-                character.DoDamage(_attackDamage);
+                damageable.TakeDamage(_attackDamage);
             }
         }
 

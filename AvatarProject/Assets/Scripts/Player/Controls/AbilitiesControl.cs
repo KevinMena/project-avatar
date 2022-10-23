@@ -7,8 +7,8 @@ using AvatarBA.Abilities;
 using AvatarBA.Managers;
 
 namespace AvatarBA
-{ 
-    public enum AbilitySlots
+{
+    public enum AbilitySlot
     {
         Dash,
         Left,
@@ -16,7 +16,7 @@ namespace AvatarBA
         Ultimate
     }
 
-    public class PlayerAbilityController : MonoBehaviour
+    public class AbilitiesControl : MonoBehaviour
     {
         [Header("References")]
         [SerializeField]
@@ -24,7 +24,7 @@ namespace AvatarBA
 
         [SerializeField]
         private AbilityDisplayManager _displayManager;
-        
+
         [Header("Abilities")]
         [SerializeField]
         private Ability _dash;
@@ -38,16 +38,18 @@ namespace AvatarBA
         [SerializeField]
         private Ability _ultimate;
 
+        private Core _core;
         private AbilityState[] _abilityStates;
         private Timer[] _cooldownTimers;
         private Timer[] _activeTimers;
 
-        private void Awake() 
+        private void Awake()
         {
             _inputManager.DashEvent += TriggerDash;
             _inputManager.LeftAbilityEvent += TriggerLeftSlot;
             _inputManager.RightAbilityEvent += TriggerRightSlot;
             _inputManager.UltimateAbilityEvent += TriggerUltimate;
+            _core = GetComponent<Core>();
         }
 
         private void OnDestroy()
@@ -58,14 +60,14 @@ namespace AvatarBA
             _inputManager.UltimateAbilityEvent -= TriggerUltimate;
         }
 
-        private void Start() 
+        private void Start()
         {
-            _abilityStates = new AbilityState[4] 
-            { 
-                AbilityState.Ready, 
-                AbilityState.Ready, 
-                AbilityState.Ready, 
-                AbilityState.Ready 
+            _abilityStates = new AbilityState[4]
+            {
+                AbilityState.Ready,
+                AbilityState.Ready,
+                AbilityState.Ready,
+                AbilityState.Ready
             };
 
             _cooldownTimers = new Timer[4]
@@ -114,24 +116,24 @@ namespace AvatarBA
                 return;
 
             // Send message of not meeting requirements
-            if(!PassRequirements(currentAbility.Cost))
+            if (!PassRequirements(currentAbility.Cost))
                 return;
-            
+
             AbilityState currentState = GetCurrentState(slot);
 
-            if(currentState != AbilityState.Ready)
+            if (currentState != AbilityState.Ready)
                 return;
-            
+
             StartCoroutine(TriggerRoutine(slot, currentAbility));
         }
 
         private IEnumerator TriggerRoutine(AbilitySlot slot, Ability currentAbility)
-        {     
+        {
             // Trigger ability
             StartCoroutine(currentAbility.Trigger(gameObject));
 
             // Use Timer is the ability has active time
-            if(currentAbility.ActiveTime != 0)
+            if (currentAbility.ActiveTime != 0)
             {
                 Timer activeTimer = _activeTimers[(int)slot];
                 activeTimer.TotalTime = currentAbility.ActiveTime;
@@ -154,7 +156,7 @@ namespace AvatarBA
 
             cooldownTimer.Start();
             StartCooldownDisplay(slot, currentAbility.Cooldown);
-            while(!cooldownTimer.IsComplete)
+            while (!cooldownTimer.IsComplete)
             {
                 cooldownTimer.Update(Time.deltaTime);
                 UpdateDisplay(slot, cooldownTimer.PercentElapsed, cooldownTimer.RemainingTime);
@@ -171,17 +173,32 @@ namespace AvatarBA
 
         private void SetupAbilities()
         {
-            if (_dash != null)
-                UpdateIcon(AbilitySlot.Dash, _dash);
+            // Get the initial abilities of the current character
+            Ability[] initialAbilities = _core.Data.InitialAbilities;
 
-            if (_leftAbility != null)
-                UpdateIcon(AbilitySlot.Left, _leftAbility);
-
-            if (_rightAbility != null)
-                UpdateIcon(AbilitySlot.Right, _rightAbility);
-
-            if (_ultimate != null)
-                UpdateIcon(AbilitySlot.Ultimate, _ultimate);
+            for(int i = 0; i < initialAbilities.Length; i++)
+            {
+                if (i == ((int)AbilitySlot.Dash))
+                {
+                    _dash = initialAbilities[i];
+                    UpdateIcon(AbilitySlot.Dash, _dash);
+                }
+                else if (i == ((int)AbilitySlot.Left))
+                {
+                    _leftAbility = initialAbilities[i];
+                    UpdateIcon(AbilitySlot.Left, _leftAbility);
+                }
+                else if (i == ((int)AbilitySlot.Right))
+                {
+                    _rightAbility = initialAbilities[i];
+                    UpdateIcon(AbilitySlot.Right, _rightAbility);
+                }
+                else if (i == ((int)AbilitySlot.Ultimate))
+                {
+                    _ultimate = initialAbilities[i];
+                    UpdateIcon(AbilitySlot.Ultimate, _ultimate);
+                }
+            }
         }
 
         public void ReplaceAbility(AbilitySlot slot, Ability newAbility)
@@ -209,17 +226,17 @@ namespace AvatarBA
 
         private void UpdateState(AbilitySlot slot, AbilityState state)
         {
-            _abilityStates[(int) slot] = state;
+            _abilityStates[(int)slot] = state;
         }
 
         private AbilityState GetCurrentState(AbilitySlot slot)
         {
-            return _abilityStates[(int) slot];
+            return _abilityStates[(int)slot];
         }
 
         private void StartCooldownDisplay(AbilitySlot slot, float maxTimer)
         {
-            _displayManager.StartCooldownTimer((int) slot, maxTimer);
+            _displayManager.StartCooldownTimer((int)slot, maxTimer);
         }
 
         private void StartActiveDisplay(AbilitySlot slot, float maxTimer)
