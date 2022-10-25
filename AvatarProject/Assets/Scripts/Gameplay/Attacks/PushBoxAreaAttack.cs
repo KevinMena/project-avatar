@@ -16,10 +16,9 @@ namespace AvatarBA.Combat
 
         protected override void HitEntity(Collider hit)
         {
-            if (hit.TryGetComponent(out CharacterMovementController characterMovementController))
+            if (hit.TryGetComponent(out Core hitCore))
             {
-                Vector3 velocity = _pushBackDirection * _pushBack * Time.deltaTime;
-                characterMovementController.AddMovement(velocity);
+                hitCore.Movement.Impulse(_pushBackDirection.normalized, _pushBack);
             }
 
             base.HitEntity(hit);
