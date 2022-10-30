@@ -1,8 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AvatarBA.Managers
-{
-    public abstract class Middleware : MonoBehaviour
+{    
+    public abstract class Processor : MonoBehaviour
     {
         [Header("References")]
         [SerializeField]

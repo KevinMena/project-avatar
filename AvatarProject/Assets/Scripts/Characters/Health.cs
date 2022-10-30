@@ -4,11 +4,16 @@ using UnityEngine;
 
 using AvatarBA.Stats;
 using AvatarBA.Interfaces;
+using AvatarBA.Managers;
 
 namespace AvatarBA
 {
     public class Health : MonoBehaviour, IDamageable
     {
+        [Header("References")]
+        [SerializeField]
+        private HealthMiddleware _displayMiddleware = default;
+
         [Header("Data")]
         [SerializeField]
         private float _invulnerableDuration = 0.5f;
@@ -46,6 +51,7 @@ namespace AvatarBA
         {
             _health = new Stat(_core.Data.BaseHealth);
             _maxHealth = new Stat(_core.Data.BaseHealth);
+            _displayMiddleware.Setup(_core.Data.BaseHealth);
         }
 
         public void TakeDamage(float damage)
@@ -55,6 +61,7 @@ namespace AvatarBA
             StatModifier damageModifier = new StatModifier("damage", -appliedDamage, StatModifierType.Flat);
             _health.AddModifier(damageModifier);
             //Update UI
+            _displayMiddleware.UpdateHealth(Current);
         }
 
         public void TakeHit(float damage, Vector2 hitDirection)
@@ -68,7 +75,7 @@ namespace AvatarBA
                 StartCoroutine(Invulnerable());
         }
 
-        protected IEnumerator Invulnerable()
+        private IEnumerator Invulnerable()
         {
             _isInvulnerable = true;
 

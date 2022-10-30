@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 using AvatarBA.Combat;
-using AvatarBA.Common;
 using AvatarBA.Managers;
 
 namespace AvatarBA
@@ -15,7 +13,7 @@ namespace AvatarBA
         private InputManager _inputManager;
 
         private Core _core;
-        private InputMiddleware _inputMovement;
+        private InputProcessor _inputMovement;
 
         private const string ATTACK_STAT = "attackPower";
         private const string ATTACK_SPEED_STAT = "attackSpeed";
@@ -24,7 +22,7 @@ namespace AvatarBA
         {
             _inputManager.MeleeAttackEvent += OnAttack;
             _core = GetComponent<Core>();
-            _inputMovement = GetComponent<InputMiddleware>();
+            _inputMovement = GetComponent<InputProcessor>();
         }
 
         private void OnDisable()

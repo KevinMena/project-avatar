@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace AvatarBA.Managers
 {
-    public class InputMiddleware : Middleware
+    public class InputProcessor : Processor
     {
         [Header("Input References")]
         [SerializeField]

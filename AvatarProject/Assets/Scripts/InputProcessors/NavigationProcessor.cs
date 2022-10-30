@@ -1,10 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AvatarBA.Managers
 {
-    public class NavigationMiddleware : Middleware
+    public class NavigationProcessor : Processor
     {
         private Vector3 _movementDirection;
         private Vector3 _rotationDirection;

@@ -18,30 +18,30 @@ namespace AvatarBA.Managers
     public class InputProvider : ScriptableObject
     {
         private InputState currentState;
-        private SortedDictionary<int, Middleware> middlewares = new SortedDictionary<int, Middleware>();
+        private SortedDictionary<int, Processor> processors = new SortedDictionary<int, Processor>();
 
         public InputState GetState()
         {
             currentState = new InputState();
 
-            foreach (var middleware in middlewares)
+            foreach (var processor in processors)
             {
-                middleware.Value.Process(ref currentState);
+                processor.Value.Process(ref currentState);
             }
 
             return currentState;
         }
 
-        public void Subscribe(Middleware middleware, int priority)
+        public void Subscribe(Processor middleware, int priority)
         {
-            middlewares.TryAdd(priority, middleware);
+            processors.TryAdd(priority, middleware);
         }
 
-        public void UnSubscribe(Middleware middleware, int priority)
+        public void UnSubscribe(Processor middleware, int priority)
         {
-            if (middlewares.ContainsValue(middleware))
+            if (processors.ContainsValue(middleware))
             {
-                middlewares.Remove(priority);
+                processors.Remove(priority);
             }
         }
     }

@@ -32,10 +32,5 @@ namespace AvatarBA.UI
             float fillAmount = currentOffset / maximumOffset;
             _bar.fillAmount = fillAmount;
         }
-        
-        public void ChangeIcon(Sprite icon)
-        {
-            _bar.sprite = icon;
-        }
     }
 }

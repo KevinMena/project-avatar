@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using AvatarBA.NPC;
+using AvatarBA.Managers;
 
 namespace AvatarBA.AI.UtilityAI.Actions
 {
@@ -22,9 +22,9 @@ namespace AvatarBA.AI.UtilityAI.Actions
 
             Vector3 targetPosition = new Vector3(owner.transform.position.x + distanceX, owner.transform.position.y, owner.transform.position.z + distanceZ);
 
-            if (owner.TryGetComponent(out NPCMiddleware movementMiddleware))
+            if (owner.TryGetComponent(out NavigationProcessor movement))
             {
-                movementMiddleware.SetDestination(targetPosition);
+                movement.MoveToPoint(targetPosition, 3f);
             }
             Debug.Log($"Wandering to {targetPosition} ");
             yield return new WaitForSeconds(3f);
