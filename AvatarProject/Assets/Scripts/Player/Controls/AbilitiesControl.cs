@@ -23,7 +23,7 @@ namespace AvatarBA
         private InputManager _inputManager;
 
         [SerializeField]
-        private AbilityDisplayManager _displayManager;
+        private AbilityMiddleware _displayMiddleware;
 
         [Header("Abilities")]
         [SerializeField]
@@ -236,27 +236,27 @@ namespace AvatarBA
 
         private void StartCooldownDisplay(AbilitySlot slot, float maxTimer)
         {
-            _displayManager.StartCooldownTimer((int)slot, maxTimer);
+            _displayMiddleware.StartCooldownTimer((int)slot, maxTimer);
         }
 
         private void StartActiveDisplay(AbilitySlot slot, float maxTimer)
         {
-            _displayManager.StartActiveTimer((int)slot, maxTimer);
+            _displayMiddleware.StartActiveTimer((int)slot, maxTimer);
         }
 
         private void EndDisplay(AbilitySlot slot)
         {
-            _displayManager.EndTimer((int)slot);
+            _displayMiddleware.EndTimer((int)slot);
         }
 
         private void UpdateDisplay(AbilitySlot slot, float current, float currentTimer)
         {
-            _displayManager.UpdateDisplay((int)slot, current, currentTimer);
+            _displayMiddleware.UpdateDisplay((int)slot, current, currentTimer);
         }
 
         private void UpdateIcon(AbilitySlot slot, Ability ability)
         {
-            _displayManager.UpdateIcon((int)slot, ability.Icon);
+            _displayMiddleware.UpdateIcon((int)slot, ability.Icon);
         }
     }
 }

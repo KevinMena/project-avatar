@@ -7,6 +7,7 @@ namespace AvatarBA.Stats
     [Serializable]
     public class Stat: IStat
     {
+        private string _name;
         private float _baseValue = 0f;
         private readonly List<StatModifier> _statModifiers = new List<StatModifier>();
 
@@ -41,7 +42,13 @@ namespace AvatarBA.Stats
             set { _baseValue = value; }
         }
 
-        public Stat(float value) => _baseValue = value;
+        public string Name => _name;
+
+        public Stat(string name, float value)
+        {
+            _name = name; 
+            _baseValue = value;
+        }
 
         /// <summary>
         /// Add a modifier to the list and mark the value to be updated

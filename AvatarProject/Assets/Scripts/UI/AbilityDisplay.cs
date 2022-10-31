@@ -4,24 +4,24 @@ using AvatarBA.Managers;
 
 namespace AvatarBA.UI
 {
-    public class AbilityUI : MonoBehaviour
+    public class AbilityDisplay : MonoBehaviour
     {
         [Header("References")]
         [SerializeField]
-        AbilityDisplayManager _manager;
+        private AbilityMiddleware _displayMiddleware;
 
         [Header("Display")]
         [SerializeField]
         private IconTimer[] _slots;
 
-        private void Awake() 
+        private void Awake()
         {
-            _manager.Subscribe(this);    
+            _displayMiddleware.Subscribe(this);
         }
 
         private void OnDestroy()
         {
-            _manager.UnSubscribe(this);
+            _displayMiddleware.Unsubscribe(this);
         }
 
         public void StartCooldownTimer(int slot, float maxTimer)

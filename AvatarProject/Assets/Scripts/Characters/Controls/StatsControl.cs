@@ -3,107 +3,126 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using AvatarBA.Stats;
+using AvatarBA.Managers;
 
 namespace AvatarBA
 {
+    public struct StatRecord
+    {
+        public float Value;
+        public string DisplayName;
+
+        public StatRecord(string name, float value)
+        {
+            DisplayName = name;
+            Value = value;
+        }
+    }
+
     public class StatsControl : MonoBehaviour, IStatContainer
     {
-        protected Core _core;
+        [SerializeField]
+        private StatMiddleware _displayMiddleware = default;
+        private Core _core;
 
-        protected Dictionary<string, StatRecord> _runtimeStats;
+        private Dictionary<string, Stat> _runtimeStats;
 
         private void Awake()
         {
             _core = GetComponent<Core>();
         }
 
-        protected virtual void Start()
+        private void Start()
         {
             CreateRuntimeValues();
         }
 
-        public virtual void CreateRuntimeValues()
+        public void CreateRuntimeValues()
         {
-            _runtimeStats = new Dictionary<string, StatRecord>();
+            _runtimeStats = new Dictionary<string, Stat>();
+            List<KeyValuePair<string, StatRecord>> records = new List<KeyValuePair<string, StatRecord>>();
 
             foreach (StatBase originalStat in _core.Data.Stats)
             {
-                _runtimeStats[originalStat.Type.Id] = new StatRecord(originalStat.Type.DisplayName, new Stat(originalStat.DefaultValue));
+                _runtimeStats[originalStat.Type.Id] = new Stat(originalStat.Type.DisplayName, originalStat.DefaultValue);
+                records.Add(new KeyValuePair<string, StatRecord>(originalStat.Type.Id, new StatRecord(originalStat.Type.DisplayName, originalStat.DefaultValue)));
             }
+
+            _displayMiddleware.SetupDisplay(records.ToArray());
         }
 
-        public virtual KeyValuePair<string, float>[] GetAllStats()
+        public KeyValuePair<string, float>[] GetAllStatsValues()
         {
             List<KeyValuePair<string, float>> stats = new List<KeyValuePair<string, float>>();
 
             foreach (var stat in _runtimeStats)
             {
-                stats.Add(new KeyValuePair<string, float>(stat.Key, stat.Value.Stat.Value));
+                stats.Add(new KeyValuePair<string, float>(stat.Key, stat.Value.Value));
             }
 
             return stats.ToArray();
         }
 
-        public virtual KeyValuePair<string, StatRecord>[] GetAllStatsDisplayName()
+        public KeyValuePair<string, string>[] GetAllStatsDisplayName()
         {
-            List<KeyValuePair<string, StatRecord>> stats = new List<KeyValuePair<string, StatRecord>>();
+            List<KeyValuePair<string, string>> stats = new List<KeyValuePair<string, string>>();
 
             foreach (var stat in _runtimeStats)
             {
-                stats.Add(new KeyValuePair<string, StatRecord>(stat.Key, stat.Value));
+                stats.Add(new KeyValuePair<string, string>(stat.Key, stat.Value.Name));
             }
 
             return stats.ToArray();
         }
 
-        public virtual float GetStat(string id)
+        public float GetStat(string id)
         {
-            if (_runtimeStats.TryGetValue(id, out var record))
-                return record.Stat.Value;
+            if (_runtimeStats.TryGetValue(id, out var stat))
+                return stat.Value;
             return -1;
         }
 
-        public virtual string GetStatDisplayName(string id)
+        public string GetStatDisplayName(string id)
         {
-            if (_runtimeStats.TryGetValue(id, out var record))
-                return record.DisplayName;
+            if (_runtimeStats.TryGetValue(id, out var stat))
+                return stat.Name;
             return "";
         }
 
-        public virtual void ApplyChangeToStat(string statId, string modifierId, float value, StatModifierType modifierType)
+        public void ApplyChangeToStat(string statId, string modifierId, float value, StatModifierType modifierType)
         {
-            if (_runtimeStats.TryGetValue(statId, out var record))
+            if (_runtimeStats.TryGetValue(statId, out var stat))
             {
                 StatModifier modifier = new StatModifier(modifierId, value, modifierType);
-                record.Stat.AddModifier(modifier);
+                stat.AddModifier(modifier);
             }
         }
 
-        public virtual void ApplyChangeToStat(string statId, string modifierId, float value, StatModifierType modifierType, object owner)
+        public void ApplyChangeToStat(string statId, string modifierId, float value, StatModifierType modifierType, object owner)
         {
-            if (_runtimeStats.TryGetValue(statId, out var record))
+            if (_runtimeStats.TryGetValue(statId, out var stat))
             {
                 StatModifier modifier = new StatModifier(modifierId, value, modifierType, owner);
-                record.Stat.AddModifier(modifier);
+                stat.AddModifier(modifier);
             }
         }
 
-        public virtual void RemoveChangeToStat(string statId, string modifierId)
+        public void RemoveChangeToStat(string statId, string modifierId)
         {
-            if (_runtimeStats.TryGetValue(statId, out var record))
-                record.Stat.RemoveModifier(modifierId);
+            if (_runtimeStats.TryGetValue(statId, out var stat))
+                stat.RemoveModifier(modifierId);
         }
 
-        public virtual void RemoveChangeToStat(string statId, StatModifier modifier)
+        public void RemoveChangeToStat(string statId, StatModifier modifier)
         {
-            if (_runtimeStats.TryGetValue(statId, out var record))
-                record.Stat.RemoveModifier(modifier);
+            if (_runtimeStats.TryGetValue(statId, out var stat))
+                stat.RemoveModifier(modifier);
         }
 
-        public virtual void RemoveChangeToStatFromSource(string id, object source)
+        public void RemoveChangeToStatFromSource(string id, object source)
         {
-            if (_runtimeStats.TryGetValue(id, out var record))
-                record.Stat.RemoveModifiersFromSource(source);
+            if (_runtimeStats.TryGetValue(id, out var stat))
+                stat.RemoveModifiersFromSource(source);
         }
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using AvatarBA.Managers;
+using TMPro;
 
 namespace AvatarBA.UI
 { 
@@ -13,6 +14,9 @@ namespace AvatarBA.UI
         [Header("Display")]
         [SerializeField]
         private ProgressBar _healthBar;
+
+        [SerializeField]
+        private TMP_Text _healthText;
 
         private void Awake() 
         {
@@ -29,11 +33,18 @@ namespace AvatarBA.UI
         public void UpdateMaxHealth(float value)
         {
             _healthBar.Maximum = (int) value;
+            UpdateText();
         }
 
         public void UpdateHealthBar(float current)
         {
             _healthBar.ChangeCurrent(current);
+            UpdateText();
+        }
+
+        private void UpdateText()
+        {
+            _healthText.text = $"{_healthBar.Current}/{_healthBar.Maximum}";
         }
     }
 }

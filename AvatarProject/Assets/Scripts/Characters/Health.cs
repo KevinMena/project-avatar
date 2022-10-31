@@ -49,8 +49,8 @@ namespace AvatarBA
 
         private void Start()
         {
-            _health = new Stat(_core.Data.BaseHealth);
-            _maxHealth = new Stat(_core.Data.BaseHealth);
+            _health = new Stat("Health", _core.Data.BaseHealth);
+            _maxHealth = new Stat("Max Health", _core.Data.BaseHealth);
             _displayMiddleware.Setup(_core.Data.BaseHealth);
         }
 

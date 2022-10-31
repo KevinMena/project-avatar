@@ -731,6 +731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84645d87ec1c83a4f83e80566bc66b9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _displayMiddleware: {fileID: 11400000, guid: 492671af92e858b409112b3e35166b90, type: 2}
   _invulnerableDuration: 0.5
   _invulnerableDelta: 0.15
 --- !u!114 &2832605410006323314
@@ -760,7 +761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputManager: {fileID: 11400000, guid: 8612807aea4d844419da8531c21d86f6, type: 2}
-  _displayManager: {fileID: 11400000, guid: 414be2a8ecd838d47a335955e91eee4f, type: 2}
+  _displayMiddleware: {fileID: 11400000, guid: 8a59ae8168f356d48b488fe76c439c50, type: 2}
   _dash: {fileID: 0}
   _leftAbility: {fileID: 0}
   _rightAbility: {fileID: 0}
@@ -777,6 +778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db816e8c6b463af42ae18513c8ca7566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _displayMiddleware: {fileID: 11400000, guid: 2b45ca492c974ec4f9e29e40ff4449f2, type: 2}
 --- !u!114 &2832605410006323316
 MonoBehaviour:
   m_ObjectHideFlags: 0
