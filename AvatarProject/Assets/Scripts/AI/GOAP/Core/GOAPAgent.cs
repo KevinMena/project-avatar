@@ -19,13 +19,18 @@ namespace AvatarBA.AI.Core
 
         private GOAPMemory _memory;
 
-        private Goal _currentGoal;
-
-        private bool _interruptPlan;
-
         private WorldContext _currentWorldContext;
+        Queue<Action> _currentPlan;
+        private Goal _currentGoal = null;
+        private Action _currentAction = null;
 
-        private float GOAL_COOLDOWN = 0.5f;
+        private bool _performingAction;
+        private bool _runningPlan;
+        private bool _interruptPlan;
+        private float _goalTimer;
+        private Coroutine ActionPerformed = null;
+
+        private const float GOAL_COOLDOWN = 10f;
 
         public bool start = false;
 
@@ -34,11 +39,18 @@ namespace AvatarBA.AI.Core
             _planner = new Planner();
             _memory = new GOAPMemory();
             SetupWorld();
-            _currentWorldContext = new WorldContext();
-            _currentWorldContext.Add(new WorldState("equippedMelee", true));
+            _currentWorldContext = new WorldContext
+                                {
+                                    new WorldState("equippedMelee", true) 
+                                };
+            _currentPlan = new Queue<Action>();
+            _goalTimer = 0;
+            _interruptPlan = false;
+            _runningPlan = false;
+            _performingAction = false;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             CleanWorld();
         }
@@ -52,6 +64,49 @@ namespace AvatarBA.AI.Core
                 start = false;
                 StartCoroutine(RunPlan());
             }
+
+            _goalTimer += Time.deltaTime;
+
+            // If not goal or goal cooldown ended try an choose a new goal
+            if(_currentGoal is null || _goalTimer > GOAL_COOLDOWN)
+            {
+                GameDebug.Log("Choosing Goal");
+                ChooseGoal();
+                _goalTimer = 0;
+            }
+
+            if(_interruptPlan)
+            {
+                GameDebug.Log("Plan interrupted");
+                _interruptPlan = false;
+                FindPlan();
+            }
+
+            if(!_runningPlan && _currentGoal is not null)
+            {
+                GameDebug.Log("No plan started, finding...");
+                FindPlan();
+            }
+
+            if(!_performingAction && _currentPlan.Count > 0)
+            {
+                GameDebug.Log("Performing next action");
+                _currentAction = _currentPlan.Dequeue();
+                StartCoroutine(PerformAction());
+            }
+        }
+
+        private IEnumerator PerformAction()
+        {
+            _performingAction = true;
+            yield return _currentAction.Perform(gameObject);
+            _performingAction = false;
+        }
+
+        private void FindPlan()
+        {
+            Action[] availableActions = _planner.GetAvailableActions(_actions.ToArray());
+            _currentPlan = _planner.GetPlan(_currentGoal, availableActions, _currentWorldContext);
         }
 
         private IEnumerator RunPlan()
@@ -62,13 +117,15 @@ namespace AvatarBA.AI.Core
             Queue<Action> plan = _planner.GetPlan(_currentGoal, availableActions, _currentWorldContext);
 
             GameDebug.Log("Started Plan");
-
+            _runningPlan = true;
             while (plan.Count > 0)
             {
                 Action currentAction = plan.Dequeue();
-                yield return currentAction.Perform(gameObject);
+                ActionPerformed = StartCoroutine(currentAction.Perform(gameObject));
+                yield return ActionPerformed;
             }
             GameDebug.Log("Finished Plan");
+            _runningPlan = false;
             yield return null;
         }
 
@@ -81,6 +138,9 @@ namespace AvatarBA.AI.Core
             {
                 goalsPriorities.Enqueue(goal.CalculatePriority(), goal);
             }
+
+            if (_currentGoal is not null && goalsPriorities.Peek() != _currentGoal)
+                _interruptPlan = true;
 
             _currentGoal = goalsPriorities.Peek();
         }

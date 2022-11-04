@@ -15,7 +15,7 @@ namespace AvatarBA.Combat
         protected bool _isAttacking;
         protected List<Collider> _alreadyHit = new List<Collider>();
 
-        protected void OnDestroy()
+        protected void OnDisable()
         {
             if(_hitbox != null)
                 _hitbox.OnCollision -= HitEntity;

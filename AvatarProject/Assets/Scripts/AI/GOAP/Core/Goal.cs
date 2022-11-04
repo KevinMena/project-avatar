@@ -24,6 +24,9 @@ namespace AvatarBA.AI.Core
 
         public override bool Equals(object obj)
         {
+            if (obj == null)
+                return false;
+
             return obj is Goal goal &&
                    base.Equals(obj) &&
                    Id == goal.Id;

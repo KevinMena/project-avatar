@@ -33,7 +33,7 @@ namespace AvatarBA.Managers
             _gameplayCamera = Camera.main;
         }
 
-        private void OnDestroy() 
+        private void OnDisable() 
         {
             _inputManager.MovementEvent -= OnMovement;
             _inputManager.MousePositionEvent -= OnMouseMovement;

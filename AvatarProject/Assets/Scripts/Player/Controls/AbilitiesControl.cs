@@ -52,7 +52,7 @@ namespace AvatarBA
             _core = GetComponent<Core>();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _inputManager.DashEvent -= TriggerDash;
             _inputManager.LeftAbilityEvent -= TriggerLeftSlot;

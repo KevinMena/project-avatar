@@ -5318,7 +5318,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &446016948
 GameObject:
@@ -6128,7 +6128,7 @@ Transform:
   - {fileID: 795041149}
   - {fileID: 1264838629}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &485287025
 GameObject:
@@ -16246,8 +16246,6 @@ GameObject:
   - component: {fileID: 1161733074}
   - component: {fileID: 1161733073}
   - component: {fileID: 1161733080}
-  - component: {fileID: 1161733077}
-  - component: {fileID: 1161733076}
   - component: {fileID: 1161733079}
   m_Layer: 0
   m_Name: Enemy
@@ -16320,36 +16318,8 @@ Transform:
   m_Children:
   - {fileID: 1067768738}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1161733076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1161733070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b53ea981ab5582a49867eaebaef1f0a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _provider: {fileID: 11400000, guid: bb26f693f369ba542b99eb5f7587abc6, type: 2}
-  _movementSpeed: 5
-  _rotationSpeed: 10
---- !u!114 &1161733077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1161733070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7704308e5669bfe41ac89f57cc0b58d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _provider: {fileID: 11400000, guid: bb26f693f369ba542b99eb5f7587abc6, type: 2}
 --- !u!114 &1161733079
 MonoBehaviour:
   m_ObjectHideFlags: 0

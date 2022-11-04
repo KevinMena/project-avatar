@@ -7,12 +7,12 @@ namespace AvatarBA
         [SerializeField]
         private InputManager _inputManager = default;
 
-        private void Start() 
+        private void Awake() 
         {
             _inputManager?.EnableInput();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _inputManager?.DisableInput();
         }

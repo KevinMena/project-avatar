@@ -25,7 +25,7 @@ namespace AvatarBA
             _inputManager.InteractEvent += OnInteract;
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _inputManager.InteractEvent -= OnInteract;
         }

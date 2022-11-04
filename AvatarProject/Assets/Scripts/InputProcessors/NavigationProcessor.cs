@@ -14,7 +14,7 @@ namespace AvatarBA.Managers
             _provider?.Subscribe(this, _priority);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _provider?.UnSubscribe(this, _priority);
         }

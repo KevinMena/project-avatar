@@ -24,7 +24,7 @@ namespace AvatarBA.UI
             _displayMiddleware.OnMaximumHealthChange += UpdateMaxHealth;
         }
 
-        private void OnDestroy() 
+        private void OnDisable() 
         {
             _displayMiddleware.OnHealthChange -= UpdateHealthBar;
             _displayMiddleware.OnMaximumHealthChange -= UpdateMaxHealth;

@@ -18,7 +18,7 @@ namespace AvatarBA.AI.Actions
         public override IEnumerator Perform(GameObject agent)
         {
             GameDebug.Log("Am going to target");
-            yield return null;
+            yield return new WaitForSeconds(8f);
         }
     }
 }

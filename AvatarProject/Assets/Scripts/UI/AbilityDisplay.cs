@@ -19,7 +19,7 @@ namespace AvatarBA.UI
             _displayMiddleware.Subscribe(this);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _displayMiddleware.Unsubscribe(this);
         }
