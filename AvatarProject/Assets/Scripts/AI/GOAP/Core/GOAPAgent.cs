@@ -28,11 +28,10 @@ namespace AvatarBA.AI.Core
         private bool _runningPlan;
         private bool _interruptPlan;
         private float _goalTimer;
-        private Coroutine ActionPerformed = null;
 
         private const float GOAL_COOLDOWN = 10f;
 
-        public bool start = false;
+        public bool PlanEmpty => _currentPlan is not null && _currentPlan.Count == 0;
 
         private void Start()
         {
@@ -58,13 +57,6 @@ namespace AvatarBA.AI.Core
         private void Update()
         {
             // Every GOAL_COOLDOWN try and get a new plan
-            // Interrupt current plan and execute new one
-            if (start)
-            {
-                start = false;
-                StartCoroutine(RunPlan());
-            }
-
             _goalTimer += Time.deltaTime;
 
             // If not goal or goal cooldown ended try an choose a new goal
@@ -75,25 +67,33 @@ namespace AvatarBA.AI.Core
                 _goalTimer = 0;
             }
 
+            // If new goal found while doing another plan then replace the plan
             if(_interruptPlan)
             {
                 GameDebug.Log("Plan interrupted");
                 _interruptPlan = false;
+                _runningPlan = false;
                 FindPlan();
             }
 
+            // If not plan started for new goal, find and start plan
             if(!_runningPlan && _currentGoal is not null)
             {
                 GameDebug.Log("No plan started, finding...");
                 FindPlan();
             }
-
-            if(!_performingAction && _currentPlan.Count > 0)
+            
+            // If we still have actions available in the plan, keep doing it
+            if(!_performingAction && !PlanEmpty)
             {
                 GameDebug.Log("Performing next action");
                 _currentAction = _currentPlan.Dequeue();
                 StartCoroutine(PerformAction());
             }
+
+            // If we finish last action then we finish the plan
+            if(!_performingAction && PlanEmpty)
+                _runningPlan = false;
         }
 
         private IEnumerator PerformAction()
@@ -107,26 +107,7 @@ namespace AvatarBA.AI.Core
         {
             Action[] availableActions = _planner.GetAvailableActions(_actions.ToArray());
             _currentPlan = _planner.GetPlan(_currentGoal, availableActions, _currentWorldContext);
-        }
-
-        private IEnumerator RunPlan()
-        {
-            GameDebug.Log("Finding Plan");
-            Action[] availableActions = _planner.GetAvailableActions(_actions.ToArray());
-            ChooseGoal();
-            Queue<Action> plan = _planner.GetPlan(_currentGoal, availableActions, _currentWorldContext);
-
-            GameDebug.Log("Started Plan");
             _runningPlan = true;
-            while (plan.Count > 0)
-            {
-                Action currentAction = plan.Dequeue();
-                ActionPerformed = StartCoroutine(currentAction.Perform(gameObject));
-                yield return ActionPerformed;
-            }
-            GameDebug.Log("Finished Plan");
-            _runningPlan = false;
-            yield return null;
         }
 
         private void ChooseGoal()

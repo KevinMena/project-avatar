@@ -16247,6 +16247,7 @@ GameObject:
   - component: {fileID: 1161733073}
   - component: {fileID: 1161733080}
   - component: {fileID: 1161733079}
+  - component: {fileID: 1161733081}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -16338,7 +16339,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 496e8331e89a4ba459773ce135e1682b, type: 2}
   - {fileID: 11400000, guid: 61d84cdf7d945dc41abb72a4514d6735, type: 2}
   - {fileID: 11400000, guid: 0b2f66b9aec71e14f8125c22405f31ee, type: 2}
-  start: 0
 --- !u!143 &1161733080
 CharacterController:
   m_ObjectHideFlags: 0
@@ -16357,6 +16357,20 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1161733081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161733070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e42514b6ee7924a8285b0a60de8d65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _provider: {fileID: 0}
+  _rotationSpeed: 0
 --- !u!1 &1169798707
 GameObject:
   m_ObjectHideFlags: 0
@@ -19431,7 +19445,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7774086, y: 1}
+    m_SensorSize: {x: 2.2429268, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

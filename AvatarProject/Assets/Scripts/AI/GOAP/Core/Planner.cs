@@ -83,7 +83,7 @@ namespace AvatarBA.AI.Core
                 StateNode currentNode = frontier.Dequeue();
                 actionsToTake.Push(currentNode);
 
-                GameDebug.Log($"Current node {currentNode.Id}");
+                // GameDebug.Log($"Current node {currentNode.Id}");
 
                 // If the WorldState to satisfie is 0, then we have a plan
                 if (currentNode.Priority == 0)
@@ -123,7 +123,7 @@ namespace AvatarBA.AI.Core
 
                     child.CostSoFar = newCost;
                     child.Priority = desiredContext.Count;
-                    GameDebug.Log($"\tPriority {child.Priority} for {child.Id}");
+                    // GameDebug.Log($"\tPriority {child.Priority} for {child.Id}");
                     frontier.Enqueue(child.Priority, child);
 
                 }
