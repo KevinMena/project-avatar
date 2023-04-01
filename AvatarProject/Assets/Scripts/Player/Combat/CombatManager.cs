@@ -28,7 +28,7 @@ namespace AvatarBA.Combat
         protected bool _attackTriggered = false;
         protected bool _isTransitioning = false;
         protected bool _fromLastCombo = false;
-        protected const float timerForInput = 0.8f;
+        protected const float timerForInput = 0.5f;
         protected const float lastComboDelay = 0.5f;
         protected const float moveSpeed = 3f;
 

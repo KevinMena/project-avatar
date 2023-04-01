@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4d0cee24eef0a841bd675c79d973f7d, type: 3}
   m_Name: AI_Action_MeleeAttack
   m_EditorClassIdentifier: 
-  _id: meleeAttack
-  _goalConditions:
-  - Id: atTargetX
-    Value: 1
-  - Id: equippedMelee
-    Value: 1
-  _afterEffects:
-  - Id: attackingTargetX
-    Value: 1
+  _id: MeleeAttack
+  _preConditions:
+    list:
+    - Key: AtTarget
+      Value: 1
+    - Key: EquippedMelee
+      Value: 1
+    keyCollision: 0
+  _effects:
+    list:
+    - Key: AttackingTarget
+      Value: 1
+    keyCollision: 0

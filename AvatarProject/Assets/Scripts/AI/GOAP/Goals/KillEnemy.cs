@@ -12,9 +12,14 @@ namespace AvatarBA.AI.Goals
             return 1;
         }
 
-        public override bool IsValid()
+        public override bool IsValid(GameObject agent)
         {
-            return true;
+            if (agent.TryGetComponent(out GOAPMemory agentMemory))
+            {
+                return agentMemory.CheckWorldState(new WorldState("TargetInHearingRange", true));
+            }
+
+            return false;
         }
     }
 }

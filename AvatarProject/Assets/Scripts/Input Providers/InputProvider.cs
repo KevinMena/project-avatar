@@ -12,6 +12,13 @@ namespace AvatarBA.Managers
         public Vector3 RotationDirection;
 
         public float Speed;
+
+        public InputState(Vector3 m, Vector3 r, float s)
+        {
+            MovementDirection = m;
+            RotationDirection = r;
+            Speed = s;
+        }
     }
 
     [CreateAssetMenu(fileName = "InputProvider_Movement", menuName = "Providers/Input Provider")]

@@ -92,7 +92,7 @@ namespace AvatarBA.Managers
 
             currentState.MovementDirection = _canReceiveInput ? _movementDirection : Vector3.zero;
             currentState.RotationDirection = _canReceiveInput ? currentRotationDirection : Vector3.zero;
-            currentState.Speed = 0;
+            currentState.Speed = -1;
         }
     }
 }

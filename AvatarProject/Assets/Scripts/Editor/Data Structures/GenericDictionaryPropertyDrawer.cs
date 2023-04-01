@@ -7,9 +7,9 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(GenericDictionary<,>))]
 public class GenericDictionaryPropertyDrawer : PropertyDrawer
 {
-    private static float lineHeight = EditorGUIUtility.singleLineHeight;
-    private static float vertSpace = EditorGUIUtility.standardVerticalSpacing;
-    private const float warningBoxHeight = 1.5f;
+    protected static float lineHeight = EditorGUIUtility.singleLineHeight;
+    protected static float vertSpace = EditorGUIUtility.standardVerticalSpacing;
+    protected const float warningBoxHeight = 1.5f;
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {

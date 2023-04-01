@@ -1,41 +1,28 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using AvatarBA.Common.DataStructures;
 using AvatarBA.Debugging;
+using UnityEngine;
 
 namespace AvatarBA.AI.Core
 {
-    [Serializable]
-    public struct WorldStateSerializable
-    {
-        public string Id;
-        public bool Value;
-
-        public WorldStateSerializable(string id, bool value)
-        {
-            Id = id;
-            Value = value;
-        }
-    }
-
-    [Serializable]
     public struct WorldState
     {
         public string Id { get; private set; }
-        public object Value { get; private set; }
+        public bool Value { get; private set; }
 
-        public WorldState(string key, object value)
+        public WorldState(string key, bool value)
         {
             Id = key;
             Value = value;
         }
     }
 
-    public class WorldContext : HashSet<WorldState>
+    [Serializable]
+    public class WorldContext : GenericDictionary<string, bool>
     {
         public WorldContext() : base() { }
-        public WorldContext(IEnumerable<WorldState> other) : base(other) { }
     }
 
     public struct StateNode
@@ -60,7 +47,8 @@ namespace AvatarBA.AI.Core
         public Queue<Action> GetPlan(Goal goal, Action[] availableActions, WorldContext currentWorldContext)
         {
             // Create the root node of the tree of actions, initiating from the Goal
-            WorldContext desiredContext = new WorldContext(goal.DesiredContext);
+            WorldContext desiredContext = new WorldContext();
+            goal.DesiredContext.CopyTo(desiredContext);
             StateNode root = new StateNode(goal.Id, desiredContext);
 
             // Get the series of actions to take to satisfie the goal
@@ -93,13 +81,20 @@ namespace AvatarBA.AI.Core
                 for (int i = 0; i < availableActions.Length; i++)
                 {
                     Action currentAction = availableActions[i];
-                    WorldContext desiredContext = new WorldContext(currentNode.State);
+                    WorldContext desiredContext = new WorldContext();
+                    currentNode.State.CopyTo(desiredContext);
                     bool shouldUse = false;
 
                     // Check if any of the effects of this action satisfies the desired state
                     // If we do we take into account this action, if not discard it
-                    if(desiredContext.RemoveWhere(x => currentAction.MatchState(x)) > 0)
-                        shouldUse = true;
+                    foreach(var context in desiredContext.ToList())
+                    {
+                        if(currentAction.MatchState(new WorldState(context.Key, context.Value)))
+                        {
+                            desiredContext.Remove(context.Key);
+                            shouldUse = true;
+                        }
+                    }
 
                     if (!shouldUse)
                         continue;
@@ -111,9 +106,15 @@ namespace AvatarBA.AI.Core
                     }
 
                     // Evaluate if any WorldState can be satisfied with the world data
-                    foreach (var currentWorldState in currentWorldContext)
+                    foreach (var worldState in currentWorldContext)
                     {
-                        desiredContext.RemoveWhere(x => currentWorldState.Id == x.Id);
+                        foreach (var context in desiredContext.ToList())
+                        {
+                            if (context.Key == worldState.Key)
+                            {
+                                desiredContext.Remove(context.Key);
+                            }
+                        }
                     }
 
                     // Create the new child of the tree calculating the new priorities
@@ -135,12 +136,17 @@ namespace AvatarBA.AI.Core
         private Queue<Action> AssemblePlan(Stack<StateNode> actionsToTake, Action[] actions)
         {
             Queue<Action> plan = new Queue<Action>();
-
-            int actionsNum = actionsToTake.Count - 1;
-            for (int i = 0; i < actionsNum; i++)
+            
+            // Check if the first action to take has a priority of 0, meaning the plan is complete
+            // If not then we need to return an empty plan, because goal not satisfied
+            if(actionsToTake.Peek().Priority == 0)
             {
-                StateNode action = actionsToTake.Pop();
-                plan.Enqueue(GetAction(action.Id, actions));
+                int actionsNum = actionsToTake.Count - 1;
+                for (int i = 0; i < actionsNum; i++)
+                {
+                    StateNode action = actionsToTake.Pop();
+                    plan.Enqueue(GetAction(action.Id, actions));
+                }
             }
 
             return plan;
@@ -170,13 +176,13 @@ namespace AvatarBA.AI.Core
             return availableActions.ToArray();
         }
 
-        public Goal[] GetValidGoals(Goal[] goals)
+        public Goal[] GetValidGoals(GameObject agent, Goal[] goals)
         {
             List<Goal> validGoals = new List<Goal>();
 
             for (int i = 0; i < goals.Length; i++)
             {
-                if (goals[i].IsValid())
+                if (goals[i].IsValid(agent))
                     validGoals.Add(goals[i]);
             }
 

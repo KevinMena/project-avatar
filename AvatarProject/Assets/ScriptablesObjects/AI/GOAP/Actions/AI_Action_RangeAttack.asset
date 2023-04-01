@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24ce860fd9841a4a978b19db79f3a9f, type: 3}
   m_Name: AI_Action_RangeAttack
   m_EditorClassIdentifier: 
-  _id: rangeAttack
-  _goalConditions:
-  - Id: nearTargetX
-    Value: 1
-  - Id: equippedRange
-    Value: 1
-  _afterEffects:
-  - Id: attackingTargetX
-    Value: 1
+  _id: RangeAttack
+  _preConditions:
+    list:
+    - Key: NearTarget
+      Value: 1
+    - Key: EquippedRange
+      Value: 1
+    keyCollision: 0
+  _effects:
+    list:
+    - Key: AttackingTarget
+      Value: 1
+    keyCollision: 0

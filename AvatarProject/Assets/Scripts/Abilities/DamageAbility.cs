@@ -23,7 +23,7 @@ namespace AvatarBA.Abilities
         {
             if(owner.TryGetComponent(out Core ownerCore))
             {
-                float ownerAttack = ownerCore.Stats.GetStat("ATTACK_STAT");
+                float ownerAttack = ownerCore.Stats.GetStat(ATTACK_STAT);
                 return BaseDamage * ownerAttack;
             }
 

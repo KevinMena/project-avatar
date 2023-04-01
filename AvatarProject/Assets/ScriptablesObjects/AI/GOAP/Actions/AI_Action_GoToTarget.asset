@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: AI_Action_GoToTarget
   m_EditorClassIdentifier: 
   _id: goToTarget
-  _goalConditions: []
-  _afterEffects:
-  - Id: atTargetX
-    Value: 1
-  - Id: nearTargetX
-    Value: 1
+  _preConditions:
+    list: []
+    keyCollision: 0
+  _effects:
+    list:
+    - Key: AtTarget
+      Value: 1
+    - Key: NearTarget
+      Value: 1
+    keyCollision: 0

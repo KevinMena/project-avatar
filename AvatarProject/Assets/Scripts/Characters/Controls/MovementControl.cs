@@ -1,45 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 using AvatarBA.Managers;
+using System.Collections;
+using UnityEngine;
 
 namespace AvatarBA
 {
     public class MovementControl : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] 
-        private InputProvider _provider;
-
         [Header("Data")]
-        [SerializeField] 
-        private float _rotationSpeed = 0;
+        [SerializeField]
+        protected float _rotationSpeed = 0;
 
         protected Core _core;
         protected CharacterController _controller;
 
-        private Vector3 _movementDirection;
-        private Vector3 _rotationDirection;
-        private float _speed;
+        protected Vector3 _movementDirection;
+        protected Vector3 _rotationDirection;
+        protected float _speed;
         protected bool _canMove = true;
 
-        private readonly int MoveAnimation = Animator.StringToHash("Run");
-        private const string MOVEMENT_SPEED_STAT = "movementSpeed";
+        private bool _inMovement = false;
 
-        protected virtual void Awake()
+        protected readonly int MoveAnimation = Animator.StringToHash("Run");
+        protected const string MOVEMENT_SPEED_STAT = "movementSpeed";
+
+        public void DisableMovement() => _canMove = false;
+        public void EnableMovement() => _canMove = true;
+
+        protected void Awake()
         {
             _core = GetComponent<Core>();
             _controller = GetComponent<CharacterController>();
         }
 
-        public virtual void DisableMovement() => _canMove = false;
-
-        public virtual void EnableMovement() => _canMove = true;
-
-        private void Update()
+        protected virtual void Update()
         {
-            UpdateState();
             if (_canMove)
             {
                 Move();
@@ -48,15 +42,13 @@ namespace AvatarBA
         }
 
         /// <summary>
-        /// Ask the _provider to gather the current information about the inputs and 
-        /// updates the corresponding information.
+        /// Updates the current movement state
         /// </summary>
-        protected void UpdateState()
+        public void UpdateState(InputState newState) 
         {
-            InputState currentState = _provider.GetState();
-            _movementDirection = currentState.MovementDirection;
-            _rotationDirection = currentState.RotationDirection;
-            _speed = currentState.Speed;
+            _movementDirection = newState.MovementDirection;
+            _rotationDirection = newState.RotationDirection;
+            _speed = newState.Speed;
         }
 
         /// <summary>
@@ -65,23 +57,28 @@ namespace AvatarBA
         protected void Move()
         {
             // If not velocity just not move at all
-            if (_movementDirection == Vector3.zero)
+            if (_inMovement && _movementDirection == Vector3.zero)
             {
                 _core.Animation.PlayInitialAnimation(MoveAnimation);
+                _inMovement = false;
                 return;
             }
+
+            if (_movementDirection == Vector3.zero)
+                return;
 
             //Set animation
             _core.Animation.PlayAnimation(MoveAnimation);
 
             // Cache the current movement speed
-            if (_speed == 0)
+            if (_speed == -1)
                 _speed = _core.Stats.GetStat(MOVEMENT_SPEED_STAT);
 
             // Apply speed and calculate desire position
-            Vector3 desiredVelocity = _movementDirection * _speed * Time.deltaTime;
+            Vector3 desiredVelocity = _speed * Time.deltaTime * _movementDirection;
+            desiredVelocity.y = 0;
             _controller.Move(desiredVelocity);
-            _speed = 0;
+            _inMovement = true;
         }
 
         /// <summary>
@@ -91,6 +88,9 @@ namespace AvatarBA
         {
             if (_rotationDirection == Vector3.zero)
                 return;
+
+            // Remove the Y axis from the vector we are looking at
+            _rotationDirection.y = 0;
 
             // Calculate and apply new rotation
             Quaternion targetRotation = Quaternion.LookRotation(_rotationDirection);
@@ -103,7 +103,7 @@ namespace AvatarBA
             StartCoroutine(LoseControlCO(loseTime));
         }
 
-        private IEnumerator LoseControlCO(float loseTime)
+        protected IEnumerator LoseControlCO(float loseTime)
         {
             float finishedTime = Time.time + loseTime;
 

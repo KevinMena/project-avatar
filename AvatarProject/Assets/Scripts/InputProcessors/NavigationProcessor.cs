@@ -26,9 +26,9 @@ namespace AvatarBA.Managers
 
         private IEnumerator MoveToPointCoroutine(Vector3 targetPosition, float movementSpeed)
         {
-            Vector3 offset = targetPosition - transform.position;
-
-            float cSquared = offset.x * offset.x + offset.y * offset.y;
+            Vector3 offset = transform.position.TargetDirection(targetPosition);
+            offset.y = 0;
+            float cSquared = offset.Distance();
 
             while (cSquared > 0.1f)
             {
@@ -37,8 +37,9 @@ namespace AvatarBA.Managers
                 _movementSpeed = movementSpeed;
 
                 yield return null;
-                offset = targetPosition - transform.position;
-                cSquared = offset.x * offset.x + offset.y * offset.y;
+                offset = transform.position.TargetDirection(targetPosition);
+                offset.y = 0;
+                cSquared = offset.Distance();
             }
 
             Reset();

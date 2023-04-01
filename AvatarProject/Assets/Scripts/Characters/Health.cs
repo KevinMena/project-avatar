@@ -51,7 +51,7 @@ namespace AvatarBA
         {
             _health = new Stat("Health", _core.Data.BaseHealth);
             _maxHealth = new Stat("Max Health", _core.Data.BaseHealth);
-            _displayMiddleware.Setup(_core.Data.BaseHealth);
+            _displayMiddleware?.Setup(_core.Data.BaseHealth);
         }
 
         public void TakeDamage(float damage)
@@ -61,12 +61,13 @@ namespace AvatarBA
             StatModifier damageModifier = new StatModifier("damage", -appliedDamage, StatModifierType.Flat);
             _health.AddModifier(damageModifier);
             //Update UI
-            _displayMiddleware.UpdateHealth(Current);
+            _displayMiddleware?.UpdateHealth(Current);
         }
 
         public void TakeHit(float damage, Vector2 hitDirection)
         {
-            throw new System.NotImplementedException();
+            TakeDamage(damage);
+            // Throw entity back
         }
 
         public void BecomeInvulnerable()

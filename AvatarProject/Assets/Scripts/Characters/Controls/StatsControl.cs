@@ -4,6 +4,7 @@ using UnityEngine;
 
 using AvatarBA.Stats;
 using AvatarBA.Managers;
+using AvatarBA.Debugging;
 
 namespace AvatarBA
 {
@@ -48,7 +49,7 @@ namespace AvatarBA
                 records.Add(new KeyValuePair<string, StatRecord>(originalStat.Type.Id, new StatRecord(originalStat.Type.DisplayName, originalStat.DefaultValue)));
             }
 
-            _displayMiddleware.SetupDisplay(records.ToArray());
+            _displayMiddleware?.SetupDisplay(records.ToArray());
         }
 
         public KeyValuePair<string, float>[] GetAllStatsValues()
@@ -79,6 +80,7 @@ namespace AvatarBA
         {
             if (_runtimeStats.TryGetValue(id, out var stat))
                 return stat.Value;
+
             return -1;
         }
 
@@ -95,6 +97,7 @@ namespace AvatarBA
             {
                 StatModifier modifier = new StatModifier(modifierId, value, modifierType);
                 stat.AddModifier(modifier);
+                _displayMiddleware?.UpdateStat(statId, new StatRecord(stat.Name, stat.Value));
             }
         }
 
@@ -110,7 +113,10 @@ namespace AvatarBA
         public void RemoveChangeToStat(string statId, string modifierId)
         {
             if (_runtimeStats.TryGetValue(statId, out var stat))
+            {
                 stat.RemoveModifier(modifierId);
+                _displayMiddleware?.UpdateStat(statId, new StatRecord(stat.Name, stat.Value));
+            }
         }
 
         public void RemoveChangeToStat(string statId, StatModifier modifier)

@@ -13,8 +13,6 @@ namespace AvatarBA.Managers
     {
         private StatDisplay _display = null;
 
-        public event UnityAction<string, StatRecord> OnStatUpdate;
-
         public void Subscribe(StatDisplay display)
         {
             if(_display != null)

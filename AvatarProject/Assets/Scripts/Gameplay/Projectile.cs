@@ -1,5 +1,8 @@
+using AvatarBA.Debugging;
 using AvatarBA.Interfaces;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEngine.UI;
 
 namespace AvatarBA.Combat
 {
@@ -68,12 +71,12 @@ namespace AvatarBA.Combat
         public void OnEntityHit(Collider hit)
         {
             GameObject entity = hit.gameObject;
-
             if (entity == _owner)
                 return;
 
-            if (entity != null && entity.layer == _mask)
+            if (entity is not null && (_mask & (1 << entity.layer)) != 0)
             {
+                GameDebug.Log($"Collisioned with {hit.name} using projectile");
                 if (entity.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.TakeHit(_baseDamage, entity.transform.position - transform.position);

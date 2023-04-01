@@ -4,6 +4,7 @@ using UnityEngine;
 
 using AvatarBA.Common.DataStructures;
 using AvatarBA.Debugging;
+using TMPro;
 
 namespace AvatarBA.AI.Core
 {
@@ -15,12 +16,15 @@ namespace AvatarBA.AI.Core
         [SerializeField]
         private List<Action> _actions;
 
+        [SerializeField]
+        private TMP_Text _statusText;
+
         private Planner _planner;
 
         private GOAPMemory _memory;
 
-        private WorldContext _currentWorldContext;
         Queue<Action> _currentPlan;
+        [SerializeField]
         private Goal _currentGoal = null;
         private Action _currentAction = null;
 
@@ -33,25 +37,22 @@ namespace AvatarBA.AI.Core
 
         public bool PlanEmpty => _currentPlan is not null && _currentPlan.Count == 0;
 
+        private void Awake()
+        {
+            _memory = GetComponent<GOAPMemory>();
+        }
+
         private void Start()
         {
             _planner = new Planner();
-            _memory = new GOAPMemory();
-            SetupWorld();
-            _currentWorldContext = new WorldContext
-                                {
-                                    new WorldState("equippedMelee", true) 
-                                };
             _currentPlan = new Queue<Action>();
             _goalTimer = 0;
             _interruptPlan = false;
             _runningPlan = false;
             _performingAction = false;
-        }
 
-        private void OnDisable()
-        {
-            CleanWorld();
+            // Testing
+            _memory.AddWorldState("EquippedMelee", true);
         }
 
         private void Update()
@@ -80,20 +81,25 @@ namespace AvatarBA.AI.Core
             if(!_runningPlan && _currentGoal is not null)
             {
                 GameDebug.Log("No plan started, finding...");
+                _statusText.text = "No plan";
                 FindPlan();
             }
             
             // If we still have actions available in the plan, keep doing it
             if(!_performingAction && !PlanEmpty)
             {
-                GameDebug.Log("Performing next action");
                 _currentAction = _currentPlan.Dequeue();
+                _statusText.text = $"{_currentAction.Id}";
                 StartCoroutine(PerformAction());
             }
 
             // If we finish last action then we finish the plan
             if(!_performingAction && PlanEmpty)
+            {
                 _runningPlan = false;
+                _currentGoal = null;
+                GameDebug.Log("Finished plan.");
+            }
         }
 
         private IEnumerator PerformAction()
@@ -106,13 +112,13 @@ namespace AvatarBA.AI.Core
         private void FindPlan()
         {
             Action[] availableActions = _planner.GetAvailableActions(_actions.ToArray());
-            _currentPlan = _planner.GetPlan(_currentGoal, availableActions, _currentWorldContext);
+            _currentPlan = _planner.GetPlan(_currentGoal, availableActions, _memory.CurrentContext);
             _runningPlan = true;
         }
 
         private void ChooseGoal()
         {
-            Goal[] validGoals = _planner.GetValidGoals(_goals.ToArray());
+            Goal[] validGoals = _planner.GetValidGoals(gameObject, _goals.ToArray());
 
             PriorityQueue<int, Goal> goalsPriorities = new PriorityQueue<int, Goal>();
             foreach(Goal goal in validGoals)
@@ -124,33 +130,6 @@ namespace AvatarBA.AI.Core
                 _interruptPlan = true;
 
             _currentGoal = goalsPriorities.Peek();
-        }
-
-        // This is for testing purposes
-        private void SetupWorld()
-        {
-            for(int i = 0; i < _actions.Count; i++)
-            {
-                _actions[i].SetupWorld();
-            }
-
-            for (int i = 0; i < _goals.Count; i++)
-            {
-                _goals[i].SetupWorld();
-            }
-        }
-
-        private void CleanWorld()
-        {
-            for (int i = 0; i < _actions.Count; i++)
-            {
-                _actions[i].CleanWorld();
-            }
-
-            for (int i = 0; i < _goals.Count; i++)
-            {
-                _goals[i].CleanWorld();
-            }
         }
     }
 }

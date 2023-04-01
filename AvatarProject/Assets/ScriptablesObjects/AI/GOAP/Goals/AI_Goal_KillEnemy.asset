@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d227005c398938d4b8d97887a60cd670, type: 3}
   m_Name: AI_Goal_KillEnemy
   m_EditorClassIdentifier: 
-  _id: killEnemy
-  _goalState:
-  - Id: attackingTargetX
-    Value: 1
+  _id: KillEnemy
+  _desiredContext:
+    list:
+    - Key: AttackingTarget
+      Value: 1
+    keyCollision: 0

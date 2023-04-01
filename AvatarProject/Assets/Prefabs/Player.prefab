@@ -594,7 +594,7 @@ GameObject:
   - component: {fileID: 2832605410006323318}
   - component: {fileID: 2832605410006323315}
   - component: {fileID: 2832605410006323312}
-  - component: {fileID: 2832605410006323314}
+  - component: {fileID: 1074499193143982141}
   - component: {fileID: 2832605410006323319}
   - component: {fileID: 2832605410006323313}
   - component: {fileID: 2832605410006323316}
@@ -734,7 +734,7 @@ MonoBehaviour:
   _displayMiddleware: {fileID: 11400000, guid: 492671af92e858b409112b3e35166b90, type: 2}
   _invulnerableDuration: 0.5
   _invulnerableDelta: 0.15
---- !u!114 &2832605410006323314
+--- !u!114 &1074499193143982141
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -743,11 +743,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2832605410006323286}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5e42514b6ee7924a8285b0a60de8d65, type: 3}
+  m_Script: {fileID: 11500000, guid: 1996f663b2cd8ec4fab8619cd3d2c43d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _provider: {fileID: 11400000, guid: 097d054f8c376634ebf2cf1f70702b3d, type: 2}
   _rotationSpeed: 14
+  _provider: {fileID: 11400000, guid: 097d054f8c376634ebf2cf1f70702b3d, type: 2}
 --- !u!114 &2832605410006323319
 MonoBehaviour:
   m_ObjectHideFlags: 0

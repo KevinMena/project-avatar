@@ -66,18 +66,18 @@ namespace AvatarBA
         private IEnumerator AddMovementCoroutine(float distance)
         {
             Vector3 targetPosition = transform.position + (transform.forward * distance);
-            Vector3 offset = targetPosition - transform.position;
+            Vector3 offset = transform.position.TargetDirection(targetPosition);
             offset.y = 0;
-            float cSquared = offset.x * offset.x + offset.z * offset.z;
+            float cSquared = offset.Distance();
 
             while (cSquared > 0.1f)
             {
                 _core.Movement.Impulse(offset.normalized, moveSpeed);
 
                 yield return null;
-                offset = targetPosition - transform.position;
+                offset = transform.position.TargetDirection(targetPosition);
                 offset.y = 0;
-                cSquared = offset.x * offset.x + offset.z * offset.z;
+                cSquared = offset.Distance();
             }
         }
     }
