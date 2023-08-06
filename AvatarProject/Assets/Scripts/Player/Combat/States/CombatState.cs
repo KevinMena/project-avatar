@@ -29,7 +29,7 @@ namespace AvatarBA.Combat
     /// State for the combat system. We calculate the damage if we trigger attacks on enemies
     /// and play the animations of the combat.
     /// </summary>
-    public class CombatState : State
+    public class CombatState : IState
     {
         private CombatManager _owner; 
         private ConeHitbox _hitbox;
@@ -49,7 +49,7 @@ namespace AvatarBA.Combat
 
         private float _timer = 0;
 
-        public CombatState(CombatManager owner, CombatStateData data) : base(owner) 
+        public CombatState(CombatManager owner, CombatStateData data)
         {
             _owner = owner;
             _stateName = data.StateName;
@@ -62,7 +62,7 @@ namespace AvatarBA.Combat
             _hitbox.OnCollision += CollisionedWith;
         }
 
-        public override void OnEnter()
+        public void OnEnter()
         {
             _owner.ChangeMovement(false);
             _timer = 0;
@@ -77,7 +77,7 @@ namespace AvatarBA.Combat
             _hitbox.StartCheckCollision();
         }
 
-        public override void OnUpdate()
+        public void OnUpdate()
         {
             _timer += Time.deltaTime;
 
@@ -96,7 +96,7 @@ namespace AvatarBA.Combat
                 Attack();
         }
 
-        public override void OnExit() 
+        public void OnExit() 
         {
             _hitbox.StopCheckCollision();
             _alreadyHit.Clear();
@@ -135,5 +135,7 @@ namespace AvatarBA.Combat
         {
             _hitbox.OnDrawGizmos();
         }
+
+        public void OnFixedUpdate() { }
     }
 }

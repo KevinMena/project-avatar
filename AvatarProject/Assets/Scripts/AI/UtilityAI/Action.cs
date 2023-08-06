@@ -1,20 +1,31 @@
 using System.Collections;
 using UnityEngine;
 
-namespace AvatarBA.AI.UtilityAI
+using AvatarBA.AI.States;
+using AvatarBA.Patterns;
+
+namespace AvatarBA.AI
 {
-    public abstract class Action : ScriptableObject
+    public class Action : MonoBehaviour
     {
         [SerializeField]
-        private string _name;
+        protected string _name;
 
-        [SerializeField]
-        private Consideration[] _considerations;
+        protected Consideration[] _considerations;
+        protected BaseState _actionState;
         
         public string Name => _name;
-        public  Consideration[] Considerations => _considerations;
+        public Consideration[] Considerations => _considerations;
 
-        public abstract IEnumerator Execute(GameObject owner);
+        protected virtual void Start()
+        {
+            _actionState.Setup(gameObject);
+        }
+
+        public void Execute(StateMachine owner) 
+        { 
+            owner.SetState(_actionState);
+        }
     }
 }
 

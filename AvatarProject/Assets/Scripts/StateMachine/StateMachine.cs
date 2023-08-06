@@ -4,10 +4,11 @@ namespace AvatarBA.Patterns
 {
     public class StateMachine : MonoBehaviour
     {
-        protected State currentState;
-        protected State initialState;
+        [SerializeField]
+        protected IState currentState;
+        protected IState initialState;
 
-        public State CurrentState => currentState;
+        public IState CurrentState => currentState;
 
         protected virtual void Start()
         {
@@ -20,13 +21,18 @@ namespace AvatarBA.Patterns
             currentState?.OnUpdate();
         }
 
+        protected virtual void FixedUpdate()
+        {
+            currentState?.OnFixedUpdate();
+        }
+
         protected void SetInitialState()
         {
             currentState = initialState;
             currentState.OnEnter();
         }
 
-        public virtual void SetState(State nextState)
+        public virtual void SetState(IState nextState)
         {
             currentState?.OnExit();
             currentState = nextState;

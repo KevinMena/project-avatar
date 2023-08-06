@@ -77,7 +77,7 @@ namespace AvatarBA.Combat
         /// Transition to one of the main combo states. In this states we don't register inputs
         /// </summary>
         /// <param name="nextState"> Combo state to transition </param>
-        public void SetMainState(State nextState)
+        public void SetMainState(IState nextState)
         {
             _currentComboIndex++;
             _isTransitioning = false;

@@ -13,6 +13,8 @@ namespace AvatarBA
         [SerializeField]
         private Transform _shootPosition;
 
+        private Vector3 _spawnPosition;
+
         // Controls
         private AnimationControl _animations;
         private StatsControl _stats;
@@ -20,6 +22,7 @@ namespace AvatarBA
 
         public CharacterData Data => _characterData;
         public Transform ShootPosition => _shootPosition;
+        public Vector3 SpawnPosition => _spawnPosition;
 
         public AnimationControl Animation => _animations;
         public StatsControl Stats => _stats;

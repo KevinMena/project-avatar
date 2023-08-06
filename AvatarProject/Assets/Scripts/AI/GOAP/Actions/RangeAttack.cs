@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using AvatarBA.AI.Core;
 
-namespace AvatarBA.AI.Actions
+namespace AvatarBA.AI.GOAP.Actions
 {
     [CreateAssetMenu(fileName = "AI_Action_RangeAttack", menuName = "AI/GOAP/Actions/RangeAttack")]
     public class RangeAttack : Action

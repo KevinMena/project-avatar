@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using AvatarBA.AI.Core;
 using AvatarBA.Managers;
 
-namespace AvatarBA.AI.Actions
+namespace AvatarBA.AI.GOAP.Actions
 {
     [CreateAssetMenu(fileName = "AI_Action_Wander", menuName = "AI/GOAP/Actions/Wander")]
     public class Wander : Action

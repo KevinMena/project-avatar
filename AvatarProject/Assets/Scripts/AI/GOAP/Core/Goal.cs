@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AvatarBA.AI.Core
+namespace AvatarBA.AI.GOAP
 {
     public abstract class Goal : ScriptableObject
     {

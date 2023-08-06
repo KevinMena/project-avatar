@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using AvatarBA.AI.Core;
 using AvatarBA.Debugging;
 using AvatarBA.Managers;
 
-namespace AvatarBA.AI.Actions
+namespace AvatarBA.AI.GOAP.Actions
 {
     [CreateAssetMenu(fileName = "AI_Action_GoToTarget", menuName = "AI/GOAP/Actions/GoToTarget")]
     public class GoToTarget : Action

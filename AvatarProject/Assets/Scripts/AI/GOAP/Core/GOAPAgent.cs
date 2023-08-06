@@ -6,7 +6,7 @@ using AvatarBA.Common.DataStructures;
 using AvatarBA.Debugging;
 using TMPro;
 
-namespace AvatarBA.AI.Core
+namespace AvatarBA.AI.GOAP
 {
     public class GOAPAgent : MonoBehaviour
     {

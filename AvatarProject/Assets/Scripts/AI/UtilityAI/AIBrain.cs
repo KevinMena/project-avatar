@@ -2,42 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AvatarBA.AI.UtilityAI
+using AvatarBA.AI.States;
+
+namespace AvatarBA.AI
 {
     public class AIBrain : MonoBehaviour
     {
         [SerializeField]
         private Action[] _actionsAvailable;
         
-        private Action bestAction;
+        private Action _bestAction;
 
-        private bool _isDeciding = false;
+        private EnemyStateMachine _stateMachine;
+
+        private bool _actionDecided = false;
         private bool _doingAction = false;
+
+        private void Awake()
+        {
+            _stateMachine = GetComponent<EnemyStateMachine>();
+        }
 
         private void Start()
         {
-            if (bestAction == null)
-                StartCoroutine(CalculateBestAction());
+            if (_bestAction == null)
+                CalculateBestAction();
         }
 
         private void Update()
         {
-            if (!_isDeciding && !_doingAction)
-                StartCoroutine(ExecuteBestAction());
+            // Execute best action calculated
+            if (_actionDecided && !_doingAction && _bestAction != null)
+            {
+                ExecuteBestAction();
+                _actionDecided = false;
+            }
+
+            // Check if the action state is done to recalculate action
+            if (_stateMachine.StateComplete)
+            {
+                _doingAction = false;
+                CalculateBestAction();
+            }
         }
 
-        private IEnumerator ExecuteBestAction()
+        private void ExecuteBestAction()
         {
             _doingAction = true;
-            yield return bestAction.Execute(gameObject);
-            _doingAction = false;
-            yield return CalculateBestAction();
+            _bestAction.Execute(_stateMachine);
         }
 
-        private IEnumerator CalculateBestAction()
+        private void CalculateBestAction()
         {
-            _isDeciding = true;
-
             float bestScore = 0;
             int bestActionIndex = 0;
 
@@ -51,10 +67,8 @@ namespace AvatarBA.AI.UtilityAI
                 }
             }
 
-            bestAction = _actionsAvailable[bestActionIndex];
-            
-            _isDeciding = false;
-            yield return null;
+            _bestAction = _actionsAvailable[bestActionIndex];
+            _actionDecided = true;
         }
 
         private float ScoreAction(Action action)

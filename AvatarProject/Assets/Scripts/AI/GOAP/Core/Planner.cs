@@ -5,7 +5,7 @@ using AvatarBA.Common.DataStructures;
 using AvatarBA.Debugging;
 using UnityEngine;
 
-namespace AvatarBA.AI.Core
+namespace AvatarBA.AI.GOAP
 {
     public struct WorldState
     {

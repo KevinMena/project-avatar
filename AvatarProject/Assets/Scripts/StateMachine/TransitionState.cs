@@ -1,19 +1,23 @@
 namespace AvatarBA.Patterns
 {
-    public class TransitionState : State
+    public class TransitionState : IState
     {
-        protected State targetState;
+        protected StateMachine owner;
+        protected IState targetState;
 
-        public TransitionState(StateMachine owner, State state) : base(owner)
+        public TransitionState(StateMachine owner, IState state)
         {
+            this.owner = owner;
             targetState = state;
         }
 
-        public override void OnEnter() { }
+        public virtual void OnEnter() { }
 
-        public override void OnExit() { }
+        public virtual void OnExit() { }
 
-        public override void OnUpdate() { }
+        public virtual void OnUpdate() { }
+
+        public virtual void OnFixedUpdate() { }
 
         protected virtual void TransitionToTarget()
         {

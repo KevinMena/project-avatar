@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using AvatarBA.Debugging;
+using AvatarBA.Common;
 
-namespace AvatarBA.AI.Core
+namespace AvatarBA.AI
 {
     public class Sensors : MonoBehaviour
     {
@@ -17,11 +18,13 @@ namespace AvatarBA.AI.Core
         [SerializeField]
         private float _hearingRange;
 
-        private GOAPMemory _memory;
-        private Collider[] _targets;
+        private Vector3 _spawnPosition;
 
-        private float _hearingTimer = 0;
-        private float _visionTimer = 0;
+        private Collider[] _targets;
+        private Vector3 _currentTargetPosition;
+
+        private Timer _hearingTimer;
+        private Timer _visionTimer;
 
         private const float HEARING_COOLDOWN = 1f;
         private const float VISION_COOLDOWN = 1f;
@@ -35,34 +38,40 @@ namespace AvatarBA.AI.Core
 
         public float CosAngle => _cosAngle;
 
-        private void Awake()
-        {
-            _memory = GetComponent<GOAPMemory>();
-        }
+        public Vector3 SpawnPosition => _spawnPosition;
+        public Vector3 TargetPosition => _currentTargetPosition;
 
         private void Start()
         {
             _targets = new Collider[5];
             _cosAngle = Mathf.Cos(_visionCone * Mathf.Deg2Rad);
+            _hearingTimer = new Timer(HEARING_COOLDOWN);
+            _visionTimer = new Timer(VISION_COOLDOWN);
+            _spawnPosition = transform.position;
+
+            _hearingTimer.Start();
+            _visionTimer.Start();
         }
 
         private void Update()
         {
             // Update timers
-            _hearingTimer += Time.deltaTime;
-            _visionTimer += Time.deltaTime;
+            _hearingTimer.Update(Time.deltaTime);
+            _visionTimer.Update(Time.deltaTime);
 
             // Check if we are in the windows where we can check the sensors
-            if (_hearingTimer > HEARING_COOLDOWN)
+            if (_hearingTimer.IsComplete)
             {
                 CheckHear();
-                _hearingTimer = 0;
+                _hearingTimer.Start();
+                _currentTargetPosition = Vector3.zero;
             }
 
-            if (_visionTimer > VISION_COOLDOWN)
+            if (_visionTimer.IsComplete)
             {
                 CheckVision();
-                _visionTimer = 0;
+                _visionTimer.Start();
+                _currentTargetPosition = Vector3.zero;
             }
         }
 
@@ -80,10 +89,8 @@ namespace AvatarBA.AI.Core
                 // Register target in memory
                 Vector2 noise = Random.insideUnitCircle * 1.5f;
                 Vector3 approximatePosition = _targets[i].transform.position + new Vector3(noise.x, transform.position.y, noise.y);
-                _memory.AddWorldState(HEARING_TAG, true);
-                _memory.AddShortData(HEARING_POS_TAG, approximatePosition);
                 GameDebug.Log($"Hearing target {_targets[i].name} around {approximatePosition}");
-
+                _currentTargetPosition = approximatePosition;
                 // Clean collection
                 _targets[i] = null;
             }
@@ -116,8 +123,7 @@ namespace AvatarBA.AI.Core
                 if(Physics.Raycast(transform.position, transform.forward, out hit, _visionRange, _targetMask, QueryTriggerInteraction.Collide))
                 {
                     // Target is in vision cone and range, register in memory
-                    _memory.AddWorldState(VISION_TAG, true);
-                    _memory.AddShortData(VISION_POS_TAG, _targets[i].transform.position);
+                    _currentTargetPosition = _targets[i].transform.position;
                     GameDebug.Log($"Looking at {_targets[i].name}");
                 }
 

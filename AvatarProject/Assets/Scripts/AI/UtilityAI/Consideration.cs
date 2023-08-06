@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace AvatarBA.AI.UtilityAI
+namespace AvatarBA.AI
 {
-    public abstract class Consideration : ScriptableObject
+    public abstract class Consideration
     {
         [SerializeField]
         private string _name;

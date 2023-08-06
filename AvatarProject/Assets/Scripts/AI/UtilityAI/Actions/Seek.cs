@@ -1,13 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace AvatarBA.AI.UtilityAI.Actions
+using AvatarBA.Patterns;
+
+namespace AvatarBA.AI
 {
-    [CreateAssetMenu(fileName ="AI_Action_Seek", menuName ="AI/Actions/Seek")]
     public class Seek : Action
     {
-        public override IEnumerator Execute(GameObject owner)
+        public IEnumerator Execute(StateMachine owner)
         {
             Debug.Log("Seeking");
             yield return null;

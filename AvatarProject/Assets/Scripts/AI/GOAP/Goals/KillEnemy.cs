@@ -1,8 +1,6 @@
 using UnityEngine;
 
-using AvatarBA.AI.Core;
-
-namespace AvatarBA.AI.Goals
+namespace AvatarBA.AI.GOAP.Goals
 {
     [CreateAssetMenu(fileName = "AI_Goal_KillEnemy", menuName = "AI/GOAP/Goals/KillEnemy")]
     public class KillEnemy : Goal

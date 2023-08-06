@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using AvatarBA.AI.Core;
-
-namespace AvatarBA.AI.Goals
+namespace AvatarBA.AI.GOAP.Goals
 {
     [CreateAssetMenu(fileName = "AI_Goal_Patrol", menuName = "AI/GOAP/Goals/Patrol")]
     public class Patrol : Goal

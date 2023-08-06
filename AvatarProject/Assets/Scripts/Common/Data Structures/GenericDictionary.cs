@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Newtonsoft.Json.Linq;
 
 /// <summary>
 /// Generic Serializable Dictionary for Unity 2020.1 and above.
