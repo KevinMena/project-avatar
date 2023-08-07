@@ -40,11 +40,14 @@ namespace AvatarBA.AI
         private void OnDestroy()
         {
             _stateMachine.OnStateFinish -= FinishAction;
+            if (_timer != null)
+                _timer.OnTimerCompleted -= CalculateBestAction;
         }
 
         private void Start()
         {
             _timer = new Timer(_actionDelay);
+            _timer.OnTimerCompleted += CalculateBestAction;
 
             CalculateBestAction();
             ExecuteBestAction();
@@ -62,11 +65,6 @@ namespace AvatarBA.AI
 
             if (!_doingAction)
                 _timer.Update(Time.deltaTime);
-
-            if (_timer.IsComplete)
-            {
-                CalculateBestAction();
-            }
         }
 
         private void ExecuteBestAction()
