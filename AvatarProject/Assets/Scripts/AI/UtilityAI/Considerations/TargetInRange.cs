@@ -8,7 +8,7 @@ namespace AvatarBA.AI.Considerations
         {
             if(owner.TryGetComponent(out Sensors ownerSensors))
             {
-                if(ownerSensors.TargetPosition != Vector3.zero)
+                if(ownerSensors.TargetInRange)
                 {
                     return 1;
                 }

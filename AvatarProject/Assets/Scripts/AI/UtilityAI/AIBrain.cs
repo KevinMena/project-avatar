@@ -1,32 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 using AvatarBA.AI.States;
+using AvatarBA.Common;
+using AvatarBA.Debugging;
 
 namespace AvatarBA.AI
 {
     public class AIBrain : MonoBehaviour
     {
         [SerializeField]
+        private float _actionDelay;
+
+        [SerializeField]
         private Action[] _actionsAvailable;
-        
+
+        [SerializeField]
+        private TMP_Text _statusText;
+
         private Action _bestAction;
+        private Action _lastAction;
+        private Timer _timer;
 
         private EnemyStateMachine _stateMachine;
 
         private bool _actionDecided = false;
         private bool _doingAction = false;
 
+        public Action LastAction => _lastAction;
+
         private void Awake()
         {
             _stateMachine = GetComponent<EnemyStateMachine>();
+            _stateMachine.OnStateFinish += FinishAction;
+        }
+
+        private void OnDestroy()
+        {
+            _stateMachine.OnStateFinish -= FinishAction;
         }
 
         private void Start()
         {
-            if (_bestAction == null)
-                CalculateBestAction();
+            _timer = new Timer(_actionDelay);
+
+            CalculateBestAction();
+            ExecuteBestAction();
+            _actionDecided = false;
         }
 
         private void Update()
@@ -38,22 +60,36 @@ namespace AvatarBA.AI
                 _actionDecided = false;
             }
 
-            // Check if the action state is done to recalculate action
-            if (_stateMachine.StateComplete)
+            if (!_doingAction)
+                _timer.Update(Time.deltaTime);
+
+            if (_timer.IsComplete)
             {
-                _doingAction = false;
                 CalculateBestAction();
             }
         }
 
         private void ExecuteBestAction()
         {
+            GameDebug.Log($"Starting execute of action {_bestAction.Name}");
             _doingAction = true;
+            _statusText.text = _bestAction.Name;
             _bestAction.Execute(_stateMachine);
+        }
+
+        private void FinishAction()
+        {
+            GameDebug.Log($"Finished action {_bestAction.Name}");
+            _doingAction = false;
+            _lastAction = _bestAction;
+            _statusText.text = "Deciding";
+            _timer.Start();
         }
 
         private void CalculateBestAction()
         {
+            GameDebug.Log($"Calculating action...");
+
             float bestScore = 0;
             int bestActionIndex = 0;
 

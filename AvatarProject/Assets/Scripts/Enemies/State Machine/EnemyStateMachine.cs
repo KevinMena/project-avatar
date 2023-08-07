@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 using AvatarBA.Patterns;
+using UnityEngine.Events;
 
 namespace AvatarBA.AI.States
 {
     public class EnemyStateMachine : StateMachine
     {
-        public bool StateComplete => currentState == null ? true : (currentState as BaseState).Completed;
+        public UnityAction OnStateFinish;
+        public bool StateComplete => currentState == null ? false : (currentState as BaseState).Completed;
 
         protected override void Start() { }
 
@@ -29,6 +27,7 @@ namespace AvatarBA.AI.States
         private void FinishState()
         {
             currentState?.OnExit();
+            OnStateFinish?.Invoke();
             currentState = null;
         }
     }

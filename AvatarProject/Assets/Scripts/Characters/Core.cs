@@ -33,6 +33,7 @@ namespace AvatarBA
             _animations = GetComponent<AnimationControl>();
             _stats = GetComponent<StatsControl>();
             _movement = GetComponent<MovementControl>();
+            _spawnPosition = transform.position;
         }
     }
 }

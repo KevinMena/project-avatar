@@ -21,7 +21,8 @@ namespace AvatarBA.AI
         private Vector3 _spawnPosition;
 
         private Collider[] _targets;
-        private Vector3 _currentTargetPosition;
+        private Vector3 _targetloosyPosition;
+        private Vector3 _targetPosition;
 
         private Timer _hearingTimer;
         private Timer _visionTimer;
@@ -39,7 +40,26 @@ namespace AvatarBA.AI
         public float CosAngle => _cosAngle;
 
         public Vector3 SpawnPosition => _spawnPosition;
-        public Vector3 TargetPosition => _currentTargetPosition;
+        public bool TargetInRange
+        {
+            get
+            {
+                if (_targetloosyPosition != Vector3.zero || _targetPosition != Vector3.zero)
+                    return true;
+
+                return false;
+            }
+        }
+        public Vector3 TargetPosition
+        {
+            get
+            {
+                if(_targetloosyPosition != Vector3.zero && _targetPosition == Vector3.zero)
+                    return _targetloosyPosition;
+
+                return _targetPosition;
+            }
+        }
 
         private void Start()
         {
@@ -64,14 +84,12 @@ namespace AvatarBA.AI
             {
                 CheckHear();
                 _hearingTimer.Start();
-                _currentTargetPosition = Vector3.zero;
             }
 
             if (_visionTimer.IsComplete)
             {
                 CheckVision();
                 _visionTimer.Start();
-                _currentTargetPosition = Vector3.zero;
             }
         }
 
@@ -79,6 +97,7 @@ namespace AvatarBA.AI
         {
             // Check if targets in range of hearing
             Physics.OverlapSphereNonAlloc(transform.position, _hearingRange, _targets, _targetMask);
+            bool targetFound = false;
 
             for(int i = 0; i < _targets.Length; i++)
             {
@@ -90,16 +109,21 @@ namespace AvatarBA.AI
                 Vector2 noise = Random.insideUnitCircle * 1.5f;
                 Vector3 approximatePosition = _targets[i].transform.position + new Vector3(noise.x, transform.position.y, noise.y);
                 GameDebug.Log($"Hearing target {_targets[i].name} around {approximatePosition}");
-                _currentTargetPosition = approximatePosition;
+                _targetloosyPosition = approximatePosition;
+                targetFound = true;
                 // Clean collection
                 _targets[i] = null;
             }
+
+            if(!targetFound)
+                _targetloosyPosition = Vector3.zero;
         }
         
         private void CheckVision()
         {
             // Check if targets in range 
             Physics.OverlapSphereNonAlloc(transform.position, _visionRange, _targets, _targetMask);
+            bool targetFound = false;
 
             for (int i = 0; i < _targets.Length; i++)
             {
@@ -123,12 +147,16 @@ namespace AvatarBA.AI
                 if(Physics.Raycast(transform.position, transform.forward, out hit, _visionRange, _targetMask, QueryTriggerInteraction.Collide))
                 {
                     // Target is in vision cone and range, register in memory
-                    _currentTargetPosition = _targets[i].transform.position;
+                    _targetPosition = _targets[i].transform.position;
+                    targetFound = true;
                     GameDebug.Log($"Looking at {_targets[i].name}");
                 }
 
                 _targets[i] = null;
             }
+
+            if (!targetFound)
+                _targetloosyPosition = Vector3.zero;
         }
 
         private void OnDrawGizmos()
