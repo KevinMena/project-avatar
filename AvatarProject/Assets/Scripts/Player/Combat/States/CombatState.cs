@@ -31,7 +31,7 @@ namespace AvatarBA.Combat
     /// </summary>
     public class CombatState : IState
     {
-        private CombatManager _owner; 
+        private CombatControl _owner; 
         private ConeHitbox _hitbox;
 
         private string _stateName;
@@ -49,7 +49,7 @@ namespace AvatarBA.Combat
 
         private float _timer = 0;
 
-        public CombatState(CombatManager owner, CombatStateData data)
+        public CombatState(CombatControl owner, CombatStateData data)
         {
             _owner = owner;
             _stateName = data.StateName;

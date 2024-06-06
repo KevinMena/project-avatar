@@ -9,13 +9,13 @@ namespace AvatarBA.Combat
     /// </summary>
     public class CombatIdleState : CombatTransitionState
     {
-        private CombatManager _owner;
+        private CombatControl _owner;
 
         private float _startComboTimer = 0;
 
         private readonly int IdleAnimation = UnityEngine.Animator.StringToHash("Idle");
 
-        public CombatIdleState(CombatManager owner, CombatState state) : base(owner, state)
+        public CombatIdleState(CombatControl owner, CombatState state) : base(owner, state)
         {
             _owner = owner;
         }

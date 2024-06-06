@@ -10,13 +10,13 @@ namespace AvatarBA.Combat
     /// </summary>
     public class CombatTransitionState : TransitionState
     {
-        private CombatManager _owner; 
+        private CombatControl _owner; 
         private float _baseTriggeredTimer = 0;
         private float _attackTriggeredTimer = 0;
 
-        public CombatTransitionState(CombatManager owner, CombatState state, float timer = 0) : base(owner, state)
+        public CombatTransitionState(CombatControl owner, CombatState state, float timer = 0) : base(owner, state)
         {
-            _owner = owner as CombatManager;
+            _owner = owner;
             _baseTriggeredTimer = timer;
             _attackTriggeredTimer = timer;
         }
