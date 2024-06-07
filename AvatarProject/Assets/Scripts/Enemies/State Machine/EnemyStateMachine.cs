@@ -6,7 +6,7 @@ namespace AvatarBA.AI.States
     public class EnemyStateMachine : StateMachine
     {
         public UnityAction OnStateFinish;
-        public bool StateComplete => currentState == null ? false : (currentState as BaseState).Completed;
+        public bool StateComplete => currentState == null ? false : (currentState as Action).Completed;
 
         protected override void Start() { }
 

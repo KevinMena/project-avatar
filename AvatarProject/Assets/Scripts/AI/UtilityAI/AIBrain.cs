@@ -72,7 +72,7 @@ namespace AvatarBA.AI
             GameDebug.Log($"Starting execute of action {_bestAction.Name}");
             _doingAction = true;
             _statusText.text = _bestAction.Name;
-            _bestAction.Execute(_stateMachine);
+            _stateMachine.SetState(_bestAction);
         }
 
         private void FinishAction()
@@ -94,6 +94,7 @@ namespace AvatarBA.AI
             for (int i = 0; i < _actionsAvailable.Length; i++)
             {
                 float actionScore = ScoreAction(_actionsAvailable[i]);
+                GameDebug.Log($"The score of {_actionsAvailable[i].Name} is {actionScore}");
                 if (actionScore > bestScore)
                 {
                     bestScore = actionScore;

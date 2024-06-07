@@ -18,7 +18,7 @@ namespace AvatarBA.AI.Considerations
             if (owner.TryGetComponent(out AIBrain ownerBrain))
             {
                 if (ownerBrain.LastAction != null && ownerBrain.LastAction.Name.Equals(_action))
-                    return 0.9f;
+                    return 0.5f;
             }
 
             return 0.1f;

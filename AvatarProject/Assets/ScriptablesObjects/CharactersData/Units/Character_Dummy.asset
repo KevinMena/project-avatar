@@ -10,17 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cb5bb2771bec5d4aa3963e47424c3cb, type: 3}
-  m_Name: Character_Enemy_Chaser
+  m_Name: Character_Dummy
   m_EditorClassIdentifier: 
   _id: 99
-  _name: Chaser
+  _name: Dummy
   _description: Description
   _icon: {fileID: 0}
   _prefab: {fileID: 0}
-  _baseHealth: 10
+  _baseHealth: 50
   _stats:
-  - Type: {fileID: 11400000, guid: 34203d34ba0f5b84ba0a7e29483cff70, type: 2}
-    DefaultValue: 3
-  - Type: {fileID: 11400000, guid: b215bec9ab4ad0b47a87fe17bb165af2, type: 2}
-    DefaultValue: 10
+  - Type: {fileID: 11400000, guid: 30b6944f04a54a24681cfa83be1e1ab6, type: 2}
+    DefaultValue: 1
   _initialAbilities: []

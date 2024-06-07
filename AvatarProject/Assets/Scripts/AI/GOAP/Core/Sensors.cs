@@ -17,18 +17,20 @@ namespace AvatarBA.AI
         private float _visionRange;
         [SerializeField]
         private float _hearingRange;
+        [SerializeField]
+        private float _hearingCooldown = 1f;
+        [SerializeField]
+        private float _visionCooldown = 1f;
 
         private Vector3 _spawnPosition;
 
         private Collider[] _targets;
-        private Vector3 _targetloosyPosition;
+        private Vector3 _targetLoosyPosition;
         private Vector3 _targetPosition;
 
         private Timer _hearingTimer;
         private Timer _visionTimer;
 
-        private const float HEARING_COOLDOWN = 1f;
-        private const float VISION_COOLDOWN = 1f;
         private const string HEARING_TAG = "TargetInHearingRange";
         private const string HEARING_POS_TAG = "HearingTargetAt";
         private const string VISION_TAG = "TargetInVision";
@@ -44,7 +46,7 @@ namespace AvatarBA.AI
         {
             get
             {
-                if (_targetloosyPosition != Vector3.zero || _targetPosition != Vector3.zero)
+                if (_targetLoosyPosition != Vector3.zero || _targetPosition != Vector3.zero)
                     return true;
 
                 return false;
@@ -54,8 +56,8 @@ namespace AvatarBA.AI
         {
             get
             {
-                if(_targetloosyPosition != Vector3.zero && _targetPosition == Vector3.zero)
-                    return _targetloosyPosition;
+                if(_targetLoosyPosition != Vector3.zero && _targetPosition == Vector3.zero)
+                    return _targetLoosyPosition;
 
                 return _targetPosition;
             }
@@ -65,8 +67,8 @@ namespace AvatarBA.AI
         {
             _targets = new Collider[5];
             _cosAngle = Mathf.Cos(_visionCone * Mathf.Deg2Rad);
-            _hearingTimer = new Timer(HEARING_COOLDOWN);
-            _visionTimer = new Timer(VISION_COOLDOWN);
+            _hearingTimer = new Timer(_hearingCooldown);
+            _visionTimer = new Timer(_visionCooldown);
             _spawnPosition = transform.position;
 
             _hearingTimer.Start();
@@ -109,14 +111,14 @@ namespace AvatarBA.AI
                 Vector2 noise = Random.insideUnitCircle * 1.5f;
                 Vector3 approximatePosition = _targets[i].transform.position + new Vector3(noise.x, transform.position.y, noise.y);
                 GameDebug.Log($"Hearing target {_targets[i].name} around {approximatePosition}");
-                _targetloosyPosition = approximatePosition;
+                _targetLoosyPosition = approximatePosition;
                 targetFound = true;
                 // Clean collection
                 _targets[i] = null;
             }
 
             if(!targetFound)
-                _targetloosyPosition = Vector3.zero;
+                _targetLoosyPosition = Vector3.zero;
         }
         
         private void CheckVision()
@@ -156,7 +158,7 @@ namespace AvatarBA.AI
             }
 
             if (!targetFound)
-                _targetloosyPosition = Vector3.zero;
+                _targetPosition = Vector3.zero;
         }
 
         private void OnDrawGizmos()

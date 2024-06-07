@@ -1,31 +1,31 @@
-using System.Collections;
 using UnityEngine;
 
-using AvatarBA.AI.States;
 using AvatarBA.Patterns;
 
 namespace AvatarBA.AI
 {
-    public class Action : MonoBehaviour
+    public class Action : MonoBehaviour, IState
     {
         [SerializeField]
         protected string _name;
 
+        protected bool _completed;
+
         protected Consideration[] _considerations;
-        protected BaseState _actionState;
         
         public string Name => _name;
         public Consideration[] Considerations => _considerations;
+        public bool Completed => _completed;
 
-        protected virtual void Start()
-        {
-            _actionState.Setup(gameObject);
-        }
+        protected virtual void Start() { }
 
-        public void Execute(StateMachine owner) 
-        { 
-            owner.SetState(_actionState);
-        }
+        public virtual void OnEnter() { }
+
+        public virtual void OnExit() { }
+
+        public virtual void OnFixedUpdate() { }
+
+        public virtual void OnUpdate() { }
     }
 }
 
