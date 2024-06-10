@@ -22,6 +22,5 @@ MonoBehaviour:
   cost: 0
   type: 4
   effects: []
-  _dashSpeed: 10
-  _dashTime: 0.5
+  _dashSpeed: 20
   _dashDistance: 4

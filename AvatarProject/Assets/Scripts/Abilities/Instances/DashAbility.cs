@@ -11,9 +11,6 @@ namespace AvatarBA.Abilities
         [SerializeField] 
         private float _dashSpeed = 0;
 
-        [SerializeField] 
-        private float _dashTime = 0;
-
         [SerializeField]
         private float _dashDistance = 0;
 
@@ -31,19 +28,17 @@ namespace AvatarBA.Abilities
 
                 ownerCore.Movement.DisableMovement();
 
-                Vector3 offset = targetPosition - owner.transform.position;
-                offset.y = 0;
+                ownerCore.Movement.Impulse(owner.transform.forward, _dashSpeed);
 
-                float cSquared = offset.x * offset.x + offset.z * offset.z;
+                float cSquared;
 
-                while (cSquared > 0.1f)
+                do
                 {
-                    ownerCore.Movement.Impulse(offset.normalized, _dashSpeed);
-                    yield return null;
-                    offset = targetPosition - owner.transform.position;
+                    Vector3 offset = targetPosition - owner.transform.position;
                     offset.y = 0;
                     cSquared = offset.x * offset.x + offset.z * offset.z;
-                }
+                    yield return null;
+                }while (cSquared > 0.1f);
 
                 ownerCore.Movement.EnableMovement();
             }

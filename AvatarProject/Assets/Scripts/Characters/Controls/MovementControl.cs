@@ -23,32 +23,31 @@ namespace AvatarBA
         protected bool m_canMove = true;
 
         private bool m_inMovement = false;
-        private bool m_resetDrag = false;
-        private float m_drag = 0;
 
         protected readonly int MoveAnimation = Animator.StringToHash("Run");
         protected const string MOVEMENT_SPEED_STAT = "movementSpeed";
 
-        public void DisableMovement() 
+        public void DisableMovement(bool resetAnimation = false) 
         {
             m_canMove = false;
-            m_rigidbody.velocity = Vector3.zero;
-            m_rigidbody.angularVelocity = Vector3.zero;
+            ResetMovement(resetAnimation);
         }
         
-        public void EnableMovement() => m_canMove = true;
+        public void EnableMovement(bool resetAnimation = false) 
+        {
+            ResetMovement(resetAnimation);
+            m_canMove = true;
+        }
 
         protected void Awake()
         {
             m_core = GetComponent<Core>();
             m_rigidbody = GetComponent<Rigidbody>();
-            m_drag =  m_rigidbody.drag;
         }
 
         protected virtual void Update()
         {
             RotateAim();
-            ResetDrag();
         }
 
         protected virtual void FixedUpdate()
@@ -78,8 +77,7 @@ namespace AvatarBA
             // If not velocity just not move at all
             if (m_inMovement && m_movementDirection == Vector3.zero)
             {
-                m_core.Animation.PlayInitialAnimation(MoveAnimation);
-                m_inMovement = false;
+                ResetMovement(true);
                 return;
             }
 
@@ -101,6 +99,17 @@ namespace AvatarBA
             Vector3 velocityChange = desiredVelocity - previousVelocity;
             m_rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
             m_inMovement = true;
+        }
+
+        protected void ResetMovement(bool resetAnimation)
+        {
+            m_rigidbody.velocity = Vector3.zero;
+            m_rigidbody.angularVelocity = Vector3.zero;
+
+            if(resetAnimation)
+                m_core.Animation.PlayInitialAnimation();
+            
+            m_inMovement = false;
         }
 
         /// <summary>
@@ -148,23 +157,11 @@ namespace AvatarBA
             EnableMovement();
         }
 
-        private void ResetDrag()
-        {
-            if(m_resetDrag)
-            {
-                m_resetDrag = false;
-                m_rigidbody.drag = m_drag;
-            }
-        }
-
         public void Impulse(Vector3 direction, float speed)
         {
-            m_rigidbody.drag = 0;
-
+            Debug.Log(direction);
             Vector3 desiredVelocity = direction * speed ;
             m_rigidbody.AddForce(desiredVelocity, ForceMode.Impulse);
-
-            m_resetDrag = true;
         }
     }
 }
