@@ -200,19 +200,17 @@ namespace AvatarBA
         private IEnumerator AddMovementCoroutine(float distance)
         {
             Vector3 targetPosition = transform.position + (transform.forward * distance);
-            Vector3 offset = transform.position.TargetDirection(targetPosition);
-            offset.y = 0;
-            float cSquared = offset.Distance();
+            
+            _core.Movement.Impulse(transform.forward, moveSpeed);
 
-            while (cSquared > 0.1f)
+            float cSquared;
+            do
             {
-                _core.Movement.Impulse(offset.normalized, moveSpeed);
-
-                yield return null;
-                offset = transform.position.TargetDirection(targetPosition);
+                Vector3 offset = transform.position.TargetDirection(targetPosition);
                 offset.y = 0;
                 cSquared = offset.Distance();
-            }
+                yield return null;
+            }while (cSquared > 0.1f);
         }
 
         private void OnDrawGizmos()

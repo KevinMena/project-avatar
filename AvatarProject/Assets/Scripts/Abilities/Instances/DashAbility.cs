@@ -36,7 +36,7 @@ namespace AvatarBA.Abilities
                 {
                     Vector3 offset = targetPosition - owner.transform.position;
                     offset.y = 0;
-                    cSquared = offset.x * offset.x + offset.z * offset.z;
+                    cSquared = offset.Distance();
                     yield return null;
                 }while (cSquared > 0.1f);
 
