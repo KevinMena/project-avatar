@@ -8,33 +8,52 @@ namespace AvatarBA
     {
         [Header("Data")]
         [SerializeField]
-        protected float _rotationSpeed = 0;
+        protected float m_rotationSpeed = 0;
 
-        protected Core _core;
+        [SerializeField]
+        protected GameObject m_aim;
+
+        protected Core m_core;
         protected CharacterController _controller;
+        protected Rigidbody m_rigidbody;
 
-        protected Vector3 _movementDirection;
-        protected Vector3 _rotationDirection;
-        protected float _speed;
-        protected bool _canMove = true;
+        protected Vector3 m_movementDirection;
+        protected Vector3 m_aimDirection;
+        protected float m_speed;
+        protected bool m_canMove = true;
 
-        private bool _inMovement = false;
+        private bool m_inMovement = false;
+        private bool m_resetDrag = false;
+        private float m_drag = 0;
 
         protected readonly int MoveAnimation = Animator.StringToHash("Run");
         protected const string MOVEMENT_SPEED_STAT = "movementSpeed";
 
-        public void DisableMovement() => _canMove = false;
-        public void EnableMovement() => _canMove = true;
+        public void DisableMovement() 
+        {
+            m_canMove = false;
+            m_rigidbody.velocity = Vector3.zero;
+            m_rigidbody.angularVelocity = Vector3.zero;
+        }
+        
+        public void EnableMovement() => m_canMove = true;
 
         protected void Awake()
         {
-            _core = GetComponent<Core>();
-            _controller = GetComponent<CharacterController>();
+            m_core = GetComponent<Core>();
+            m_rigidbody = GetComponent<Rigidbody>();
+            m_drag =  m_rigidbody.drag;
         }
 
         protected virtual void Update()
         {
-            if (_canMove)
+            RotateAim();
+            ResetDrag();
+        }
+
+        protected virtual void FixedUpdate()
+        {
+            if (m_canMove)
             {
                 Move();
                 Rotate();
@@ -46,9 +65,9 @@ namespace AvatarBA
         /// </summary>
         public void UpdateState(InputState newState) 
         {
-            _movementDirection = newState.MovementDirection;
-            _rotationDirection = newState.RotationDirection;
-            _speed = newState.Speed;
+            m_movementDirection = newState.MovementDirection;
+            m_aimDirection = newState.AimDirection;
+            m_speed = newState.Speed;
         }
 
         /// <summary>
@@ -57,28 +76,31 @@ namespace AvatarBA
         protected void Move()
         {
             // If not velocity just not move at all
-            if (_inMovement && _movementDirection == Vector3.zero)
+            if (m_inMovement && m_movementDirection == Vector3.zero)
             {
-                _core.Animation.PlayInitialAnimation(MoveAnimation);
-                _inMovement = false;
+                m_core.Animation.PlayInitialAnimation(MoveAnimation);
+                m_inMovement = false;
                 return;
             }
 
-            if (_movementDirection == Vector3.zero)
+            if (m_movementDirection == Vector3.zero)
                 return;
 
             //Set animation
-            _core.Animation.PlayAnimation(MoveAnimation);
+            m_core.Animation.PlayAnimation(MoveAnimation);
 
             // Cache the current movement speed
-            if (_speed == -1)
-                _speed = _core.Stats.GetStat(MOVEMENT_SPEED_STAT);
+            if (m_speed == -1)
+                m_speed = m_core.Stats.GetStat(MOVEMENT_SPEED_STAT);
+
+            // Cache velocity last frame
+            Vector3 previousVelocity = m_rigidbody.velocity;
 
             // Apply speed and calculate desire position
-            Vector3 desiredVelocity = _speed * Time.deltaTime * _movementDirection;
-            desiredVelocity.y = 0;
-            _controller.Move(desiredVelocity);
-            _inMovement = true;
+            Vector3 desiredVelocity = m_movementDirection * m_speed;
+            Vector3 velocityChange = desiredVelocity - previousVelocity;
+            m_rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+            m_inMovement = true;
         }
 
         /// <summary>
@@ -86,16 +108,24 @@ namespace AvatarBA
         /// </summary>
         protected void Rotate()
         {
-            if (_rotationDirection == Vector3.zero)
+            if (m_movementDirection == Vector3.zero)
                 return;
 
-            // Remove the Y axis from the vector we are looking at
-            _rotationDirection.y = 0;
+            // Calculate and apply new rotation
+            Quaternion targetRotation = Quaternion.LookRotation(m_movementDirection);
+            Quaternion desiredRotation = Quaternion.Slerp(m_rigidbody.rotation, targetRotation, m_rotationSpeed * Time.deltaTime);
+            m_rigidbody.MoveRotation(desiredRotation);
+        }
+
+        protected void RotateAim()
+        {
+            if (m_aimDirection == Vector3.zero)
+                return;
 
             // Calculate and apply new rotation
-            Quaternion targetRotation = Quaternion.LookRotation(_rotationDirection);
-            Quaternion desiredRotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-            transform.rotation = desiredRotation;
+            Quaternion targetRotation = Quaternion.LookRotation(m_aimDirection);
+            Quaternion desiredRotation = Quaternion.Slerp(m_aim.transform.rotation, targetRotation, m_rotationSpeed * Time.deltaTime);
+            m_aim.transform.rotation = desiredRotation;
         }
 
         public void LoseControl(float loseTime)
@@ -118,10 +148,23 @@ namespace AvatarBA
             EnableMovement();
         }
 
+        private void ResetDrag()
+        {
+            if(m_resetDrag)
+            {
+                m_resetDrag = false;
+                m_rigidbody.drag = m_drag;
+            }
+        }
+
         public void Impulse(Vector3 direction, float speed)
         {
-            Vector3 desiredVelocity = direction * speed * Time.deltaTime;
-            _controller.Move(desiredVelocity);
+            m_rigidbody.drag = 0;
+
+            Vector3 desiredVelocity = direction * speed ;
+            m_rigidbody.AddForce(desiredVelocity, ForceMode.Impulse);
+
+            m_resetDrag = true;
         }
     }
 }

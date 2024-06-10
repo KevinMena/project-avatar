@@ -58,7 +58,7 @@ namespace AvatarBA.Managers
                 return;
 
             currentState.MovementDirection = _movementDirection;
-            currentState.RotationDirection = _rotationDirection;
+            currentState.AimDirection = _rotationDirection;
             currentState.Speed = _movementSpeed;
         }
     }

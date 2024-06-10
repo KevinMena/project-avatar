@@ -9,14 +9,14 @@ namespace AvatarBA.Managers
     {
         public Vector3 MovementDirection;
 
-        public Vector3 RotationDirection;
+        public Vector3 AimDirection;
 
         public float Speed;
 
         public InputState(Vector3 m, Vector3 r, float s)
         {
             MovementDirection = m;
-            RotationDirection = r;
+            AimDirection = r;
             Speed = s;
         }
     }

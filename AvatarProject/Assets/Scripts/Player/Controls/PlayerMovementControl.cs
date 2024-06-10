@@ -8,7 +8,7 @@ namespace AvatarBA
     {
         [Header("References")]
         [SerializeField]
-        private InputProvider _provider;
+        private InputProvider m_provider;
 
         protected override void Update()
         {
@@ -22,10 +22,10 @@ namespace AvatarBA
         /// </summary>
         private void UpdateState()
         {
-            InputState currentState = _provider.GetState();
-            _movementDirection = currentState.MovementDirection;
-            _rotationDirection = currentState.RotationDirection;
-            _speed = currentState.Speed;
+            InputState currentState = m_provider.GetState();
+            m_movementDirection = currentState.MovementDirection;
+            m_aimDirection = currentState.AimDirection;
+            m_speed = currentState.Speed;
         }
     }
 }

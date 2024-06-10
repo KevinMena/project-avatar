@@ -43,7 +43,7 @@ namespace AvatarBA.AI.GOAP.Actions
                 while (cSquared > 0.4f)
                 {
                     movementState.MovementDirection = offset.normalized;
-                    movementState.RotationDirection = movementState.MovementDirection;
+                    movementState.AimDirection = movementState.MovementDirection;
                     movementState.Speed = -1;
 
                     agentCore.Movement.UpdateState(movementState);
@@ -60,7 +60,7 @@ namespace AvatarBA.AI.GOAP.Actions
         private void Reset(AvatarBA.Core agent, InputState movementState)
         {
             movementState.MovementDirection = Vector3.zero;
-            movementState.RotationDirection = Vector3.zero;
+            movementState.AimDirection = Vector3.zero;
             movementState.Speed = 0;
             agent.Movement.UpdateState(movementState);
         }

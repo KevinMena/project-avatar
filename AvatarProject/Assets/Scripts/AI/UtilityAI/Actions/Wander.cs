@@ -47,7 +47,7 @@ namespace AvatarBA.AI.Actions
             }
 
             _movementState.MovementDirection = offset.normalized;
-            _movementState.RotationDirection = _movementState.MovementDirection;
+            _movementState.AimDirection = _movementState.MovementDirection;
             _movementState.Speed = -1;
 
             _ownerCore.Movement.UpdateState(_movementState);
@@ -56,7 +56,7 @@ namespace AvatarBA.AI.Actions
         public override void OnExit()
         {
             _movementState.MovementDirection = Vector3.zero;
-            _movementState.RotationDirection = Vector3.zero;
+            _movementState.AimDirection = Vector3.zero;
             _movementState.Speed = 0;
             _ownerCore.Movement.UpdateState(_movementState);
             _completed = false;

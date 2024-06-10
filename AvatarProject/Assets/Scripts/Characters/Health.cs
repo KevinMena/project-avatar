@@ -12,19 +12,19 @@ namespace AvatarBA
     {
         [Header("References")]
         [SerializeField]
-        private HealthMiddleware _displayMiddleware = default;
+        private HealthMiddleware m_displayMiddleware = null;
 
         [Header("Data")]
         [SerializeField]
-        private float _invulnerableDuration = 0.5f;
+        private float m_invulnerableDuration = 0.5f;
 
         [SerializeField]
-        private float _invulnerableDelta = 0.15f;
+        private float m_invulnerableDelta = 0.15f;
 
-        private Core _core;
-        private Stat _health;
-        private Stat _maxHealth;
-        private bool _isInvulnerable = false;
+        private Core m_core;
+        private Stat m_health;
+        private Stat m_maxHealth;
+        private bool m_isInvulnerable = false;
 
         private const string DEFENSE_STAT = "defense";
 
@@ -32,36 +32,52 @@ namespace AvatarBA
         {
             get
             {
-                if (_health.Value < 0)
+                if (m_health.Value < 0)
                     return 0;
-                else if (_health.Value > _maxHealth.Value)
+                else if (m_health.Value > m_maxHealth.Value)
                     return Maximum;
-                return _health.Value;
+                return m_health.Value;
             }
         }
 
-        public float Maximum => _maxHealth.Value;
+        public float DefenseValue
+        {
+            get
+            {
+                if(m_core.Stats == null)
+                    return 0;
+                float value = m_core.Stats.GetStat(DEFENSE_STAT);
+
+                if(value < 0)
+                    return 0;
+                return value;
+            }
+        }
+
+        public float Maximum => m_maxHealth.Value;
 
         private void Awake()
         {
-            _core = GetComponent<Core>();
+            m_core = GetComponent<Core>();
         }
 
         private void Start()
         {
-            _health = new Stat("Health", _core.Data.BaseHealth);
-            _maxHealth = new Stat("Max Health", _core.Data.BaseHealth);
-            _displayMiddleware?.Setup(_core.Data.BaseHealth);
+            m_health = new Stat("Health", m_core.Data.BaseHealth);
+            m_maxHealth = new Stat("Max Health", m_core.Data.BaseHealth);
+            m_displayMiddleware?.Setup(m_core.Data.BaseHealth);
         }
 
         public void TakeDamage(float damage)
         {
             // Damage formula
-            float appliedDamage = damage / _core.Stats.GetStat(DEFENSE_STAT);
+            float appliedDamage = damage / DefenseValue;
             StatModifier damageModifier = new StatModifier("damage", -appliedDamage, StatModifierType.Flat);
-            _health.AddModifier(damageModifier);
+            m_health.AddModifier(damageModifier);
             //Update UI
-            _displayMiddleware?.UpdateHealth(Current);
+            m_displayMiddleware?.UpdateHealth(Current);
+            // Check if character is dead
+            CheckDeath();
         }
 
         public void TakeHit(float damage, Vector2 hitDirection)
@@ -70,22 +86,30 @@ namespace AvatarBA
             // Throw entity back
         }
 
+        private void CheckDeath()
+        {
+            if(Current == 0)
+            {
+                m_core.gameObject.SetActive(false);
+            }
+        }
+
         public void BecomeInvulnerable()
         {
-            if (!_isInvulnerable)
+            if (!m_isInvulnerable)
                 StartCoroutine(Invulnerable());
         }
 
         private IEnumerator Invulnerable()
         {
-            _isInvulnerable = true;
+            m_isInvulnerable = true;
 
-            for (float i = 0; i < _invulnerableDuration; i += _invulnerableDelta)
+            for (float i = 0; i < m_invulnerableDuration; i += m_invulnerableDelta)
             {
-                yield return new WaitForSeconds(_invulnerableDelta);
+                yield return new WaitForSeconds(m_invulnerableDelta);
             }
 
-            _isInvulnerable = false;
+            m_isInvulnerable = false;
         }
     }
 }
