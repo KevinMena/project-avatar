@@ -27,17 +27,7 @@ namespace AvatarBA
         protected readonly int MoveAnimation = Animator.StringToHash("Run");
         protected const string MOVEMENT_SPEED_STAT = "movementSpeed";
 
-        public void DisableMovement(bool resetAnimation = false) 
-        {
-            m_canMove = false;
-            ResetMovement(resetAnimation);
-        }
-        
-        public void EnableMovement(bool resetAnimation = false) 
-        {
-            ResetMovement(resetAnimation);
-            m_canMove = true;
-        }
+        public Vector3 AimDirection => m_aimDirection.normalized;
 
         protected void Awake()
         {
@@ -60,6 +50,24 @@ namespace AvatarBA
         }
 
         /// <summary>
+        /// Blocks the character from receiving movement values
+        /// </summary>
+        public void DisableMovement(bool resetAnimation = false) 
+        {
+            m_canMove = false;
+            ResetMovement(resetAnimation);
+        }
+        
+        /// <summary>
+        /// Allows the character to receive movement values
+        /// </summary>
+        public void EnableMovement(bool resetAnimation = false) 
+        {
+            ResetMovement(resetAnimation);
+            m_canMove = true;
+        }
+
+        /// <summary>
         /// Updates the current movement state
         /// </summary>
         public void UpdateState(InputState newState) 
@@ -70,7 +78,7 @@ namespace AvatarBA
         }
 
         /// <summary>
-        /// Calculates and moves the player.
+        /// Calculates and moves the character
         /// </summary>
         protected void Move()
         {
@@ -101,6 +109,9 @@ namespace AvatarBA
             m_inMovement = true;
         }
 
+        /// <summary>
+        /// Resets the rigidbody values for velocity
+        /// </summary>
         protected void ResetMovement(bool resetAnimation)
         {
             m_rigidbody.velocity = Vector3.zero;
@@ -113,7 +124,7 @@ namespace AvatarBA
         }
 
         /// <summary>
-        /// Calculates and rotates the player
+        /// Calculates and rotates the character
         /// </summary>
         protected void Rotate()
         {
@@ -126,6 +137,9 @@ namespace AvatarBA
             m_rigidbody.MoveRotation(desiredRotation);
         }
 
+        /// <summary>
+        /// Calculates and rotates the character aim direction
+        /// </summary>
         protected void RotateAim()
         {
             if (m_aimDirection == Vector3.zero)
@@ -157,11 +171,18 @@ namespace AvatarBA
             EnableMovement();
         }
 
+        /// <summary>
+        /// Impulse the character towards the desired direction with a certain speed
+        /// </summary>
         public void Impulse(Vector3 direction, float speed)
         {
-            Debug.Log(direction);
+            // Add impulse towards the desired direction
             Vector3 desiredVelocity = direction * speed ;
             m_rigidbody.AddForce(desiredVelocity, ForceMode.Impulse);
+
+            // Rotate character directly towards the desired direction
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            m_rigidbody.MoveRotation(targetRotation);
         }
     }
 }

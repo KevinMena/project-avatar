@@ -16,58 +16,58 @@ namespace AvatarBA
     {
         [Header("References")]
         [SerializeField]
-        private InputManager _inputManager;
+        private InputManager m_inputManager;
 
         [Header("Data")]
         [SerializeField]
-        private CombatStateData[] _combatStatesData;
+        private CombatStateData[] m_combatStatesData;
 
         [SerializeField]
-        private LayerMask _hittableLayer;
+        private LayerMask m_hittableLayer;
 
-        private CombatState[] _combatStates;
-        private CombatTransitionState[] _transitions;
+        private CombatState[] m_combatStates;
+        private CombatTransitionState[] m_transitions;
 
-        protected int _currentComboIndex = 0;
+        protected int m_currentComboIndex = 0;
 
-        protected bool _attackTriggered = false;
-        protected bool _isTransitioning = false;
-        protected bool _fromLastCombo = false;
-        protected const float timerForInput = 0.5f;
-        protected const float lastComboDelay = 0.5f;
-        protected const float moveSpeed = 3f;
+        protected bool m_attackTriggered = false;
+        protected bool m_isTransitioning = false;
+        protected bool m_fromLastCombo = false;
+        protected const float TIMER_FOR_INPUT = 0.5f;
+        protected const float LAST_COMBO_DELAY = 0.5f;
+        protected const float IMPULSE_SPEED = 3f;
 
-        private Core _core;
-        private InputProcessor _inputMovement;
+        private Core m_core;
+        private InputProcessor m_inputMovement;
 
         private const string ATTACK_STAT = "attackPower";
         private const string ATTACK_SPEED_STAT = "attackSpeed";
 
-        public LayerMask HittableLayer => _hittableLayer;
-        public Transform HitPoint => _core.HitPoint;
-        public bool Comboing => _currentComboIndex > 0;
-        public bool AttackTriggered => _attackTriggered;
-        public bool IsLastCombo => _currentComboIndex >= _combatStates.Length;
-        public bool FromLastCombo => _fromLastCombo;
-        public float LastComboDelay => lastComboDelay;
+        public LayerMask HittableLayer => m_hittableLayer;
+        public Transform HitPoint => m_core.HitPoint;
+        public bool Comboing => m_currentComboIndex > 0;
+        public bool AttackTriggered => m_attackTriggered;
+        public bool IsLastCombo => m_currentComboIndex >= m_combatStates.Length;
+        public bool FromLastCombo => m_fromLastCombo;
+        public float LastComboDelay => LAST_COMBO_DELAY;
 
         private void Awake()
         {
-            _inputManager.MeleeAttackEvent += OnAttack;
-            _core = GetComponent<Core>();
-            _inputMovement = GetComponent<InputProcessor>();
+            m_inputManager.MeleeAttackEvent += OnAttack;
+            m_core = GetComponent<Core>();
+            m_inputMovement = GetComponent<InputProcessor>();
         }
 
         private void OnDisable()
         {
-            _inputManager.MeleeAttackEvent -= OnAttack;
+            m_inputManager.MeleeAttackEvent -= OnAttack;
         }
 
         protected override void Start()
         {
             GenerateStates();
-            initialState = _transitions[0];
-            _isTransitioning = true;
+            initialState = m_transitions[0];
+            m_isTransitioning = true;
             SetInitialState();
         }
 
@@ -77,22 +77,22 @@ namespace AvatarBA
         /// </summary>
         private void GenerateStates()
         {
-            int numberStates = _combatStatesData.Length;
+            int numberStates = m_combatStatesData.Length;
 
-            _combatStates = new CombatState[numberStates];
+            m_combatStates = new CombatState[numberStates];
 
             for (int i = 0; i < numberStates; i++)
             {
-                _combatStates[i] = new CombatState(this, _combatStatesData[i]);
+                m_combatStates[i] = new CombatState(this, m_combatStatesData[i]);
             }
 
-            _transitions = new CombatTransitionState[numberStates];
+            m_transitions = new CombatTransitionState[numberStates];
 
-            _transitions[0] = new CombatIdleState(this, _combatStates[0]);
+            m_transitions[0] = new CombatIdleState(this, m_combatStates[0]);
 
             for (int i = 1; i < numberStates; i++)
             {
-                _transitions[i] = new CombatTransitionState(this, _combatStates[i], timerForInput);
+                m_transitions[i] = new CombatTransitionState(this, m_combatStates[i], TIMER_FOR_INPUT);
             }
         }
 
@@ -102,10 +102,10 @@ namespace AvatarBA
         /// <param name="nextState"> Combo state to transition </param>
         public void SetMainState(IState nextState)
         {
-            _currentComboIndex++;
-            _isTransitioning = false;
-            _attackTriggered = false;
-            _fromLastCombo = false;
+            m_currentComboIndex++;
+            m_isTransitioning = false;
+            m_attackTriggered = false;
+            m_fromLastCombo = false;
             SetState(nextState);
         }
 
@@ -114,7 +114,7 @@ namespace AvatarBA
         /// </summary>
         public override void SetStateToInitial()
         {
-            _currentComboIndex = 0;
+            m_currentComboIndex = 0;
             base.SetStateToInitial();
         }
 
@@ -123,14 +123,14 @@ namespace AvatarBA
         /// </summary>
         public void SetNextState()
         {
-            _isTransitioning = true;
+            m_isTransitioning = true;
             if (IsLastCombo)
             {
-                _fromLastCombo = true;
+                m_fromLastCombo = true;
                 SetStateToInitial();
                 return;
             }
-            SetState(_transitions[_currentComboIndex]);
+            SetState(m_transitions[m_currentComboIndex]);
         }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace AvatarBA
         /// </summary>
         protected void OnAttack()
         {
-            if (_isTransitioning)
-                _attackTriggered = true;
+            if (m_isTransitioning)
+                m_attackTriggered = true;
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace AvatarBA
         /// <param name="animation"> Hash name of the animation </param>
         public void SetAnimation(int animation)
         {
-            _core.Animation.PlayAnimation(animation);
+            m_core.Animation.PlayAnimation(animation);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace AvatarBA
         /// <returns> Damage of the attack </returns>
         public float CalculateAttackDamage()
         {
-            return _core.Stats.GetStat(ATTACK_STAT);
+            return m_core.Stats.GetStat(ATTACK_STAT);
         }
 
         /// <summary>
@@ -167,11 +167,11 @@ namespace AvatarBA
         /// <returns> Length of the attack </returns>
         public float CalculateAttackDuration(string animationName)
         {
-            float animationLenght = _core.Animation.GetAnimationLength(animationName);
-            float attackSpeed = _core.Stats.GetStat(ATTACK_SPEED_STAT);
+            float animationLenght = m_core.Animation.GetAnimationLength(animationName);
+            float attackSpeed = m_core.Stats.GetStat(ATTACK_SPEED_STAT);
 
             // If attack speed is different than 1 change play rate of the animation so is faster
-            _core.Animation.ChangeAnimationSpeed("AttackSpeed", 1 + attackSpeed);
+            m_core.Animation.ChangeAnimationSpeed("AttackSpeed", 1 + attackSpeed);
             return (1 - attackSpeed) * animationLenght;
         }
 
@@ -183,9 +183,9 @@ namespace AvatarBA
         public void ChangeMovement(bool state)
         {
             if (state)
-                _inputMovement.EnableMovementInput();
+                m_inputMovement.EnableMovementInput();
             else
-                _inputMovement.DisableMovementInput();
+                m_inputMovement.DisableMovementInput();
         }
 
         /// <summary>
@@ -199,9 +199,9 @@ namespace AvatarBA
 
         private IEnumerator AddMovementCoroutine(float distance)
         {
-            Vector3 targetPosition = transform.position + (transform.forward * distance);
+            Vector3 targetPosition = transform.position + (m_core.Movement.AimDirection * distance);
             
-            _core.Movement.Impulse(transform.forward, moveSpeed);
+            m_core.Movement.Impulse(m_core.Movement.AimDirection, IMPULSE_SPEED);
 
             float cSquared;
             do

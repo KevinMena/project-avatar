@@ -20,7 +20,16 @@ namespace AvatarBA.Abilities
 
         public override IEnumerator Trigger(GameObject owner)
         {
-            GameObject wave = Instantiate(Prefab, owner.transform.position, owner.transform.rotation);
+            // Get position and rotation to spawn
+            Vector3 spawnPos = owner.transform.position;
+            Quaternion spawnRot = owner.transform.rotation;
+
+            if(owner.TryGetComponent(out Core ownerCore))
+            {
+                spawnRot = Quaternion.LookRotation(ownerCore.Movement.AimDirection);
+            }
+
+            GameObject wave = Instantiate(Prefab, spawnPos, spawnRot);
 
             // Generate attack prefab
             if (wave.TryGetComponent(out PushBoxAreaAttack attack))

@@ -17,9 +17,18 @@ namespace AvatarBA.Abilities
 
         public override IEnumerator Trigger(GameObject owner)
         {
+            // Get position and rotation to spawn
+            Vector3 spawnPos = owner.transform.position;
+            Quaternion spawnRot = owner.transform.rotation;
+
+            if(owner.TryGetComponent(out Core ownerCore))
+            {
+                spawnRot = Quaternion.LookRotation(ownerCore.Movement.AimDirection);
+            }
+
             // Create VFX
             // Instantiate area of attack
-            GameObject waterWhip = Instantiate(Prefab, owner.transform.position, owner.transform.rotation);
+            GameObject waterWhip = Instantiate(Prefab, spawnPos, spawnRot);
 
             // Generate attack prefab
             if (waterWhip.TryGetComponent(out BoxAreaAttack attack))

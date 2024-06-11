@@ -21,14 +21,14 @@ namespace AvatarBA.Abilities
             if(owner.TryGetComponent(out Core ownerCore))
             {
                 // Calculate correct direction base on where the owner is looking
-                Vector3 targetPosition = owner.transform.position + (owner.transform.forward * _dashDistance);
+                Vector3 targetPosition = owner.transform.position + (ownerCore.Movement.AimDirection * _dashDistance);
 
                 if (owner.TryGetComponent(out Health health))
                     health.BecomeInvulnerable();
 
                 ownerCore.Movement.DisableMovement();
 
-                ownerCore.Movement.Impulse(owner.transform.forward, _dashSpeed);
+                ownerCore.Movement.Impulse(ownerCore.Movement.AimDirection, _dashSpeed);
 
                 float cSquared;
 

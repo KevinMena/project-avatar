@@ -12,20 +12,21 @@ namespace AvatarBA.Abilities
 
         public override IEnumerator Trigger(GameObject owner)
         {
-            Vector3 shootPosition = owner.transform.position;
+            Vector3 shootPosition =  owner.transform.position;
+            Quaternion projectileRotation = owner.transform.rotation;
 
             if(owner.TryGetComponent(out Core ownerCore))
             {
-                shootPosition = ownerCore.ShootPosition.position;
-            }
+                shootPosition =  ownerCore.ShootPosition.position;
+            
+                // Calculate rotation of the projectile so always lands where the user is looking towards
+                projectileRotation = Quaternion.LookRotation(ownerCore.Movement.AimDirection);
 
-            // Calculate rotation of the projectile so always lands where the user is looking towards
-            Quaternion projectileRotation = owner.transform.rotation;
-
-            if(Physics.Raycast(owner.transform.position, owner.transform.forward, out RaycastHit hit, 500f, Mask))
-            {
-                Vector3 direction = (hit.point - shootPosition).normalized;
-                projectileRotation = Quaternion.LookRotation(direction);
+                if(Physics.Raycast(owner.transform.position, ownerCore.Movement.AimDirection, out RaycastHit hit, 500f, Mask))
+                {
+                    Vector3 direction = (hit.point - shootPosition).normalized;
+                    projectileRotation = Quaternion.LookRotation(direction);
+                }
             }
             
             GameObject iceball = Instantiate(Prefab, shootPosition, projectileRotation);

@@ -944,8 +944,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94de4248c59a744438dac7b4fe1d8c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputManager: {fileID: 11400000, guid: 8612807aea4d844419da8531c21d86f6, type: 2}
-  _combatStatesData:
+  m_inputManager: {fileID: 11400000, guid: 8612807aea4d844419da8531c21d86f6, type: 2}
+  m_combatStatesData:
   - StateName: Entry
     AnimationName: Entry
     AttackRange: 2
@@ -961,7 +961,7 @@ MonoBehaviour:
     AttackRange: 2.25
     AttackAngle: 60
     AttackMovementDistance: 1
-  _hittableLayer:
+  m_hittableLayer:
     serializedVersion: 2
     m_Bits: 128
 --- !u!114 &2832605410006323278
