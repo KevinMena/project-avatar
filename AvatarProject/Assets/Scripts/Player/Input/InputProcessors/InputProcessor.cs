@@ -72,7 +72,7 @@ namespace AvatarBA.Managers
                 return;
             }
 
-            m_aimDirection = hitPoint - transform.position;
+            m_aimDirection = (hitPoint - transform.position).normalized;
             m_aimDirection.y = 0;
         }
 

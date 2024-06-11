@@ -183,9 +183,9 @@ namespace AvatarBA
         public void ChangeMovement(bool state)
         {
             if (state)
-                m_inputMovement.EnableMovementInput();
+                m_core.Movement.EnableMovement();
             else
-                m_inputMovement.DisableMovementInput();
+                m_core.Movement.DisableMovement();
         }
 
         /// <summary>

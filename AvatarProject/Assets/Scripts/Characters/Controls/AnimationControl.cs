@@ -59,9 +59,9 @@ namespace AvatarBA
             if (m_currentAnimation == animation)
                 return;
 
-            m_currentAnimation = animation;
             AnimatorStateInfo current = m_animator.GetCurrentAnimatorStateInfo(layerIndex);
-            m_animator.CrossFade(animation, transitionDelay / current.length, layerIndex);
+            m_animator.CrossFade(animation, transitionDelay / current.length, layerIndex, 0.1f);
+            m_currentAnimation = animation;
 
             if(backToInitial)
             {
