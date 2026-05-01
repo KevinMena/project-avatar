@@ -30,6 +30,6 @@ MonoBehaviour:
   - Type: {fileID: 11400000, guid: 6928a768aba338d42bb1effddb15dc67, type: 2}
     DefaultValue: 5
   _initialAbilities:
-  - {fileID: 11400000, guid: 6a70d954e66cf584b9f1da0761f31b88, type: 2}
-  - {fileID: 11400000, guid: b44c28a35d0cb414c8e7d086c6cfa3fb, type: 2}
-  - {fileID: 11400000, guid: 7bfb6a3262e3e5e44b342a22c7f61f1a, type: 2}
+  - {fileID: 11400000, guid: 96de34a8abfab83468e37d7abf542ab5, type: 2}
+  - {fileID: 11400000, guid: cd82af60e349b6844b9260f09e7cc5e1, type: 2}
+  - {fileID: 11400000, guid: 4e98062e70609444fb2f4e1658c5ce17, type: 2}

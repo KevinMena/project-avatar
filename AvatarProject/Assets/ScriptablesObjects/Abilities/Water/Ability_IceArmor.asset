@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d8441f03273ed44ea08d4c0439daeb4, type: 3}
+  m_Script: {fileID: 11500000, guid: 79f316796deee674290c30d34d3e6459, type: 3}
   m_Name: Ability_IceArmor
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::AvatarBA.Abilities.Ability
   _id: iceArmor
   icon: {fileID: 21300000, guid: 1aa8150e129c5f34696c80cebb097f64, type: 3}
   abilityName: Ice Armor
@@ -21,6 +21,16 @@ MonoBehaviour:
   activeTime: 5
   cost: 0
   type: 3
-  effects: []
-  _baseModifier: 0.25
-  _duration: 5
+  effects:
+  - rid: 3410998456374001664
+  references:
+    version: 2
+    RefIds:
+    - rid: 3410998456374001664
+      type: {class: StatModifierEffect, ns: AvatarBA.Abilities.Effects, asm: Assembly-CSharp}
+      data:
+        m_Id: iceArmor
+        m_StatId: defense
+        m_Type: 200
+        m_BaseModifier: 0.25
+        m_Duration: 5

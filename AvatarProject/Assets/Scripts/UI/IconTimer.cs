@@ -48,7 +48,7 @@ namespace AvatarBA.UI
         {
             _currentEffect.gameObject.SetActive(false);
             _currentEffect.fillAmount = 1;
-            _timer.SetText("");
+            _timer.text = "";
         }
 
         public void ChangeCurrent(float amount, float timer)

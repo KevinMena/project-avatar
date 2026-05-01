@@ -14,17 +14,10 @@ namespace AvatarBA
         [SerializeField]
         private HealthMiddleware m_displayMiddleware = null;
 
-        [Header("Data")]
-        [SerializeField]
-        private float m_invulnerableDuration = 0.5f;
-
-        [SerializeField]
-        private float m_invulnerableDelta = 0.15f;
-
         private Core m_core;
         private Stat m_health;
         private Stat m_maxHealth;
-        private bool m_isInvulnerable = false;
+        public bool IsInvulnerable { get; set; } = false;
 
         private const string DEFENSE_STAT = "defense";
 
@@ -44,11 +37,11 @@ namespace AvatarBA
         {
             get
             {
-                if(m_core.Stats == null)
+                if (m_core.Stats == null)
                     return 0;
                 float value = m_core.Stats.GetStat(DEFENSE_STAT);
 
-                if(value < 0)
+                if (value < 0)
                     return 0;
                 return value;
             }
@@ -65,11 +58,14 @@ namespace AvatarBA
         {
             m_health = new Stat("Health", m_core.Data.BaseHealth);
             m_maxHealth = new Stat("Max Health", m_core.Data.BaseHealth);
-            m_displayMiddleware?.Setup(m_core.Data.BaseHealth);
+            m_displayMiddleware?.Setup(Current);
         }
 
         public void TakeDamage(float damage)
         {
+            if (IsInvulnerable)
+                return;
+
             // Damage formula
             float appliedDamage = damage / DefenseValue;
             StatModifier damageModifier = new StatModifier("damage", -appliedDamage, StatModifierType.Flat);
@@ -88,28 +84,10 @@ namespace AvatarBA
 
         private void CheckDeath()
         {
-            if(Current == 0)
+            if (Current == 0)
             {
                 m_core.gameObject.SetActive(false);
             }
-        }
-
-        public void BecomeInvulnerable()
-        {
-            if (!m_isInvulnerable)
-                StartCoroutine(Invulnerable());
-        }
-
-        private IEnumerator Invulnerable()
-        {
-            m_isInvulnerable = true;
-
-            for (float i = 0; i < m_invulnerableDuration; i += m_invulnerableDelta)
-            {
-                yield return new WaitForSeconds(m_invulnerableDelta);
-            }
-
-            m_isInvulnerable = false;
         }
     }
 }

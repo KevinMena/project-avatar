@@ -1,11 +1,12 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 using AvatarBA.Abilities.Effects;
 
 namespace AvatarBA.Abilities
 {
-    public abstract class Ability : ScriptableObject
+    [CreateAssetMenu(fileName = "Ability_", menuName = "Abilities/Ability")]
+    public class Ability : ScriptableObject
     {
         [SerializeField]
         protected string _id;
@@ -21,7 +22,7 @@ namespace AvatarBA.Abilities
 
         [SerializeField]
         protected float cooldown;
-        
+
         [SerializeField]
         protected float activeTime;
 
@@ -31,28 +32,33 @@ namespace AvatarBA.Abilities
         [SerializeField]
         protected AbilityType type;
 
-        [SerializeField]
-        protected AbilityEffect[] effects;
+        [SerializeReference, SerializeReferenceDropdown]
+        protected List<AbilityEffect> effects;
 
         public string Id => _id;
         public Sprite Icon => icon;
-        public string Name  => abilityName;
+        public string Name => abilityName;
         public string Description => description;
         public float Cooldown => cooldown;
         public float ActiveTime => activeTime;
         public float Cost => cost;
         public AbilityType Type => type;
-        public ref readonly AbilityEffect[] Effects => ref effects;
+        public ref readonly List<AbilityEffect> Effects => ref effects;
 
-        public abstract void Initialize();
-        public abstract IEnumerator Trigger(GameObject owner);
+        public void Cast(ExecutionContext context)
+        {
+            foreach (var effect in effects)
+            {
+                effect.Execute(context);
+            }
+        }
     }
 
     public enum AbilityState
     {
         Ready,
         Active,
-        Cooldown   
+        Cooldown
     }
 
     public enum AbilityType

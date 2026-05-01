@@ -13,7 +13,7 @@ namespace AvatarBA.Common
 
         public float TimeElapsed => TotalTime - RemainingTime;
         public float PercentElapsed => TimeElapsed / TotalTime;
-        public bool IsComplete => RemainingTime < 0;
+        public bool IsComplete => RemainingTime <= 0;
         public bool Running => _running;
 
         public event Action OnTimerStarted;
@@ -44,6 +44,11 @@ namespace AvatarBA.Common
                     _running = false;
                 }
             }
+        }
+
+        public void ClearOnTimerCompleted()
+        {
+            OnTimerCompleted = null;
         }
     }
 }
