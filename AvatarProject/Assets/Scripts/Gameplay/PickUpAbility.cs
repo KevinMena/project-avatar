@@ -29,10 +29,10 @@ namespace AvatarBA
 
         public void Interact(GameObject entity)
         {
-            if(entity.TryGetComponent(out AbilitiesControl abiltiesControl))
+            if (entity.TryGetComponent(out AbilitiesControl abiltiesControl))
             {
                 //TODO: Display Overlay to choose which ability slot to replace
-                abiltiesControl.ReplaceAbility(AbilitySlot.Left, _holdAbility);
+                abiltiesControl.ReplaceAbility(0, _holdAbility);
                 Disappear();
             }
         }
