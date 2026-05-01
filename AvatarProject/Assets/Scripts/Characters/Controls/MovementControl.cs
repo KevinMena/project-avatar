@@ -100,7 +100,7 @@ namespace AvatarBA
                 m_speed = m_core.Stats.GetStat(MOVEMENT_SPEED_STAT);
 
             // Cache velocity last frame
-            Vector3 previousVelocity = m_rigidbody.velocity;
+            Vector3 previousVelocity = m_rigidbody.linearVelocity;
 
             // Apply speed and calculate desire position
             Vector3 desiredVelocity = m_movementDirection * m_speed;
@@ -114,7 +114,7 @@ namespace AvatarBA
         /// </summary>
         protected void ResetMovement(bool resetAnimation)
         {
-            m_rigidbody.velocity = Vector3.zero;
+            m_rigidbody.linearVelocity = Vector3.zero;
             m_rigidbody.angularVelocity = Vector3.zero;
 
             if(resetAnimation)
