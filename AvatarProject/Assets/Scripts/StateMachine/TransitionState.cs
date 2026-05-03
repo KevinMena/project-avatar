@@ -2,10 +2,10 @@ namespace AvatarBA.Patterns
 {
     public class TransitionState : IState
     {
-        protected StateMachine owner;
+        protected StateMachineMonoBehaviour owner;
         protected IState targetState;
 
-        public TransitionState(StateMachine owner, IState state)
+        public TransitionState(StateMachineMonoBehaviour owner, IState state)
         {
             this.owner = owner;
             targetState = state;

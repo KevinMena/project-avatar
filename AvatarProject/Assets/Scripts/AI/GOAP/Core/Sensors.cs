@@ -56,7 +56,7 @@ namespace AvatarBA.AI
         {
             get
             {
-                if(_targetLoosyPosition != Vector3.zero && _targetPosition == Vector3.zero)
+                if (_targetLoosyPosition != Vector3.zero && _targetPosition == Vector3.zero)
                     return _targetLoosyPosition;
 
                 return _targetPosition;
@@ -101,7 +101,7 @@ namespace AvatarBA.AI
             Physics.OverlapSphereNonAlloc(transform.position, _hearingRange, _targets, _targetMask);
             bool targetFound = false;
 
-            for(int i = 0; i < _targets.Length; i++)
+            for (int i = 0; i < _targets.Length; i++)
             {
                 // Ignore self
                 if (_targets[i] is null || _targets[i].gameObject == gameObject)
@@ -109,7 +109,7 @@ namespace AvatarBA.AI
 
                 // Register target in memory
                 Vector2 noise = Random.insideUnitCircle * 1.5f;
-                Vector3 approximatePosition = _targets[i].transform.position + new Vector3(noise.x, transform.position.y, noise.y);
+                Vector3 approximatePosition = _targets[i].transform.position + new Vector3(noise.x, 0, noise.y);
                 GameDebug.Log($"Hearing target {_targets[i].name} around {approximatePosition}");
                 _targetLoosyPosition = approximatePosition;
                 targetFound = true;
@@ -117,13 +117,13 @@ namespace AvatarBA.AI
                 _targets[i] = null;
             }
 
-            if(!targetFound)
+            if (!targetFound)
                 _targetLoosyPosition = Vector3.zero;
         }
-        
+
         private void CheckVision()
         {
-            // Check if targets in range 
+            // Check if targets in range
             Physics.OverlapSphereNonAlloc(transform.position, _visionRange, _targets, _targetMask);
             bool targetFound = false;
 
@@ -146,7 +146,7 @@ namespace AvatarBA.AI
 
                 // Target in vision cone, check if actually looking or behind something
                 RaycastHit hit;
-                if(Physics.Raycast(transform.position, transform.forward, out hit, _visionRange, _targetMask, QueryTriggerInteraction.Collide))
+                if (Physics.Raycast(transform.position, transform.forward, out hit, _visionRange, _targetMask, QueryTriggerInteraction.Collide))
                 {
                     // Target is in vision cone and range, register in memory
                     _targetPosition = _targets[i].transform.position;

@@ -3,18 +3,18 @@ using UnityEngine.Events;
 
 namespace AvatarBA.AI.States
 {
-    public class EnemyStateMachine : StateMachine
+    public class EnemyStateMachine : StateMachineMonoBehaviour
     {
         public UnityAction OnStateFinish;
         public bool StateComplete => currentState == null ? false : (currentState as Action).Completed;
 
         protected override void Start() { }
 
-        protected override void Update() 
+        protected override void Update()
         {
             base.Update();
 
-            if(StateComplete)
+            if (StateComplete)
                 FinishState();
         }
 

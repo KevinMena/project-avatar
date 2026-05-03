@@ -12,7 +12,7 @@ namespace AvatarBA
     /// Manager of the combat system. The system is combo based combat of a number of states.
     /// We keep the current combo index to know when to finish the combo and to reset all the states.
     /// </summary>
-    public class CombatControl : StateMachine
+    public class CombatControl : StateMachineMonoBehaviour
     {
         [Header("References")]
         [SerializeField]
@@ -200,7 +200,7 @@ namespace AvatarBA
         private IEnumerator AddMovementCoroutine(float distance)
         {
             Vector3 targetPosition = transform.position + (m_core.Movement.AimDirection * distance);
-            
+
             m_core.Movement.Impulse(m_core.Movement.AimDirection, IMPULSE_SPEED);
 
             float cSquared;
@@ -210,7 +210,7 @@ namespace AvatarBA
                 offset.y = 0;
                 cSquared = offset.Distance();
                 yield return null;
-            }while (cSquared > 0.1f);
+            } while (cSquared > 0.1f);
         }
 
         private void OnDrawGizmos()

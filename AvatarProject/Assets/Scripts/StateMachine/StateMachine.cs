@@ -1,47 +1,43 @@
-using UnityEngine;
+using System;
 
 namespace AvatarBA.Patterns
 {
-    public class StateMachine : MonoBehaviour
+    public class StateMachine
     {
-        [SerializeField]
-        protected IState currentState;
-        protected IState initialState;
+        private IState m_CurrentState;
+        private IState m_InitialState;
 
-        public IState CurrentState => currentState;
+        public Action<string> OnStateChanged;
+        public IState CurrentState => m_CurrentState;
 
-        protected virtual void Start()
+        public StateMachine(IState initialState, Action<string> stateChanged = null)
         {
-            if(initialState != null)
-                SetState(initialState);
+            m_InitialState = initialState;
+            OnStateChanged = stateChanged;
+            SetState(m_InitialState);
         }
 
-        protected virtual void Update()
+        public void Update()
         {
-            currentState?.OnUpdate();
+            m_CurrentState?.OnUpdate();
         }
 
-        protected virtual void FixedUpdate()
+        public void FixedUpdate()
         {
-            currentState?.OnFixedUpdate();
+            m_CurrentState?.OnFixedUpdate();
         }
 
-        protected void SetInitialState()
+        public void SetInitialState()
         {
-            currentState = initialState;
-            currentState.OnEnter();
+            SetState(m_InitialState);
         }
 
-        public virtual void SetState(IState nextState)
+        public void SetState(IState nextState)
         {
-            currentState?.OnExit();
-            currentState = nextState;
-            currentState.OnEnter();
-        }
-
-        public virtual void SetStateToInitial()
-        {
-            SetState(initialState);
+            m_CurrentState?.OnExit();
+            m_CurrentState = nextState;
+            m_CurrentState.OnEnter();
+            OnStateChanged?.Invoke(m_CurrentState.GetType().Name);
         }
     }
 }
